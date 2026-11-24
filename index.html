@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>White Horse Builders Ltd — Client Project Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #doc-modal-sheet, #doc-modal-sheet * {
+        visibility: visible;
+      }
+      #doc-modal-sheet {
+        position: fixed;
+        inset: 0;
+        background: white;
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- TOP DEMO CONTROL BAR -->
+  <div class="bg-slate-950 text-white border-b border-slate-800 sticky top-0 z-40 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-col lg:flex-row items-center justify-between gap-2.5">
+      <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 w-full lg:w-auto">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 tracking-wider uppercase">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          Live Portal Demo
+        </span>
+
+        <div class="flex items-center gap-2 flex-1 sm:flex-initial">
+          <label for="project-selector" class="text-xs text-slate-400 hidden sm:inline font-medium">Project:</label>
+          <select id="project-selector" class="w-full sm:w-auto bg-slate-900 text-white text-xs sm:text-sm font-medium rounded-xl px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-amber-500 cursor-pointer">
+            <option value="proj-1">14 Station Road, NR27 9DS — Rear Kitchen Extension</option>
+            <option value="proj-2">8 Coastguard Cottages, NR27 9BU — Loft Conversion &amp; Dormer</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 w-full sm:w-auto justify-center">
+        <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 flex-1 sm:flex-initial">
+          <button id="btn-role-client" type="button" data-action="switch-role" data-role="client" class="flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-amber-600 text-white shadow-sm">
+            Client View (Homeowner)
+          </button>
+          <button id="btn-role-builder" type="button" data-action="switch-role" data-role="builder" class="flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white">
+            Builder View (Jamie Cox)
+          </button>
+        </div>
+
+        <button type="button" data-action="reset-demo" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-400 border border-slate-700 transition-colors shrink-0">
+          Reset Demo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPANY BRAND HEADER -->
+  <header class="bg-white border-b border-slate-200 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <!-- Crisp White Horse Crest Emblem -->
+        <div class="w-12 h-12 rounded-2xl bg-slate-900 border-2 border-amber-500/80 flex items-center justify-center shadow-sm shrink-0">
+          <svg class="w-7 h-7 text-white" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M11 29H26L24.5 24.5C23.8 22.4 23.5 20.1 24 17.9L25.2 13.5L28.5 11.5L26.5 8.5L22.5 9.2L19.5 6L17.5 8.8C14.2 10.2 11.5 13.2 10.5 16.8C9.6 20.1 10.1 23.6 11.8 26.5L11 29Z" fill="currentColor"/>
+            <circle cx="22.8" cy="11.2" r="1.1" fill="#0F172A"/>
+            <path d="M9 31H28" stroke="#F59E0B" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900">WHITE HORSE BUILDERS LTD</h1>
+            <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+              FMB &amp; TrustMark Registered
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">
+            Registered in England &amp; Wales • VAT Reg No: <span class="font-mono font-medium text-slate-700">GB 418 7291 04</span> • North Norfolk, UK
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between sm:justify-end gap-3 bg-slate-50 sm:bg-transparent px-3.5 py-2 sm:p-0 rounded-xl border sm:border-0 border-slate-200">
+        <div class="text-left sm:text-right">
+          <p id="header-context-label" class="text-xs font-bold text-slate-900">Client Portal • David &amp; Sarah Mitchell</p>
+          <p class="text-[11px] text-slate-500">Site Manager: <strong class="text-slate-700">Jamie Cox</strong> (SMSTS &amp; CSCS)</p>
+        </div>
+        <div class="w-10 h-10 rounded-full bg-amber-600 text-white font-bold text-xs flex items-center justify-center shadow-xs shrink-0">
+          JC
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0"></div>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ===================================================================
+         CLIENT VIEW (HOMEOWNER)
+         =================================================================== -->
+    <div id="client-view" class="space-y-6">
+
+      <!-- PROJECT HERO CARD -->
+      <section class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 pb-5 border-b border-slate-100">
+          <div class="space-y-2">
+            <div class="flex flex-wrap items-center gap-2">
+              <span id="hero-stage-pill" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                Stage 4: First Fix Electrics &amp; Plumbing
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                NNDC Building Control Active
+              </span>
+            </div>
+
+            <h2 id="hero-title" class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              Rear Kitchen Extension &amp; Structural Knock-Through
+            </h2>
+
+            <div id="hero-meta" class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-slate-600"></div>
+          </div>
+
+          <!-- Completion Progress & Contract Value Box -->
+          <div class="bg-slate-50 border border-slate-200/90 rounded-2xl p-4 lg:w-80 shrink-0 space-y-2.5">
+            <div class="flex items-baseline justify-between">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Overall Progress</span>
+              <span id="hero-progress-pct" class="text-2xl font-extrabold text-slate-900">65%</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+              <div id="hero-progress-bar" class="h-full bg-amber-600 rounded-full transition-all duration-300" style="width: 65%"></div>
+            </div>
+            <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/70">
+              <span class="text-slate-500">Live Contract Sum:</span>
+              <span id="hero-contract-sum" class="font-extrabold text-slate-900">£54,600 inc. VAT</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6-STAGE UK RESIDENTIAL BUILD ROADMAP STEPPER -->
+        <div class="pt-5">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">6-Stage Build Roadmap</span>
+            <span id="hero-handover-text" class="text-xs font-medium text-slate-500">Target Handover: 12 Dec 2026</span>
+          </div>
+          <div id="build-roadmap-stepper" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5"></div>
+        </div>
+      </section>
+
+      <!-- TWO-COLUMN LAYOUT: LEFT TABS + RIGHT STICKY LIVE CHAT -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- LEFT 8 COLUMNS: TABS & ACTIVE TAB CONTENT -->
+        <div class="lg:col-span-8 space-y-5">
+
+          <!-- 4 NAVIGATION TABS -->
+          <div class="bg-white rounded-2xl border border-slate-200 px-3 sm:px-5 flex items-center gap-4 sm:gap-6 overflow-x-auto shadow-xs">
+            <button type="button" data-action="select-tab" data-tab="photos" id="tab-btn-photos" class="py-3.5 px-1 text-xs sm:text-sm font-bold text-slate-900 border-b-2 border-amber-600 whitespace-nowrap flex items-center gap-2 transition-colors">
+              <span>Site Progress &amp; Photos</span>
+              <span id="badge-photos" class="bg-amber-100 text-amber-800 text-xs font-bold px-2 py-0.5 rounded-full">4</span>
+            </button>
+
+            <button type="button" data-action="select-tab" data-tab="documents" id="tab-btn-documents" class="py-3.5 px-1 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-900 border-b-2 border-transparent whitespace-nowrap flex items-center gap-2 transition-colors">
+              <span>Documents &amp; Certificates</span>
+              <span id="badge-documents" class="bg-slate-100 text-slate-700 text-xs font-semibold px-2 py-0.5 rounded-full">5</span>
+            </button>
+
+            <button type="button" data-action="select-tab" data-tab="variations" id="tab-btn-variations" class="py-3.5 px-1 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-900 border-b-2 border-transparent whitespace-nowrap flex items-center gap-2 transition-colors">
+              <span>Variations &amp; Sign-Offs</span>
+              <span id="badge-variations" class="bg-amber-100 text-amber-800 text-xs font-bold px-2 py-0.5 rounded-full">1 Pending</span>
+            </button>
+
+            <button type="button" data-action="select-tab" data-tab="payments" id="tab-btn-payments" class="py-3.5 px-1 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-900 border-b-2 border-transparent whitespace-nowrap flex items-center gap-2 transition-colors">
+              <span>Valuations &amp; Payments</span>
+              <span id="badge-payments" class="bg-slate-100 text-slate-700 text-xs font-semibold px-2 py-0.5 rounded-full">4</span>
+            </button>
+          </div>
+
+          <!-- TAB 1 PANEL: SITE PROGRESS & PHOTOS -->
+          <div id="panel-photos" class="space-y-4">
+            <!-- Live Site Diary & North Norfolk Weather Banner -->
+            <div class="bg-slate-900 text-white rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-xs space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                    Daily Site Diary — Jamie Cox
+                  </span>
+                  <span id="diary-timestamp" class="text-xs text-slate-400">24 Nov 2026, 14:40</span>
+                </div>
+                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  H&amp;S Status: 0 Incidents
+                </span>
+              </div>
+
+              <p id="diary-note-text" class="text-xs sm:text-sm text-slate-200 leading-relaxed"></p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 border-t border-slate-800 text-xs">
+                <div class="bg-slate-850 bg-slate-800/80 rounded-xl px-3 py-2">
+                  <span class="text-slate-400 block text-[11px]">North Norfolk Coastal Conditions:</span>
+                  <span id="diary-weather-text" class="font-semibold text-white"></span>
+                </div>
+                <div class="bg-slate-850 bg-slate-800/80 rounded-xl px-3 py-2">
+                  <span class="text-slate-400 block text-[11px]">Trades On Site Today:</span>
+                  <span id="diary-trades-text" class="font-semibold text-white"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phase Filter Bar -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+              <div>
+                <h3 class="font-bold text-sm sm:text-base text-slate-900">Site Progress Gallery</h3>
+                <p class="text-xs text-slate-500">Tap any photograph to open full-screen lightbox with Next/Previous controls.</p>
+              </div>
+              <div id="photo-filter-bar" class="flex flex-wrap gap-1.5">
+                <button type="button" data-action="filter-photos" data-filter="All" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white">All Photos</button>
+                <button type="button" data-action="filter-photos" data-filter="Groundworks" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Groundworks</button>
+                <button type="button" data-action="filter-photos" data-filter="Brickwork & Steels" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Brickwork &amp; Steels</button>
+                <button type="button" data-action="filter-photos" data-filter="Roofing" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Roofing</button>
+                <button type="button" data-action="filter-photos" data-filter="First Fix" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">First Fix</button>
+              </div>
+            </div>
+
+            <!-- Photo Grid -->
+            <div id="photo-gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
+          </div>
+
+          <!-- TAB 2 PANEL: DOCUMENTS & CERTIFICATES -->
+          <div id="panel-documents" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 class="font-bold text-base text-slate-900">Documents &amp; Certificates Vault</h3>
+                  <p class="text-xs text-slate-500">Inspect formatted UK JCT contracts, NNDC Building Control notices, RSJ calculations &amp; VAT invoices.</p>
+                </div>
+                <label class="cursor-pointer inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-xs transition-colors shrink-0">
+                  <span>+ Upload Client File</span>
+                  <input id="client-doc-upload-input" type="file" class="hidden" />
+                </label>
+              </div>
+
+              <div id="doc-filter-bar" class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                <button type="button" data-action="filter-docs" data-filter="All" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white">All Files</button>
+                <button type="button" data-action="filter-docs" data-filter="Contracts" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Contracts</button>
+                <button type="button" data-action="filter-docs" data-filter="Building Control" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Building Control</button>
+                <button type="button" data-action="filter-docs" data-filter="Structural" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Structural</button>
+                <button type="button" data-action="filter-docs" data-filter="Valuations & Invoices" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Valuations &amp; Invoices</button>
+                <button type="button" data-action="filter-docs" data-filter="Certificates" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Certificates</button>
+              </div>
+            </div>
+
+            <div id="documents-list" class="space-y-3"></div>
+          </div>
+
+          <!-- TAB 3 PANEL: VARIATIONS & SIGN-OFFS -->
+          <div id="panel-variations" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 class="font-bold text-base text-slate-900">Contract Variations &amp; Digital Sign-Offs</h3>
+                <p class="text-xs text-slate-500">Approving a variation digitally signs the scope change, updates your Contract Sum, and posts a receipt in chat.</p>
+              </div>
+              <div id="variations-summary-badge" class="bg-slate-900 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shrink-0"></div>
+            </div>
+
+            <div id="variations-list" class="space-y-4"></div>
+          </div>
+
+          <!-- TAB 4 PANEL: VALUATIONS & PAYMENTS -->
+          <div id="panel-payments" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 class="font-bold text-base text-slate-900">JCT Stage Payment Schedule</h3>
+                <p class="text-xs text-slate-500">Milestone-linked stage valuations with 20% UK VAT breakdown and White Horse Builders Ltd BACS details.</p>
+              </div>
+              <div id="payments-paid-badge" class="bg-emerald-50 border border-emerald-200 text-emerald-900 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0"></div>
+            </div>
+
+            <!-- UK BACS Remittance Box -->
+            <div class="bg-slate-900 text-white rounded-2xl p-4 sm:p-5 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div>
+                <span class="text-amber-400 font-bold uppercase tracking-wider block mb-1">UK BACS Remittance Account</span>
+                <p class="text-slate-200 font-medium">Account Name: <strong>White Horse Builders Ltd</strong> • Sort Code: <span class="font-mono">20-62-53</span> • Account No: <span class="font-mono">83941027</span></p>
+              </div>
+              <span id="bacs-reference-pill" class="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 font-mono text-amber-300 shrink-0">
+                Ref: WHB-104-2026
+              </span>
+            </div>
+
+            <div id="payments-list" class="space-y-3.5"></div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT 4 COLUMNS: STICKY LIVE PROJECT CHAT -->
+        <aside class="lg:col-span-4 lg:sticky lg:top-20">
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col h-[610px]">
+            <div class="bg-slate-900 text-white px-4 py-3.5 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="relative">
+                  <div class="w-9 h-9 rounded-full bg-amber-600 text-white font-bold text-xs flex items-center justify-center">JC</div>
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-slate-900 absolute bottom-0 right-0"></span>
+                </div>
+                <div>
+                  <h4 class="font-bold text-sm">Jamie Cox • Site Manager</h4>
+                  <p class="text-[11px] text-emerald-300">Online • Direct Project Thread</p>
+                </div>
+              </div>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-amber-400 border border-slate-700">Live</span>
+            </div>
+
+            <div id="client-chat-feed" class="flex-1 p-4 overflow-y-auto space-y-3.5 bg-slate-50"></div>
+
+            <div id="client-typing-bar" class="hidden px-4 py-1.5 bg-slate-50 text-xs text-slate-500 italic border-t border-slate-100">
+              Jamie Cox is typing a reply...
+            </div>
+
+            <!-- Quick-Reply Chips -->
+            <div class="px-3 py-2 bg-slate-50 border-t border-slate-200/80 flex items-center gap-1.5 overflow-x-auto">
+              <button type="button" data-action="quick-reply" data-text="When is Building Control visiting?" class="text-[11px] font-medium bg-white hover:bg-amber-50 text-slate-700 hover:text-amber-800 border border-slate-200 hover:border-amber-300 px-2.5 py-1 rounded-full whitespace-nowrap transition-colors">
+                When is Building Control visiting?
+              </button>
+              <button type="button" data-action="quick-reply" data-text="Happy with the steelwork!" class="text-[11px] font-medium bg-white hover:bg-amber-50 text-slate-700 hover:text-amber-800 border border-slate-200 hover:border-amber-300 px-2.5 py-1 rounded-full whitespace-nowrap transition-colors">
+                Happy with the steelwork!
+              </button>
+              <button type="button" data-action="quick-reply" data-text="Can we meet on site Friday?" class="text-[11px] font-medium bg-white hover:bg-amber-50 text-slate-700 hover:text-amber-800 border border-slate-200 hover:border-amber-300 px-2.5 py-1 rounded-full whitespace-nowrap transition-colors">
+                Can we meet on site Friday?
+              </button>
+            </div>
+
+            <!-- Chat Composer -->
+            <form id="client-chat-form" class="p-3 bg-white border-t border-slate-200 flex items-center gap-2">
+              <label title="Attach site photo" class="cursor-pointer px-2.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors shrink-0">
+                + Photo
+                <input id="client-chat-photo-input" type="file" accept="image/*" class="hidden" />
+              </label>
+              <input id="client-chat-input" type="text" placeholder="Message Jamie Cox..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-amber-500" required />
+              <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition-colors shrink-0">
+                Send
+              </button>
+            </form>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         BUILDER VIEW (SITE ADMIN — JAMIE COX)
+         =================================================================== -->
+    <div id="builder-view" class="hidden space-y-6">
+
+      <!-- Admin Context Banner -->
+      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-slate-900 text-amber-400 font-bold flex items-center justify-center shrink-0">
+            JC
+          </div>
+          <div>
+            <h3 class="font-bold text-sm sm:text-base text-slate-900">Jamie Cox — Site Manager Console (On-Site Admin)</h3>
+            <p id="admin-banner-subtitle" class="text-xs text-slate-600">Managing 14 Station Road, NR27 9DS • Changes sync immediately to Client View.</p>
+          </div>
+        </div>
+        <button type="button" data-action="switch-role" data-role="client" class="text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl transition-colors self-start sm:self-center shrink-0">
+          Preview Client View &rarr;
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- LEFT 7 COLUMNS: 5 SITE ADMIN TOOLS -->
+        <div class="lg:col-span-7 space-y-6">
+
+          <!-- 1. Project Progress % Slider, Phase & Daily Site Diary -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-4">
+            <h3 class="font-bold text-base text-slate-900">1. Project Progress &amp; Daily Site Diary Update</h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="admin-stage-select" class="block text-xs font-semibold text-slate-700 mb-1.5">Current Build Phase</label>
+                <select id="admin-stage-select" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:border-amber-500">
+                  <option value="1">1. Groundworks &amp; Foundations</option>
+                  <option value="2">2. Brickwork &amp; RSJ Steels</option>
+                  <option value="3">3. Roof &amp; Weatherproofing</option>
+                  <option value="4">4. First Fix Electrics &amp; Plumbing</option>
+                  <option value="5">5. Plastering &amp; Second Fix</option>
+                  <option value="6">6. Snagging &amp; Handover</option>
+                </select>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="admin-progress-slider" class="text-xs font-semibold text-slate-700">Overall Completion %</label>
+                  <span id="admin-progress-display" class="text-sm font-extrabold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-lg border border-amber-200">65%</span>
+                </div>
+                <input id="admin-progress-slider" type="range" min="0" max="100" value="65" class="w-full accent-amber-600 cursor-pointer h-2 bg-slate-200 rounded-lg mt-2.5" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="admin-weather-input" class="block text-xs font-semibold text-slate-700 mb-1.5">North Norfolk Coastal Conditions</label>
+                <input id="admin-weather-input" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm text-slate-800 focus:outline-none focus:border-amber-500" />
+              </div>
+              <div>
+                <label for="admin-trades-input" class="block text-xs font-semibold text-slate-700 mb-1.5">Trades On Site Today</label>
+                <input id="admin-trades-input" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm text-slate-800 focus:outline-none focus:border-amber-500" />
+              </div>
+            </div>
+
+            <div>
+              <label for="admin-diary-input" class="block text-xs font-semibold text-slate-700 mb-1.5">Daily Site Diary Entry</label>
+              <textarea id="admin-diary-input" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-amber-500"></textarea>
+            </div>
+
+            <button type="button" data-action="save-progress" class="bg-slate-900 hover:bg-slate-800 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-xs">
+              Publish Progress &amp; Site Diary
+            </button>
+          </div>
+
+          <!-- 2. Quick Site Photo Uploader + 1-Tap Presets -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-4">
+            <div>
+              <h3 class="font-bold text-base text-slate-900">2. Quick Site Photo Uploader</h3>
+              <p class="text-xs text-slate-500">Tap a 1-tap Site Photo Preset below or select an image file from your device.</p>
+            </div>
+
+            <div>
+              <span class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">1-Tap Site Photo Presets:</span>
+              <div id="admin-photo-presets-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5"></div>
+            </div>
+
+            <form id="admin-photo-form" class="space-y-3.5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                  <label for="admin-photo-file" class="block text-xs font-semibold text-slate-700 mb-1">Or Choose Device Image</label>
+                  <input id="admin-photo-file" type="file" accept="image/*" class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 border border-slate-200 rounded-xl p-1" />
+                </div>
+                <div>
+                  <label for="admin-photo-phase" class="block text-xs font-semibold text-slate-700 mb-1">Gallery Phase Filter</label>
+                  <select id="admin-photo-phase" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                    <option value="Groundworks">Groundworks</option>
+                    <option value="Brickwork & Steels">Brickwork &amp; Steels</option>
+                    <option value="Roofing">Roofing</option>
+                    <option value="First Fix" selected>First Fix</option>
+                  </select>
+                </div>
+              </div>
+
+              <div id="admin-staged-preview" class="hidden items-center gap-3 p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                <img id="admin-staged-img" src="" alt="Preview" class="w-16 h-12 object-cover rounded-lg border border-slate-300" />
+                <div class="text-xs">
+                  <p class="font-bold text-slate-800">Photo staged and ready</p>
+                  <p class="text-slate-500">Click "Publish Photo to Client Gallery" below</p>
+                </div>
+              </div>
+
+              <div>
+                <label for="admin-photo-caption" class="block text-xs font-semibold text-slate-700 mb-1">Site Photo Caption</label>
+                <input id="admin-photo-caption" type="text" placeholder="e.g. 203x203x46 UC RSJ steel beam bolted onto Class B engineering brick padstones" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-amber-500" required />
+              </div>
+
+              <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-xs">
+                Publish Photo to Client Gallery
+              </button>
+            </form>
+          </div>
+
+          <!-- 3. Raise a New Priced Variation (Auto-calculates 20% UK VAT) -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-4">
+            <div>
+              <h3 class="font-bold text-base text-slate-900">3. Raise a New Priced Variation (20% UK VAT Auto-Calc)</h3>
+              <p class="text-xs text-slate-500">Sends a formal scope variation to the homeowner for digital signature &amp; logs a chat notification.</p>
+            </div>
+
+            <form id="admin-variation-form" class="space-y-3.5">
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                <div class="sm:col-span-8">
+                  <label for="admin-var-title" class="block text-xs font-semibold text-slate-700 mb-1">Variation Title</label>
+                  <input id="admin-var-title" type="text" placeholder="e.g. Upgrade to Quartz Kitchen Island Waterfall Worktop" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-amber-500" required />
+                </div>
+                <div class="sm:col-span-4">
+                  <label for="admin-var-net" class="block text-xs font-semibold text-slate-700 mb-1">Net Amount (£ ex. VAT)</label>
+                  <input id="admin-var-net" type="number" min="50" step="10" placeholder="950" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-amber-500" required />
+                </div>
+              </div>
+
+              <div class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 flex items-center justify-between text-xs">
+                <span class="text-slate-500">Live UK VAT Calculation (20%):</span>
+                <span id="admin-var-vat-preview" class="font-bold text-slate-900">Net £0 + VAT £0 = £0 inc. VAT</span>
+              </div>
+
+              <div>
+                <label for="admin-var-desc" class="block text-xs font-semibold text-slate-700 mb-1">Scope Description &amp; Programme Impact</label>
+                <input id="admin-var-desc" type="text" placeholder="e.g. Template, supply and fit 30mm Carrara quartz waterfall ends. Zero programme delay." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-amber-500" required />
+              </div>
+
+              <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors">
+                Send Variation for Client Sign-Off
+              </button>
+            </form>
+          </div>
+
+          <!-- 4. Publish Document / Certificate to Client Vault -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-4">
+            <div>
+              <h3 class="font-bold text-base text-slate-900">4. Publish Document / Certificate to Client Vault</h3>
+              <p class="text-xs text-slate-500">Issue Building Control sign-off notices, NICEIC/Gas Safe certificates, or interim valuations.</p>
+            </div>
+
+            <form id="admin-doc-form" class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+              <div class="sm:col-span-7">
+                <label for="admin-doc-title" class="block text-xs font-semibold text-slate-700 mb-1">Document Filename (.pdf)</label>
+                <input id="admin-doc-title" type="text" placeholder="e.g. NNDC_Pre_Plaster_Inspection_Certificate.pdf" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-amber-500" required />
+              </div>
+              <div class="sm:col-span-5">
+                <label for="admin-doc-category" class="block text-xs font-semibold text-slate-700 mb-1">Vault Category</label>
+                <select id="admin-doc-category" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                  <option value="Contracts">Contracts</option>
+                  <option value="Building Control">Building Control</option>
+                  <option value="Structural">Structural</option>
+                  <option value="Valuations & Invoices">Valuations &amp; Invoices</option>
+                  <option value="Certificates" selected>Certificates</option>
+                </select>
+              </div>
+              <div class="sm:col-span-12">
+                <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors">
+                  Publish PDF to Client Vault
+                </button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+
+        <!-- RIGHT 5 COLUMNS: JAMIE COX LIVE CHAT REPLY CONSOLE -->
+        <div class="lg:col-span-5 lg:sticky lg:top-20">
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col h-[680px]">
+            <div class="bg-slate-900 text-white px-5 py-3.5 flex items-center justify-between">
+              <div>
+                <h4 class="font-bold text-sm">Live Project Chat (Jamie Cox)</h4>
+                <p id="admin-chat-subtitle" class="text-xs text-slate-300">Replying to David &amp; Sarah Mitchell</p>
+              </div>
+              <span class="text-[11px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-500/30">Synced</span>
+            </div>
+
+            <div id="builder-chat-feed" class="flex-1 p-4 overflow-y-auto space-y-3.5 bg-slate-50"></div>
+
+            <form id="builder-chat-form" class="p-3 bg-white border-t border-slate-200 flex items-center gap-2">
+              <label title="Attach site photo" class="cursor-pointer px-2.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors shrink-0">
+                + Photo
+                <input id="builder-chat-photo-input" type="file" accept="image/*" class="hidden" />
+              </label>
+              <input id="builder-chat-input" type="text" placeholder="Reply directly as Jamie Cox..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:bg-white focus:border-amber-500" required />
+              <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-4 py-2 rounded-xl text-sm transition-colors shrink-0">
+                Send
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 mt-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+      <span>&copy; 2026 White Horse Builders Ltd • Registered in England &amp; Wales • VAT Reg No: GB 418 7291 04</span>
+      <span>North Norfolk Residential Construction Portal</span>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       MODAL 1: FULLSCREEN PHOTO LIGHTBOX (NEXT / PREVIOUS)
+       ===================================================================== -->
+  <div id="photo-modal" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full overflow-hidden shadow-2xl">
+      <div class="relative bg-slate-950 flex items-center justify-center max-h-[68vh] min-h-[260px]">
+        <img id="lightbox-img" src="" alt="Site Progress" class="max-h-[68vh] w-auto object-contain" />
+
+        <button type="button" data-action="lightbox-prev" class="absolute left-3 top-1/2 -translate-y-1/2 px-3 py-2 rounded-xl bg-slate-900/85 hover:bg-amber-600 text-white text-xs font-bold shadow-lg transition-colors">
+          &larr; Prev
+        </button>
+        <button type="button" data-action="lightbox-next" class="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-2 rounded-xl bg-slate-900/85 hover:bg-amber-600 text-white text-xs font-bold shadow-lg transition-colors">
+          Next &rarr;
+        </button>
+        <button type="button" data-action="close-lightbox" class="absolute top-3 right-3 px-3 py-1.5 rounded-xl bg-slate-900/85 hover:bg-slate-800 text-white text-xs font-bold">
+          Close &times;
+        </button>
+      </div>
+
+      <div class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div class="flex flex-wrap items-center gap-2 mb-1">
+            <span id="lightbox-phase" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800"></span>
+            <span id="lightbox-date" class="text-xs text-slate-500 font-medium"></span>
+            <span id="lightbox-counter" class="text-xs text-slate-400"></span>
+          </div>
+          <p id="lightbox-caption" class="text-sm sm:text-base font-medium text-slate-900"></p>
+        </div>
+        <button type="button" data-action="close-lightbox" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-800 self-end sm:self-center shrink-0">
+          Close Lightbox
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL 2: UK FORMAL DOCUMENT PREVIEW & PRINT SHEET
+       ===================================================================== -->
+  <div id="doc-modal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl">
+      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+        <div>
+          <h4 id="doc-modal-title" class="font-bold text-sm sm:text-base">Document Preview</h4>
+          <p id="doc-modal-subtitle" class="text-xs text-slate-400">White Horse Builders Ltd • Verified Record</p>
+        </div>
+        <button type="button" data-action="close-doc-modal" class="text-slate-300 hover:text-white text-sm font-bold px-2 py-1">
+          &times;
+        </button>
+      </div>
+
+      <div class="p-5 sm:p-6 space-y-4 max-h-[78vh] overflow-y-auto">
+        <div id="doc-modal-sheet" class="bg-white border-2 border-slate-200 rounded-xl p-5 sm:p-6 space-y-4 text-xs sm:text-sm text-slate-700">
+          <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-slate-200 pb-4">
+            <div>
+              <p class="font-extrabold text-base text-slate-900 tracking-tight">WHITE HORSE BUILDERS LTD</p>
+              <p class="text-[11px] text-slate-500">Registered in England &amp; Wales • VAT Reg No: GB 418 7291 04</p>
+              <p class="text-[11px] text-slate-500">FMB &amp; TrustMark Registered • North Norfolk, UK</p>
+            </div>
+            <div class="sm:text-right">
+              <span id="doc-modal-status" class="inline-block text-xs font-bold px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-200"></span>
+              <p id="doc-modal-ref" class="text-[11px] text-slate-500 font-mono mt-1"></p>
+            </div>
+          </div>
+
+          <div id="doc-modal-client-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200/80 text-xs"></div>
+
+          <p id="doc-modal-summary" class="leading-relaxed text-slate-700"></p>
+
+          <div id="doc-modal-financials" class="bg-slate-900 text-white p-4 rounded-xl text-xs font-medium leading-relaxed"></div>
+
+          <div class="pt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 border-t border-slate-100">
+            <span>Authorised by: Jamie Cox (Site Manager, SMSTS &amp; CSCS)</span>
+            <span>NNDC Building Control Compliant</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2.5">
+          <button type="button" data-action="close-doc-modal" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+            Close
+          </button>
+          <button type="button" data-action="print-doc" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-xs">
+            Print / Save PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL 3: DIGITAL SIGNATURE CONFIRMATION FOR VARIATIONS
+       ===================================================================== -->
+  <div id="sign-modal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+        <div>
+          <h4 class="font-bold text-sm sm:text-base">Digital Variation Sign-Off</h4>
+          <p class="text-xs text-slate-400">White Horse Builders Ltd • JCT Contract Amendment</p>
+        </div>
+        <button type="button" data-action="close-sign-modal" class="text-slate-300 hover:text-white text-sm font-bold px-2 py-1">
+          &times;
+        </button>
+      </div>
+
+      <form id="sign-variation-form" class="p-5 sm:p-6 space-y-4">
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-1">
+          <p id="sign-modal-var-code" class="text-xs font-mono font-bold text-amber-800"></p>
+          <p id="sign-modal-var-title" class="text-sm font-bold text-slate-900"></p>
+          <p id="sign-modal-var-amount" class="text-sm font-extrabold text-slate-900 pt-1"></p>
+        </div>
+
+        <div>
+          <label for="sign-modal-name-input" class="block text-xs font-semibold text-slate-700 mb-1.5">
+            Type your full name to confirm digital approval:
+          </label>
+          <input id="sign-modal-name-input" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:border-amber-500" required />
+          <p class="text-[11px] text-slate-500 mt-1.5">
+            By signing, this variation is added to your live Contract Sum and an audit receipt is posted to Jamie Cox in Live Project Chat.
+          </p>
+        </div>
+
+        <div class="flex items-center justify-end gap-2.5 pt-2">
+          <button type="button" data-action="close-sign-modal" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+            Cancel
+          </button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold shadow-xs">
+            Confirm &amp; Digitally Sign
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       APPLICATION JAVASCRIPT (CLEAN, ESCAPE-SAFE, EVENT-DELEGATED)
+       ===================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      var STORAGE_KEY = 'whb_client_portal_mvp_v2';
+
+      // Crisp inline SVG fallback so no broken image icon can ever appear
+      var FALLBACK_IMAGE_URI = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">' +
+          '<rect width="800" height="500" fill="#0F172A"/>' +
+          '<rect x="24" y="24" width="752" height="452" rx="16" fill="#1E293B" stroke="#D97706" stroke-width="2"/>' +
+          '<text x="400" y="235" fill="#F8FAFC" font-family="sans-serif" font-size="22" font-weight="bold" text-anchor="middle">WHITE HORSE BUILDERS LTD</text>' +
+          '<text x="400" y="270" fill="#FBBF24" font-family="sans-serif" font-size="14" text-anchor="middle">North Norfolk Site Progress Photograph</text>' +
+        '</svg>'
+      );
+
+      var VERIFIED_PHOTOS = {
+        brickworkExtension: 'https://buildaway.co.uk/img/home-extension.webp',
+        firstFixElectrics: 'https://www.brightsparkelectrician.co.uk/uploads/1st%20%26%202nd%20Fix/At%20end%20of%202nd%20fix_Bright_Spark_Electricians.jpg',
+        concreteFoundations: 'https://www.self-build.co.uk/wp-content/uploads/2013/07/foundations-property-self-build-project-2000x1333.jpg',
+        timberTrusses: 'https://mbctimberframe.co.uk/wp-content/uploads/Truss-1-1900-w-7-5.jpg',
+        biFoldExtension: 'https://img.expressbifolds.co.uk/spio/ret_img+q_cdnize+to_auto+s_webp:avif/www.expressbifolds.co.uk/wp-content/uploads/2018/09/img0004High_Res-1920x1128.jpg'
+      };
+
+      var BUILD_STAGES = [
+        { num: 1, label: 'Groundworks & Foundations' },
+        { num: 2, label: 'Brickwork & RSJ Steels' },
+        { num: 3, label: 'Roof & Weatherproofing' },
+        { num: 4, label: 'First Fix Electrics & Plumbing' },
+        { num: 5, label: 'Plastering & Second Fix' },
+        { num: 6, label: 'Snagging & Handover' }
+      ];
+
+      var PHOTO_PRESETS = [
+        {
+          label: 'RSJ Steel Beam',
+          phase: 'Brickwork & Steels',
+          caption: '203x203x46 UC RSJ structural steel beam installed on Class B engineering brick padstones and inspected by NNDC Building Control.',
+          url: VERIFIED_PHOTOS.brickworkExtension
+        },
+        {
+          label: 'First Fix Wiring',
+          phase: 'First Fix',
+          caption: 'First fix electrical circuits, consumer unit tails, and kitchen socket back-boxes chased and levelled at 1,150mm AFFL.',
+          url: VERIFIED_PHOTOS.firstFixElectrics
+        },
+        {
+          label: 'Roof Trusses',
+          phase: 'Roofing',
+          caption: 'Engineered C24 treated timber roof trusses craned into position, braced, and strapped ahead of breathable membrane.',
+          url: VERIFIED_PHOTOS.timberTrusses
+        },
+        {
+          label: 'Bi-Fold Glazing',
+          phase: 'First Fix',
+          caption: 'Thermally broken powder-coated aluminium bi-fold doors glazed with Part L solar-control units and flush weathered threshold.',
+          url: VERIFIED_PHOTOS.biFoldExtension
+        }
+      ];
+
+      var JAMIE_AUTO_REPLIES = [
+        'Thanks for the message! North Norfolk District Council Building Control are booked in for Thursday at 09:30—I will upload the sign-off certificate straight after.',
+        'All noted on our site log. I have confirmed the measurements with our lead sparky and carpenter on site this morning.',
+        'Cheers! I will snap a couple more progress photos before we lock up the site at 16:30 today.'
+      ];
+      var jamieReplyCursor = 0;
+
+      function getDefaultProjects() {
+        return {
+          'proj-1': {
+            id: 'proj-1',
+            title: 'Rear Kitchen Extension & Structural Knock-Through',
+            address: '14 Station Road, North Norfolk',
+            postcode: 'NR27 9DS',
+            ref: 'WHB-104-2026',
+            clientName: 'David & Sarah Mitchell',
+            baseContractNet: 45500,
+            progress: 65,
+            activeStage: 4,
+            targetHandover: '12 Dec 2026',
+            lastUpdated: '24 Nov 2026, 14:40',
+            weather: '8°C • Crisp & Dry, Light SW Coastal Breeze',
+            tradesOnSite: 'Jamie Cox (SM), 2x NICEIC Electricians, 1x Heating Eng.',
+            diaryNote: 'First fix electrics and plumbing completed across the new 300mm cavity wall and 203x203x46 UC RSJ steel opening. Wet underfloor heating loops pressure-tested at 4 bar over 100mm Celotex PIR insulation ahead of Friday morning liquid screed. North Norfolk District Council Building Control passed the pre-screed inspection.',
+            photos: [
+              {
+                id: 'p-101',
+                phase: 'First Fix',
+                caption: 'First fix electrical circuits, consumer unit tails, and kitchen socket back-boxes installed in 300mm cavity wall ahead of plasterboarding.',
+                date: '24 Nov 2026, 11:20',
+                url: VERIFIED_PHOTOS.firstFixElectrics
+              },
+              {
+                id: 'p-102',
+                phase: 'Brickwork & Steels',
+                caption: '300mm cavity brickwork raised to wall-plate height with 203x203x46 UC RSJ steel beam spanning the 4.5m rear kitchen knock-through.',
+                date: '18 Nov 2026, 15:10',
+                url: VERIFIED_PHOTOS.brickworkExtension
+              },
+              {
+                id: 'p-103',
+                phase: 'Roofing',
+                caption: 'C24 timber roof structure cut, strapped, and felted with breathable membrane for full weatherproofing.',
+                date: '12 Nov 2026, 13:45',
+                url: VERIFIED_PHOTOS.timberTrusses
+              },
+              {
+                id: 'p-104',
+                phase: 'Groundworks',
+                caption: '1,000mm deep trench foundations poured with C25 ready-mix concrete and signed off on site by NNDC Building Control.',
+                date: '29 Oct 2026, 10:05',
+                url: VERIFIED_PHOTOS.concreteFoundations
+              }
+            ],
+            documents: [
+              {
+                id: 'd-101',
+                title: 'JCT_Homeowner_Building_Contract_Signed.pdf',
+                category: 'Contracts',
+                date: '05 Oct 2026',
+                size: '2.4 MB',
+                status: 'JCT Signed',
+                ref: 'JCT-HO/C-WHB-104',
+                summary: 'Executed JCT Building Contract for a Homeowner/Occupier covering the single-storey rear kitchen extension and structural knock-through at 14 Station Road, NR27 9DS.',
+                financials: 'Base Net Contract Sum: £45,500.00 • UK VAT @ 20%: £9,100.00 • Base Gross Sum: £54,600.00 inc. VAT'
+              },
+              {
+                id: 'd-102',
+                title: 'NNDC_Building_Control_Initial_Notice.pdf',
+                category: 'Building Control',
+                date: '08 Oct 2026',
+                size: '1.1 MB',
+                status: 'NNDC Approved',
+                ref: 'NNDC-BC-2026/0841',
+                summary: 'North Norfolk District Council Building Control statutory acceptance notice confirming inspection stages (Foundations, DPC, Oversite Insulation, RSJ Steel, Drainage, and Completion).',
+                financials: 'Inspection Log: Foundations, RSJ Steel Beam & Pre-Screed Insulation Passed'
+              },
+              {
+                id: 'd-103',
+                title: 'Structural_Engineer_RSJ_Calculations.pdf',
+                category: 'Structural',
+                date: '11 Oct 2026',
+                size: '4.8 MB',
+                status: 'Stamped & Verified',
+                ref: 'SE-CALCS-14SR-R2',
+                summary: 'Chartered Structural Engineer calculation package specifying the 203x203x46 UC S275 steel beam, 440x215x140mm high-strength concrete padstones, and foundation load bearings.',
+                financials: 'Compliance: Eurocode 3 & UK Building Regulations Approved Document A (Structure)'
+              },
+              {
+                id: 'd-104',
+                title: 'Stage_2_Valuation_Invoice_0042.pdf',
+                category: 'Valuations & Invoices',
+                date: '18 Nov 2026',
+                size: '680 KB',
+                status: 'Due Now',
+                ref: 'INV-WHB-0042',
+                summary: 'Stage 2 interim valuation covering completion of weather-tight roof structure, 203x203x46 UC RSJ steel installation, and first fix electrics & plumbing.',
+                financials: 'Net Valuation: £13,650.00 • UK VAT @ 20%: £2,730.00 • Total Payable via BACS: £16,380.00 inc. VAT'
+              },
+              {
+                id: 'd-105',
+                title: 'NICEIC_Part_P_Electrical_Schedule.pdf',
+                category: 'Certificates',
+                date: '24 Nov 2026',
+                size: '920 KB',
+                status: 'First Fix Logged',
+                ref: 'NICEIC-SCH-7671',
+                summary: 'First fix circuit schedule and SPD/RCBO consumer unit upgrade specification prepared for Part P Building Regulations self-certification upon second fix testing.',
+                financials: 'Standard: BS 7671:2018+A2:2022 (18th Edition IET Wiring Regulations)'
+              }
+            ],
+            variations: [
+              {
+                id: 'var-101',
+                code: 'VAR-01',
+                title: 'Upgrade to Powder-Coated Aluminium Bi-Fold Doors (3.6m)',
+                description: 'Upgrade from standard white uPVC patio sliders to thermally broken RAL 7016 anthracite powder-coated aluminium 3-pane bi-fold doors with flush weathered threshold and Part L solar-control glazing.',
+                netAmount: 1850,
+                vatAmount: 370,
+                grossAmount: 2220,
+                raisedDate: '23 Nov 2026',
+                status: 'Pending Client Approval',
+                signedBy: '',
+                signedAt: ''
+              },
+              {
+                id: 'var-102',
+                code: 'VAR-02',
+                title: 'Additional Underfloor Heating Zone in Utility',
+                description: 'Extend wet underfloor heating manifold by 1 additional circuit into the adjoining utility room with dedicated programmable wall thermostat.',
+                netAmount: 650,
+                vatAmount: 130,
+                grossAmount: 780,
+                raisedDate: '16 Nov 2026',
+                status: 'Approved',
+                signedBy: 'David & Sarah Mitchell',
+                signedAt: '17 Nov 2026, 18:15'
+              }
+            ],
+            payments: [
+              {
+                id: 'pay-101',
+                stage: 'Deposit (15%) — Contract Mobilisation & Materials',
+                netAmount: 6825,
+                grossAmount: 8190,
+                dueDate: '05 Oct 2026',
+                status: 'Paid'
+              },
+              {
+                id: 'pay-102',
+                stage: 'Stage 1 (30%) — Foundations, Brickwork & RSJ Steels',
+                netAmount: 13650,
+                grossAmount: 16380,
+                dueDate: '04 Nov 2026',
+                status: 'Paid'
+              },
+              {
+                id: 'pay-103',
+                stage: 'Stage 2 (30%) — Weathertight Roof & First Fix M&E',
+                netAmount: 13650,
+                grossAmount: 16380,
+                dueDate: '25 Nov 2026',
+                status: 'Due Now'
+              },
+              {
+                id: 'pay-104',
+                stage: 'Stage 3 (25%) — Plastering, Second Fix & Practical Completion',
+                netAmount: 11375,
+                grossAmount: 13650,
+                dueDate: '12 Dec 2026',
+                status: 'Upcoming'
+              }
+            ],
+            messages: [
+              {
+                id: 'm-101',
+                sender: 'builder',
+                senderName: 'Jamie Cox',
+                text: 'Morning David & Sarah! Quick update from 14 Station Road: North Norfolk District Council Building Control passed our pre-screed insulation and first fix pipework inspection this morning.',
+                time: '09:15'
+              },
+              {
+                id: 'm-102',
+                sender: 'client',
+                senderName: 'David & Sarah Mitchell',
+                text: 'Morning Jamie, brilliant news on Building Control! Can we double-check the socket heights above the kitchen worktop?',
+                time: '10:42'
+              },
+              {
+                id: 'm-103',
+                sender: 'builder',
+                senderName: 'Jamie Cox',
+                text: 'All worktop socket back-boxes are set at 1,150mm AFFL as agreed on the kitchen plan. I have also uploaded VAR-01 for the anthracite aluminium bi-fold doors in your Variations tab.',
+                time: '11:05'
+              }
+            ]
+          },
+
+          'proj-2': {
+            id: 'proj-2',
+            title: 'Loft Conversion & Dormer',
+            address: '8 Coastguard Cottages, North Norfolk',
+            postcode: 'NR27 9BU',
+            ref: 'WHB-108-2026',
+            clientName: 'Eleanor Hughes',
+            baseContractNet: 32000,
+            progress: 35,
+            activeStage: 3,
+            targetHandover: '22 Jan 2027',
+            lastUpdated: '23 Nov 2026, 16:30',
+            weather: '7°C • Moderate North Sea Breeze, Dry',
+            tradesOnSite: 'Jamie Cox (SM), 2x Carpenters, 1x Leadworker',
+            diaryNote: 'Structural C24 timber dormer framing erected and wrapped in breathable roofing membrane with Code 5 milled lead flashings. 150mm Celotex PIR insulation fitted between rafters to achieve Part L thermal U-values. NNDC Building Control inspected the ridge steel beam and trimmer joists.',
+            photos: [
+              {
+                id: 'p-201',
+                phase: 'Roofing',
+                caption: 'C24 graded structural timber dormer framing and roof trusses erected ahead of clay pantile re-tiling.',
+                date: '23 Nov 2026, 15:45',
+                url: VERIFIED_PHOTOS.timberTrusses
+              },
+              {
+                id: 'p-202',
+                phase: 'Brickwork & Steels',
+                caption: 'Gable masonry rebuilt in NHL 3.5 hydraulic lime mortar with padstones bedded for new ridge steel beam.',
+                date: '14 Nov 2026, 12:30',
+                url: VERIFIED_PHOTOS.brickworkExtension
+              }
+            ],
+            documents: [
+              {
+                id: 'd-201',
+                title: 'JCT_Homeowner_Building_Contract_Signed.pdf',
+                category: 'Contracts',
+                date: '19 Oct 2026',
+                size: '2.1 MB',
+                status: 'JCT Signed',
+                ref: 'JCT-HO/C-WHB-108',
+                summary: 'Signed JCT Homeowner Building Contract covering loft conversion, rear dormer construction, and clay pantile re-tiling at 8 Coastguard Cottages, NR27 9BU.',
+                financials: 'Base Net Contract Sum: £32,000.00 • UK VAT @ 20%: £6,400.00 • Base Gross Sum: £38,400.00 inc. VAT'
+              },
+              {
+                id: 'd-202',
+                title: 'NNDC_Building_Control_Initial_Notice.pdf',
+                category: 'Building Control',
+                date: '22 Oct 2026',
+                size: '1.0 MB',
+                status: 'NNDC Approved',
+                ref: 'NNDC-BC-2026/0912',
+                summary: 'North Norfolk District Council Building Control full plans approval covering dormer structural trimmer joists, Part L roof insulation, and fire-escape windows.',
+                financials: 'Inspection Log: Ridge Steel Beam & Dormer Timber Framing Passed'
+              },
+              {
+                id: 'd-203',
+                title: 'Stage_1_Valuation_Invoice_0038.pdf',
+                category: 'Valuations & Invoices',
+                date: '26 Oct 2026',
+                size: '610 KB',
+                status: 'Due Now',
+                ref: 'INV-WHB-0038',
+                summary: 'Stage 1 interim valuation covering perimeter scaffolding, roof strip, and structural ridge steel installation at 8 Coastguard Cottages.',
+                financials: 'Net Valuation: £9,600.00 • UK VAT @ 20%: £1,920.00 • Total Payable via BACS: £11,520.00 inc. VAT'
+              }
+            ],
+            variations: [
+              {
+                id: 'var-201',
+                code: 'VAR-01',
+                title: 'Upgrade to Conservation Cast-Iron Style Roof Windows (x2)',
+                description: 'Supply and install two conservation-grade centre-pivot roof windows with black external glazing bars to suit coastal cottage heritage aesthetics.',
+                netAmount: 750,
+                vatAmount: 150,
+                grossAmount: 900,
+                raisedDate: '22 Nov 2026',
+                status: 'Pending Client Approval',
+                signedBy: '',
+                signedAt: ''
+              }
+            ],
+            payments: [
+              {
+                id: 'pay-201',
+                stage: 'Deposit (15%) — Scaffolding & Structural Steel Order',
+                netAmount: 4800,
+                grossAmount: 5760,
+                dueDate: '19 Oct 2026',
+                status: 'Paid'
+              },
+              {
+                id: 'pay-202',
+                stage: 'Stage 1 (30%) — Dormer Timber Framing & Leadwork',
+                netAmount: 9600,
+                grossAmount: 11520,
+                dueDate: '26 Nov 2026',
+                status: 'Due Now'
+              },
+              {
+                id: 'pay-203',
+                stage: 'Stage 2 (30%) — First Fix Electrics, Plumbing & Insulation',
+                netAmount: 9600,
+                grossAmount: 11520,
+                dueDate: '18 Dec 2026',
+                status: 'Upcoming'
+              },
+              {
+                id: 'pay-204',
+                stage: 'Stage 3 (25%) — Plastering, Second Fix & Handover',
+                netAmount: 8000,
+                grossAmount: 9600,
+                dueDate: '22 Jan 2027',
+                status: 'Upcoming'
+              }
+            ],
+            messages: [
+              {
+                id: 'm-201',
+                sender: 'builder',
+                senderName: 'Jamie Cox',
+                text: 'Afternoon Eleanor, the C24 dormer timber framing and breathable membrane went on smoothly today—just uploaded a fresh photo to your gallery.',
+                time: '16:35'
+              }
+            ]
+          }
+        };
+      }
+
+      var projects = getDefaultProjects();
+
+      var appState = {
+        role: 'client',
+        projectId: 'proj-1',
+        activeTab: 'photos',
+        photoFilter: 'All',
+        docFilter: 'All',
+        lightboxIndex: 0,
+        stagedPhotoUrl: null,
+        signingVariationId: null
+      };
+
+      function loadPersistedState() {
+        try {
+          var raw = window.localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && parsed['proj-1'] && parsed['proj-2']) {
+              projects = parsed;
+            }
+          }
+        } catch (err) {
+          projects = getDefaultProjects();
+        }
+      }
+
+      function savePersistedState() {
+        try {
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+        } catch (err) {
+          // Ignore storage quota errors if user uploads a large local image
+        }
+      }
+
+      function getCurrentProject() {
+        return projects[appState.projectId] || projects['proj-1'];
+      }
+
+      function formatGBP(amount) {
+        return '£' + Math.round(Number(amount || 0)).toLocaleString('en-GB');
+      }
+
+      function getContractTotals(proj) {
+        var approvedVarsNet = proj.variations
+          .filter(function (v) { return v.status === 'Approved'; })
+          .reduce(function (sum, v) { return sum + Number(v.netAmount || 0); }, 0);
+        var totalNet = Number(proj.baseContractNet || 0) + approvedVarsNet;
+        var totalGross = Math.round(totalNet * 1.2);
+        return {
+          approvedVarsNet: approvedVarsNet,
+          totalNet: totalNet,
+          totalGross: totalGross
+        };
+      }
+
+      function getNowTime24() {
+        var now = new Date();
+        var hh = String(now.getHours()).padStart(2, '0');
+        var mm = String(now.getMinutes()).padStart(2, '0');
+        return hh + ':' + mm;
+      }
+
+      function escapeHtml(value) {
+        if (value === null || value === undefined) return '';
+        return String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function showToast(message, variant) {
+        var container = document.getElementById('toast-container');
+        if (!container) return;
+        var toast = document.createElement('div');
+        var borderClass = variant === 'success' ? 'border-emerald-500/60' : 'border-amber-500/60';
+        var dotClass = variant === 'success' ? 'bg-emerald-400' : 'bg-amber-400';
+        toast.className = 'pointer-events-auto bg-slate-900 text-white border ' + borderClass + ' px-4 py-3 rounded-xl shadow-lg text-xs sm:text-sm font-medium flex items-center gap-2.5 transition-opacity duration-200';
+        toast.innerHTML = '<span class="w-2 h-2 rounded-full ' + dotClass + ' shrink-0"></span><span>' + escapeHtml(message) + '</span>';
+        container.appendChild(toast);
+        setTimeout(function () {
+          toast.style.opacity = '0';
+          setTimeout(function () {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+          }, 220);
+        }, 3000);
+      }
+
+      // =====================================================================
+      // RENDER FUNCTIONS
+      // =====================================================================
+      function renderAll() {
+        var proj = getCurrentProject();
+        var totals = getContractTotals(proj);
+        var activeStageObj = BUILD_STAGES.find(function (s) { return s.num === proj.activeStage; }) || BUILD_STAGES[0];
+
+        // Header context
+        var headerContext = document.getElementById('header-context-label');
+        if (headerContext) {
+          headerContext.textContent = appState.role === 'client'
+            ? 'Client Portal • ' + proj.clientName + ' (' + proj.postcode + ')'
+            : 'Site Admin Console • ' + proj.address + ', ' + proj.postcode;
+        }
+
+        // Hero Section
+        document.getElementById('hero-stage-pill').textContent = 'Stage ' + activeStageObj.num + ': ' + activeStageObj.label;
+        document.getElementById('hero-title').textContent = proj.title;
+        document.getElementById('hero-meta').innerHTML =
+          '<span><strong>Location:</strong> ' + escapeHtml(proj.address) + ', <strong>' + escapeHtml(proj.postcode) + '</strong></span>' +
+          '<span>•</span>' +
+          '<span><strong>Client:</strong> ' + escapeHtml(proj.clientName) + '</span>' +
+          '<span>•</span>' +
+          '<span><strong>Ref:</strong> ' + escapeHtml(proj.ref) + '</span>';
+
+        document.getElementById('hero-progress-pct').textContent = proj.progress + '%';
+        document.getElementById('hero-progress-bar').style.width = proj.progress + '%';
+        document.getElementById('hero-contract-sum').textContent = formatGBP(totals.totalGross) + ' inc. VAT';
+        document.getElementById('hero-handover-text').textContent = 'Target Handover: ' + proj.targetHandover;
+
+        // Tab Badges
+        var pendingVars = proj.variations.filter(function (v) { return v.status !== 'Approved'; }).length;
+        document.getElementById('badge-photos').textContent = String(proj.photos.length);
+        document.getElementById('badge-documents').textContent = String(proj.documents.length);
+        document.getElementById('badge-variations').textContent = pendingVars > 0 ? pendingVars + ' Pending' : String(proj.variations.length);
+        document.getElementById('badge-payments').textContent = String(proj.payments.length);
+
+        // Site Diary Banner
+        document.getElementById('diary-timestamp').textContent = proj.lastUpdated;
+        document.getElementById('diary-note-text').textContent = proj.diaryNote;
+        document.getElementById('diary-weather-text').textContent = proj.weather;
+        document.getElementById('diary-trades-text').textContent = proj.tradesOnSite;
+
+        // Admin View Sync
+        document.getElementById('admin-banner-subtitle').textContent =
+          'Managing ' + proj.address + ', ' + proj.postcode + ' (' + proj.clientName + ')';
+        document.getElementById('admin-stage-select').value = String(proj.activeStage);
+        document.getElementById('admin-progress-slider').value = String(proj.progress);
+        document.getElementById('admin-progress-display').textContent = proj.progress + '%';
+        document.getElementById('admin-weather-input').value = proj.weather;
+        document.getElementById('admin-trades-input').value = proj.tradesOnSite;
+        document.getElementById('admin-diary-input').value = proj.diaryNote;
+        document.getElementById('admin-chat-subtitle').textContent = 'Replying to ' + proj.clientName;
+
+        renderRoadmap(proj);
+        renderPhotos(proj);
+        renderDocuments(proj);
+        renderVariations(proj, totals);
+        renderPayments(proj);
+        renderChats(proj);
+        renderAdminPhotoPresets();
+      }
+
+      function renderRoadmap(proj) {
+        var container = document.getElementById('build-roadmap-stepper');
+        container.innerHTML = BUILD_STAGES.map(function (stage) {
+          var isDone = stage.num < proj.activeStage;
+          var isCurrent = stage.num === proj.activeStage;
+          var cardClass = 'rounded-xl p-3 border text-xs transition-all ';
+          var badgeHtml = '';
+
+          if (isDone) {
+            cardClass += 'bg-emerald-50/70 border-emerald-200 text-emerald-950';
+            badgeHtml = '<span class="text-[11px] font-bold text-emerald-700">✓ Completed</span>';
+          } else if (isCurrent) {
+            cardClass += 'bg-amber-50 border-amber-400 text-slate-900 ring-1 ring-amber-400/40';
+            badgeHtml = '<span class="text-[11px] font-bold text-amber-700">● In Progress</span>';
+          } else {
+            cardClass += 'bg-slate-50 border-slate-200 text-slate-400';
+            badgeHtml = '<span class="text-[11px] font-medium text-slate-400">Upcoming</span>';
+          }
+
+          return (
+            '<div class="' + cardClass + '">' +
+              '<div class="flex items-center justify-between mb-1">' +
+                '<span class="font-extrabold">0' + stage.num + '</span>' +
+                badgeHtml +
+              '</div>' +
+              '<p class="font-semibold leading-snug">' + escapeHtml(stage.label) + '</p>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function renderPhotos(proj) {
+        var grid = document.getElementById('photo-gallery-grid');
+        var list = appState.photoFilter === 'All'
+          ? proj.photos
+          : proj.photos.filter(function (p) { return p.phase === appState.photoFilter; });
+
+        if (!list.length) {
+          grid.innerHTML =
+            '<div class="col-span-full bg-white rounded-2xl border border-slate-200 p-8 text-center text-sm text-slate-500">' +
+              'No site photographs logged under this filter yet.' +
+            '</div>';
+          return;
+        }
+
+        grid.innerHTML = list.map(function (photo) {
+          return (
+            '<article data-action="open-lightbox" data-photo-id="' + escapeHtml(photo.id) + '" class="group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md hover:border-amber-400 transition-all cursor-pointer flex flex-col">' +
+              '<div class="relative h-52 bg-slate-900 overflow-hidden">' +
+                '<img src="' + escapeHtml(photo.url) + '" alt="' + escapeHtml(photo.caption) + '" class="site-photo-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />' +
+                '<span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-950/85 text-amber-400">' +
+                  escapeHtml(photo.phase) +
+                '</span>' +
+                '<span class="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white/90 text-slate-900 opacity-0 group-hover:opacity-100 transition-opacity">' +
+                  'Inspect' +
+                '</span>' +
+              '</div>' +
+              '<div class="p-4 flex-1 flex flex-col justify-between gap-2">' +
+                '<p class="text-xs sm:text-sm font-medium text-slate-800 leading-relaxed">' + escapeHtml(photo.caption) + '</p>' +
+                '<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-400">' +
+                  '<span>Uploaded by Jamie Cox</span>' +
+                  '<span class="font-medium text-slate-500">' + escapeHtml(photo.date) + '</span>' +
+                '</div>' +
+              '</div>' +
+            '</article>'
+          );
+        }).join('');
+
+        attachImageFallbacks();
+      }
+
+      function renderDocuments(proj) {
+        var listEl = document.getElementById('documents-list');
+        var list = appState.docFilter === 'All'
+          ? proj.documents
+          : proj.documents.filter(function (d) { return d.category === appState.docFilter; });
+
+        if (!list.length) {
+          listEl.innerHTML =
+            '<div class="bg-white rounded-2xl border border-slate-200 p-8 text-center text-sm text-slate-500">' +
+              'No documents in this category yet.' +
+            '</div>';
+          return;
+        }
+
+        listEl.innerHTML = list.map(function (doc) {
+          return (
+            '<div data-action="open-doc-modal" data-doc-id="' + escapeHtml(doc.id) + '" class="bg-white rounded-2xl border border-slate-200 hover:border-amber-400 p-4 shadow-xs hover:shadow-sm transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3">' +
+              '<div class="flex items-start sm:items-center gap-3.5">' +
+                '<div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 font-extrabold text-xs flex items-center justify-center shrink-0">' +
+                  'PDF' +
+                '</div>' +
+                '<div>' +
+                  '<h4 class="font-bold text-xs sm:text-sm text-slate-900 break-all">' + escapeHtml(doc.title) + '</h4>' +
+                  '<p class="text-[11px] text-slate-500 mt-0.5">' + escapeHtml(doc.category) + ' • ' + escapeHtml(doc.date) + ' • ' + escapeHtml(doc.size) + '</p>' +
+                '</div>' +
+              '</div>' +
+              '<div class="flex items-center justify-between sm:justify-end gap-2.5 shrink-0">' +
+                '<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">' +
+                  escapeHtml(doc.status) +
+                '</span>' +
+                '<span class="text-xs font-semibold text-slate-800 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg">' +
+                  'Inspect / Print' +
+                '</span>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function renderVariations(proj, totals) {
+        document.getElementById('variations-summary-badge').textContent =
+          'Live Contract Sum: ' + formatGBP(totals.totalGross) + ' inc. VAT';
+
+        var listEl = document.getElementById('variations-list');
+        if (!proj.variations.length) {
+          listEl.innerHTML =
+            '<div class="bg-white rounded-2xl border border-slate-200 p-8 text-center text-sm text-slate-500">' +
+              'No variations raised on this contract.' +
+            '</div>';
+          return;
+        }
+
+        listEl.innerHTML = proj.variations.map(function (v) {
+          var isApproved = v.status === 'Approved';
+          var borderClass = isApproved ? 'border-emerald-200' : 'border-amber-300';
+          var pillClass = isApproved
+            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+            : 'bg-amber-50 text-amber-800 border-amber-200';
+
+          var footerHtml = isApproved
+            ? '<div class="bg-emerald-50/80 border border-emerald-200 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2 text-xs text-emerald-900">' +
+                '<span class="font-bold">✓ Digitally Signed by: ' + escapeHtml(v.signedBy) + '</span>' +
+                '<span class="text-emerald-700">' + escapeHtml(v.signedAt) + '</span>' +
+              '</div>'
+            : '<div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">' +
+                '<span class="text-xs text-slate-500">Awaiting homeowner digital authorisation</span>' +
+                '<button type="button" data-action="open-sign-modal" data-var-id="' + escapeHtml(v.id) + '" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold shadow-xs transition-colors">' +
+                  'Approve &amp; Digitally Sign' +
+                '</button>' +
+              '</div>';
+
+          return (
+            '<div class="bg-white rounded-2xl border ' + borderClass + ' p-5 shadow-xs space-y-4">' +
+              '<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">' +
+                '<div class="space-y-1">' +
+                  '<div class="flex flex-wrap items-center gap-2">' +
+                    '<span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-900 text-white">' + escapeHtml(v.code) + '</span>' +
+                    '<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full border ' + pillClass + '">' + escapeHtml(v.status) + '</span>' +
+                    '<span class="text-xs text-slate-400">Issued: ' + escapeHtml(v.raisedDate) + '</span>' +
+                  '</div>' +
+                  '<h4 class="font-bold text-base text-slate-900">' + escapeHtml(v.title) + '</h4>' +
+                  '<p class="text-xs sm:text-sm text-slate-600 leading-relaxed">' + escapeHtml(v.description) + '</p>' +
+                '</div>' +
+                '<div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-left sm:text-right shrink-0 min-w-[175px]">' +
+                  '<p class="text-[11px] text-slate-500">Net: ' + formatGBP(v.netAmount) + ' + VAT: ' + formatGBP(v.vatAmount) + '</p>' +
+                  '<p class="text-base font-extrabold text-slate-900">+' + formatGBP(v.grossAmount) + ' inc. VAT</p>' +
+                '</div>' +
+              '</div>' +
+              footerHtml +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function renderPayments(proj) {
+        var paidGross = proj.payments
+          .filter(function (p) { return p.status === 'Paid'; })
+          .reduce(function (s, p) { return s + Number(p.grossAmount || 0); }, 0);
+        var totalGross = proj.payments.reduce(function (s, p) { return s + Number(p.grossAmount || 0); }, 0);
+
+        document.getElementById('payments-paid-badge').textContent =
+          'Paid to Date: ' + formatGBP(paidGross) + ' of ' + formatGBP(totalGross) + ' inc. VAT';
+        document.getElementById('bacs-reference-pill').textContent = 'Ref: ' + proj.ref;
+
+        var listEl = document.getElementById('payments-list');
+        listEl.innerHTML = proj.payments.map(function (pay) {
+          var isPaid = pay.status === 'Paid';
+          var isDue = pay.status === 'Due Now';
+          var statusPill = '<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">Upcoming</span>';
+          if (isPaid) {
+            statusPill = '<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Paid via BACS</span>';
+          } else if (isDue) {
+            statusPill = '<span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">Due Now</span>';
+          }
+
+          var actionBtn = isDue
+            ? '<button type="button" data-action="confirm-bacs" data-pay-id="' + escapeHtml(pay.id) + '" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors">Confirm BACS Transfer Sent</button>'
+            : '';
+
+          return (
+            '<div class="bg-white rounded-2xl border ' + (isDue ? 'border-amber-300' : 'border-slate-200') + ' p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">' +
+              '<div class="space-y-1">' +
+                '<div class="flex flex-wrap items-center gap-2">' +
+                  statusPill +
+                  '<span class="text-xs text-slate-400">Milestone Date: ' + escapeHtml(pay.dueDate) + '</span>' +
+                '</div>' +
+                '<h4 class="font-bold text-sm text-slate-900">' + escapeHtml(pay.stage) + '</h4>' +
+                '<p class="text-xs text-slate-500">Net: ' + formatGBP(pay.netAmount) + ' • UK VAT @ 20%: ' + formatGBP(pay.grossAmount - pay.netAmount) + '</p>' +
+              '</div>' +
+              '<div class="flex items-center justify-between sm:justify-end gap-3 shrink-0">' +
+                '<span class="text-base font-extrabold text-slate-900">' + formatGBP(pay.grossAmount) + '</span>' +
+                actionBtn +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function renderChats(proj) {
+        var clientFeed = document.getElementById('client-chat-feed');
+        var builderFeed = document.getElementById('builder-chat-feed');
+
+        clientFeed.innerHTML = proj.messages.map(function (m) {
+          var isClient = m.sender === 'client';
+          var imgHtml = m.imageUrl
+            ? '<img src="' + escapeHtml(m.imageUrl) + '" alt="Attachment" class="site-photo-img mt-2 rounded-xl max-h-40 w-full object-cover border border-white/20" />'
+            : '';
+          return (
+            '<div class="flex flex-col ' + (isClient ? 'items-end' : 'items-start') + '">' +
+              '<span class="text-[11px] text-slate-400 mb-1 px-1">' + escapeHtml(m.senderName) + ' • ' + escapeHtml(m.time) + '</span>' +
+              '<div class="max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm leading-relaxed shadow-xs ' +
+                (isClient ? 'bg-slate-900 text-white rounded-br-sm' : 'bg-white text-slate-800 border border-slate-200 rounded-bl-sm') + '">' +
+                escapeHtml(m.text) +
+                imgHtml +
+              '</div>' +
+              (isClient ? '<span class="text-[10px] text-emerald-600 font-medium mt-0.5 px-1">✓✓ Read by Jamie Cox</span>' : '') +
+            '</div>'
+          );
+        }).join('');
+
+        builderFeed.innerHTML = proj.messages.map(function (m) {
+          var isBuilder = m.sender === 'builder';
+          var imgHtml = m.imageUrl
+            ? '<img src="' + escapeHtml(m.imageUrl) + '" alt="Attachment" class="site-photo-img mt-2 rounded-xl max-h-40 w-full object-cover border border-white/20" />'
+            : '';
+          return (
+            '<div class="flex flex-col ' + (isBuilder ? 'items-end' : 'items-start') + '">' +
+              '<span class="text-[11px] text-slate-400 mb-1 px-1">' + escapeHtml(m.senderName) + ' • ' + escapeHtml(m.time) + '</span>' +
+              '<div class="max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm leading-relaxed shadow-xs ' +
+                (isBuilder ? 'bg-amber-600 text-white rounded-br-sm' : 'bg-white text-slate-800 border border-slate-200 rounded-bl-sm') + '">' +
+                escapeHtml(m.text) +
+                imgHtml +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+
+        attachImageFallbacks();
+        clientFeed.scrollTop = clientFeed.scrollHeight;
+        builderFeed.scrollTop = builderFeed.scrollHeight;
+      }
+
+      function renderAdminPhotoPresets() {
+        var grid = document.getElementById('admin-photo-presets-grid');
+        if (!grid) return;
+        grid.innerHTML = PHOTO_PRESETS.map(function (preset, idx) {
+          return (
+            '<button type="button" data-action="apply-photo-preset" data-preset-index="' + idx + '" class="group text-left p-2 rounded-xl border border-slate-200 hover:border-amber-500 bg-slate-50 transition-all">' +
+              '<img src="' + escapeHtml(preset.url) + '" alt="' + escapeHtml(preset.label) + '" class="site-photo-img w-full h-12 object-cover rounded-lg mb-1.5" />' +
+              '<span class="block text-[11px] font-bold text-slate-800 group-hover:text-amber-700 truncate">' + escapeHtml(preset.label) + '</span>' +
+            '</button>'
+          );
+        }).join('');
+        attachImageFallbacks();
+      }
+
+      function attachImageFallbacks() {
+        var imgs = document.querySelectorAll('.site-photo-img');
+        for (var i = 0; i < imgs.length; i++) {
+          if (!imgs[i].dataset.fallbackBound) {
+            imgs[i].dataset.fallbackBound = '1';
+            imgs[i].addEventListener('error', function () {
+              if (this.src !== FALLBACK_IMAGE_URI) {
+                this.src = FALLBACK_IMAGE_URI;
+              }
+            });
+          }
+        }
+      }
+
+      // =====================================================================
+      // INTERACTION HANDLERS
+      // =====================================================================
+      function switchRole(newRole) {
+        appState.role = newRole;
+        var clientBtn = document.getElementById('btn-role-client');
+        var builderBtn = document.getElementById('btn-role-builder');
+        var clientView = document.getElementById('client-view');
+        var builderView = document.getElementById('builder-view');
+
+        if (newRole === 'client') {
+          clientBtn.className = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-amber-600 text-white shadow-sm';
+          builderBtn.className = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white';
+          clientView.classList.remove('hidden');
+          builderView.classList.add('hidden');
+        } else {
+          builderBtn.className = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-amber-600 text-white shadow-sm';
+          clientBtn.className = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white';
+          builderView.classList.remove('hidden');
+          clientView.classList.add('hidden');
+        }
+        renderAll();
+      }
+
+      function selectTab(tabName) {
+        appState.activeTab = tabName;
+        var tabKeys = ['photos', 'documents', 'variations', 'payments'];
+        tabKeys.forEach(function (key) {
+          var btn = document.getElementById('tab-btn-' + key);
+          var panel = document.getElementById('panel-' + key);
+          if (key === tabName) {
+            btn.className = 'py-3.5 px-1 text-xs sm:text-sm font-bold text-slate-900 border-b-2 border-amber-600 whitespace-nowrap flex items-center gap-2 transition-colors';
+            panel.classList.remove('hidden');
+          } else {
+            btn.className = 'py-3.5 px-1 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-900 border-b-2 border-transparent whitespace-nowrap flex items-center gap-2 transition-colors';
+            panel.classList.add('hidden');
+          }
+        });
+      }
+
+      function updateFilterPills(barId, activeFilter) {
+        var bar = document.getElementById(barId);
+        if (!bar) return;
+        var buttons = bar.querySelectorAll('button');
+        for (var i = 0; i < buttons.length; i++) {
+          var isMatch = buttons[i].dataset.filter === activeFilter;
+          buttons[i].className = isMatch
+            ? 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white'
+            : 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200';
+        }
+      }
+
+      function openLightbox(photoId) {
+        var proj = getCurrentProject();
+        var idx = proj.photos.findIndex(function (p) { return p.id === photoId; });
+        if (idx === -1) return;
+        appState.lightboxIndex = idx;
+        refreshLightbox();
+        document.getElementById('photo-modal').classList.remove('hidden');
+      }
+
+      function refreshLightbox() {
+        var proj = getCurrentProject();
+        var photo = proj.photos[appState.lightboxIndex];
+        if (!photo) return;
+        var img = document.getElementById('lightbox-img');
+        img.src = photo.url;
+        img.onerror = function () { img.src = FALLBACK_IMAGE_URI; };
+        document.getElementById('lightbox-phase').textContent = photo.phase;
+        document.getElementById('lightbox-date').textContent = photo.date;
+        document.getElementById('lightbox-counter').textContent = 'Photo ' + (appState.lightboxIndex + 1) + ' of ' + proj.photos.length;
+        document.getElementById('lightbox-caption').textContent = photo.caption;
+      }
+
+      function openDocModal(docId) {
+        var proj = getCurrentProject();
+        var doc = proj.documents.find(function (d) { return d.id === docId; });
+        if (!doc) return;
+        document.getElementById('doc-modal-title').textContent = doc.title;
+        document.getElementById('doc-modal-subtitle').textContent = doc.category + ' • ' + doc.date + ' • ' + doc.size;
+        document.getElementById('doc-modal-status').textContent = doc.status;
+        document.getElementById('doc-modal-ref').textContent = 'REF: ' + doc.ref;
+        document.getElementById('doc-modal-client-grid').innerHTML =
+          '<div><span class="text-slate-400 block">Client:</span><strong class="text-slate-900">' + escapeHtml(proj.clientName) + '</strong></div>' +
+          '<div><span class="text-slate-400 block">Site Address:</span><strong class="text-slate-900">' + escapeHtml(proj.address) + ', ' + escapeHtml(proj.postcode) + '</strong></div>';
+        document.getElementById('doc-modal-summary').textContent = doc.summary;
+        document.getElementById('doc-modal-financials').textContent = doc.financials;
+        document.getElementById('doc-modal').classList.remove('hidden');
+      }
+
+      function openSignModal(varId) {
+        var proj = getCurrentProject();
+        var variation = proj.variations.find(function (v) { return v.id === varId; });
+        if (!variation) return;
+        appState.signingVariationId = varId;
+        document.getElementById('sign-modal-var-code').textContent = variation.code + ' • Issued ' + variation.raisedDate;
+        document.getElementById('sign-modal-var-title').textContent = variation.title;
+        document.getElementById('sign-modal-var-amount').textContent =
+          'Additional Cost: +' + formatGBP(variation.grossAmount) + ' inc. VAT (Net ' + formatGBP(variation.netAmount) + ' + VAT ' + formatGBP(variation.vatAmount) + ')';
+        document.getElementById('sign-modal-name-input').value = proj.clientName;
+        document.getElementById('sign-modal').classList.remove('hidden');
+      }
+
+      function sendChatMessage(senderRole, text, imageUrl) {
+        var proj = getCurrentProject();
+        var nowTime = getNowTime24();
+        proj.messages.push({
+          id: 'm-' + Date.now(),
+          sender: senderRole,
+          senderName: senderRole === 'client' ? proj.clientName : 'Jamie Cox',
+          text: text,
+          imageUrl: imageUrl || '',
+          time: nowTime
+        });
+        savePersistedState();
+        renderChats(proj);
+
+        if (senderRole === 'builder') {
+          showToast('Reply sent to ' + proj.clientName, 'success');
+        } else {
+          var typingBar = document.getElementById('client-typing-bar');
+          typingBar.classList.remove('hidden');
+          setTimeout(function () {
+            typingBar.classList.add('hidden');
+            var replyText = JAMIE_AUTO_REPLIES[jamieReplyCursor % JAMIE_AUTO_REPLIES.length];
+            jamieReplyCursor++;
+            proj.messages.push({
+              id: 'm-' + Date.now(),
+              sender: 'builder',
+              senderName: 'Jamie Cox',
+              text: replyText,
+              time: getNowTime24()
+            });
+            savePersistedState();
+            renderChats(proj);
+          }, 850);
+        }
+      }
+
+      // =====================================================================
+      // INITIALISE ON DOMCONTENTLOADED WITH TRY/CATCH GUARD
+      // =====================================================================
+      document.addEventListener('DOMContentLoaded', function () {
+        try {
+          loadPersistedState();
+
+          // Project Selector Change
+          document.getElementById('project-selector').addEventListener('change', function (e) {
+            appState.projectId = e.target.value;
+            appState.photoFilter = 'All';
+            appState.docFilter = 'All';
+            updateFilterPills('photo-filter-bar', 'All');
+            updateFilterPills('doc-filter-bar', 'All');
+            renderAll();
+            showToast('Loaded project: ' + getCurrentProject().address, 'info');
+          });
+
+          // Admin Progress Slider Live Readout
+          document.getElementById('admin-progress-slider').addEventListener('input', function (e) {
+            document.getElementById('admin-progress-display').textContent = e.target.value + '%';
+          });
+
+          // Admin Variation Net Amount Live 20% VAT Preview
+          document.getElementById('admin-var-net').addEventListener('input', function (e) {
+            var net = parseFloat(e.target.value) || 0;
+            var vat = Math.round(net * 0.2);
+            var gross = Math.round(net + vat);
+            document.getElementById('admin-var-vat-preview').textContent =
+              'Net ' + formatGBP(net) + ' + VAT ' + formatGBP(vat) + ' = ' + formatGBP(gross) + ' inc. VAT';
+          });
+
+          // Client Chat Form Submit
+          document.getElementById('client-chat-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var input = document.getElementById('client-chat-input');
+            var text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            sendChatMessage('client', text, '');
+          });
+
+          // Builder Chat Form Submit
+          document.getElementById('builder-chat-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var input = document.getElementById('builder-chat-input');
+            var text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            sendChatMessage('builder', text, '');
+          });
+
+          // Chat Photo Attachments (Client & Builder)
+          document.getElementById('client-chat-photo-input').addEventListener('change', function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function (ev) {
+              sendChatMessage('client', 'Attached photo: ' + file.name, ev.target.result);
+            };
+            reader.readAsDataURL(file);
+            e.target.value = '';
+          });
+
+          document.getElementById('builder-chat-photo-input').addEventListener('change', function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function (ev) {
+              sendChatMessage('builder', 'Site photo update: ' + file.name, ev.target.result);
+            };
+            reader.readAsDataURL(file);
+            e.target.value = '';
+          });
+
+          // Client Document Upload
+          document.getElementById('client-doc-upload-input').addEventListener('change', function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            var proj = getCurrentProject();
+            proj.documents.unshift({
+              id: 'd-' + Date.now(),
+              title: file.name,
+              category: 'Building Control',
+              date: '24 Nov 2026',
+              size: Math.max(110, Math.round(file.size / 1024)) + ' KB',
+              status: 'Client Uploaded',
+              ref: 'CLIENT-' + Math.floor(100 + Math.random() * 900),
+              summary: 'Uploaded directly by ' + proj.clientName + ' into the White Horse Builders Client Portal.',
+              financials: 'Contract Ref: ' + proj.ref + ' • Shared immediately with Site Manager Jamie Cox'
+            });
+            e.target.value = '';
+            savePersistedState();
+            renderAll();
+            showToast('Uploaded "' + file.name + '" to Document Vault', 'success');
+          });
+
+          // Digital Variation Sign-Off Form Submit
+          document.getElementById('sign-variation-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var proj = getCurrentProject();
+            var variation = proj.variations.find(function (v) { return v.id === appState.signingVariationId; });
+            var signerName = document.getElementById('sign-modal-name-input').value.trim();
+            if (!variation || !signerName) return;
+
+            var timeStr = getNowTime24();
+            variation.status = 'Approved';
+            variation.signedBy = signerName;
+            variation.signedAt = '24 Nov 2026, ' + timeStr;
+
+            proj.messages.push({
+              id: 'm-' + Date.now(),
+              sender: 'client',
+              senderName: signerName,
+              text: '✓ DIGITAL SIGN-OFF RECEIPT: Approved ' + variation.code + ' ("' + variation.title + '") for +' + formatGBP(variation.grossAmount) + ' inc. VAT.',
+              time: timeStr
+            });
+
+            document.getElementById('sign-modal').classList.add('hidden');
+            savePersistedState();
+            renderAll();
+            showToast(variation.code + ' digitally signed & added to Contract Sum', 'success');
+          });
+
+          // Admin Photo File Picker
+          document.getElementById('admin-photo-file').addEventListener('change', function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function (ev) {
+              appState.stagedPhotoUrl = ev.target.result;
+              var previewBox = document.getElementById('admin-staged-preview');
+              document.getElementById('admin-staged-img').src = ev.target.result;
+              previewBox.classList.remove('hidden');
+              previewBox.classList.add('flex');
+            };
+            reader.readAsDataURL(file);
+          });
+
+          // Admin Photo Publish Form
+          document.getElementById('admin-photo-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var proj = getCurrentProject();
+            var phase = document.getElementById('admin-photo-phase').value;
+            var caption = document.getElementById('admin-photo-caption').value.trim();
+            if (!caption) return;
+
+            proj.photos.unshift({
+              id: 'p-' + Date.now(),
+              phase: phase,
+              caption: caption,
+              date: '24 Nov 2026, ' + getNowTime24(),
+              url: appState.stagedPhotoUrl || VERIFIED_PHOTOS.firstFixElectrics
+            });
+
+            document.getElementById('admin-photo-caption').value = '';
+            document.getElementById('admin-photo-file').value = '';
+            appState.stagedPhotoUrl = null;
+            var previewBox = document.getElementById('admin-staged-preview');
+            previewBox.classList.add('hidden');
+            previewBox.classList.remove('flex');
+
+            savePersistedState();
+            renderAll();
+            showToast('Site photo published to Client Gallery', 'success');
+          });
+
+          // Admin Raise Variation Form
+          document.getElementById('admin-variation-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var proj = getCurrentProject();
+            var title = document.getElementById('admin-var-title').value.trim();
+            var netAmount = parseFloat(document.getElementById('admin-var-net').value);
+            var desc = document.getElementById('admin-var-desc').value.trim();
+            if (!title || isNaN(netAmount)) return;
+
+            var vatAmount = Math.round(netAmount * 0.2);
+            var grossAmount = Math.round(netAmount + vatAmount);
+            var code = 'VAR-0' + (proj.variations.length + 1);
+
+            proj.variations.unshift({
+              id: 'var-' + Date.now(),
+              code: code,
+              title: title,
+              description: desc,
+              netAmount: netAmount,
+              vatAmount: vatAmount,
+              grossAmount: grossAmount,
+              raisedDate: '24 Nov 2026',
+              status: 'Pending Client Approval',
+              signedBy: '',
+              signedAt: ''
+            });
+
+            proj.messages.push({
+              id: 'm-' + Date.now(),
+              sender: 'builder',
+              senderName: 'Jamie Cox',
+              text: 'New priced variation issued (' + code + '): "' + title + '" (+' + formatGBP(grossAmount) + ' inc. VAT). Please review and sign in your Variations tab.',
+              time: getNowTime24()
+            });
+
+            document.getElementById('admin-var-title').value = '';
+            document.getElementById('admin-var-net').value = '';
+            document.getElementById('admin-var-desc').value = '';
+            document.getElementById('admin-var-vat-preview').textContent = 'Net £0 + VAT £0 = £0 inc. VAT';
+
+            savePersistedState();
+            renderAll();
+            showToast(code + ' issued to ' + proj.clientName + ' for digital sign-off', 'success');
+          });
+
+          // Admin Publish Document Form
+          document.getElementById('admin-doc-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var proj = getCurrentProject();
+            var titleInput = document.getElementById('admin-doc-title');
+            var category = document.getElementById('admin-doc-category').value;
+            var rawTitle = titleInput.value.trim();
+            if (!rawTitle) return;
+            if (!rawTitle.toLowerCase().endsWith('.pdf')) {
+              rawTitle += '.pdf';
+            }
+
+            proj.documents.unshift({
+              id: 'd-' + Date.now(),
+              title: rawTitle,
+              category: category,
+              date: '24 Nov 2026',
+              size: '840 KB',
+              status: 'Verified Today',
+              ref: 'WHB-CERT-' + Math.floor(1000 + Math.random() * 9000),
+              summary: 'Published by Jamie Cox (Site Manager, White Horse Builders Ltd) for ' + proj.address + ', ' + proj.postcode + '.',
+              financials: 'Contract Ref: ' + proj.ref + ' • NNDC Building Control Compliant • VAT Reg No: GB 418 7291 04'
+            });
+
+            titleInput.value = '';
+            savePersistedState();
+            renderAll();
+            showToast('Published "' + rawTitle + '" to Client Vault', 'success');
+          });
+
+          // Global Click Event Delegation (Zero brittle inline onclick handlers)
+          document.addEventListener('click', function (e) {
+            var trigger = e.target.closest('[data-action]');
+            if (!trigger) {
+              if (e.target.id === 'photo-modal') document.getElementById('photo-modal').classList.add('hidden');
+              if (e.target.id === 'doc-modal') document.getElementById('doc-modal').classList.add('hidden');
+              if (e.target.id === 'sign-modal') document.getElementById('sign-modal').classList.add('hidden');
+              return;
+            }
+
+            var action = trigger.dataset.action;
+
+            if (action === 'switch-role') {
+              switchRole(trigger.dataset.role);
+            } else if (action === 'reset-demo') {
+              try { window.localStorage.removeItem(STORAGE_KEY); } catch (err) {}
+              projects = getDefaultProjects();
+              appState.photoFilter = 'All';
+              appState.docFilter = 'All';
+              updateFilterPills('photo-filter-bar', 'All');
+              updateFilterPills('doc-filter-bar', 'All');
+              renderAll();
+              showToast('Demo data reset to default presentation state', 'info');
+            } else if (action === 'select-tab') {
+              selectTab(trigger.dataset.tab);
+            } else if (action === 'filter-photos') {
+              appState.photoFilter = trigger.dataset.filter;
+              updateFilterPills('photo-filter-bar', appState.photoFilter);
+              renderPhotos(getCurrentProject());
+            } else if (action === 'filter-docs') {
+              appState.docFilter = trigger.dataset.filter;
+              updateFilterPills('doc-filter-bar', appState.docFilter);
+              renderDocuments(getCurrentProject());
+            } else if (action === 'open-lightbox') {
+              openLightbox(trigger.dataset.photoId);
+            } else if (action === 'lightbox-prev') {
+              var pListPrev = getCurrentProject().photos;
+              if (pListPrev.length) {
+                appState.lightboxIndex = (appState.lightboxIndex - 1 + pListPrev.length) % pListPrev.length;
+                refreshLightbox();
+              }
+            } else if (action === 'lightbox-next') {
+              var pListNext = getCurrentProject().photos;
+              if (pListNext.length) {
+                appState.lightboxIndex = (appState.lightboxIndex + 1) % pListNext.length;
+                refreshLightbox();
+              }
+            } else if (action === 'close-lightbox') {
+              document.getElementById('photo-modal').classList.add('hidden');
+            } else if (action === 'open-doc-modal') {
+              openDocModal(trigger.dataset.docId);
+            } else if (action === 'close-doc-modal') {
+              document.getElementById('doc-modal').classList.add('hidden');
+            } else if (action === 'print-doc') {
+              window.print();
+            } else if (action === 'open-sign-modal') {
+              openSignModal(trigger.dataset.varId);
+            } else if (action === 'close-sign-modal') {
+              document.getElementById('sign-modal').classList.add('hidden');
+            } else if (action === 'confirm-bacs') {
+              var projBacs = getCurrentProject();
+              var payment = projBacs.payments.find(function (p) { return p.id === trigger.dataset.payId; });
+              if (payment) {
+                payment.status = 'Paid';
+                projBacs.messages.push({
+                  id: 'm-' + Date.now(),
+                  sender: 'client',
+                  senderName: projBacs.clientName,
+                  text: 'BACS TRANSFER CONFIRMATION: Sent ' + formatGBP(payment.grossAmount) + ' inc. VAT for "' + payment.stage + '".',
+                  time: getNowTime24()
+                });
+                savePersistedState();
+                renderAll();
+                showToast('BACS payment confirmed & receipt posted to Jamie Cox', 'success');
+              }
+            } else if (action === 'quick-reply') {
+              sendChatMessage('client', trigger.dataset.text, '');
+            } else if (action === 'save-progress') {
+              var projSave = getCurrentProject();
+              projSave.activeStage = parseInt(document.getElementById('admin-stage-select').value, 10) || 1;
+              projSave.progress = parseInt(document.getElementById('admin-progress-slider').value, 10) || 0;
+              var wVal = document.getElementById('admin-weather-input').value.trim();
+              var tVal = document.getElementById('admin-trades-input').value.trim();
+              var dVal = document.getElementById('admin-diary-input').value.trim();
+              if (wVal) projSave.weather = wVal;
+              if (tVal) projSave.tradesOnSite = tVal;
+              if (dVal) projSave.diaryNote = dVal;
+              projSave.lastUpdated = '24 Nov 2026, ' + getNowTime24();
+              savePersistedState();
+              renderAll();
+              showToast('Published progress & daily site diary to Client View', 'success');
+            } else if (action === 'apply-photo-preset') {
+              var preset = PHOTO_PRESETS[parseInt(trigger.dataset.presetIndex, 10)];
+              if (preset) {
+                appState.stagedPhotoUrl = preset.url;
+                document.getElementById('admin-photo-phase').value = preset.phase;
+                document.getElementById('admin-photo-caption').value = preset.caption;
+                var previewBox = document.getElementById('admin-staged-preview');
+                document.getElementById('admin-staged-img').src = preset.url;
+                previewBox.classList.remove('hidden');
+                previewBox.classList.add('flex');
+              }
+            }
+          });
+
+          renderAll();
+        } catch (err) {
+          console.error('Portal initialisation error:', err);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

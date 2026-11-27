@@ -25,7 +25,7 @@ service cloud.firestore {
     // while Chris (Owner) can list users and assign client/builder/owner roles.
     match /users/{userId} {
       allow read: if isSignedIn() && (request.auth.uid == userId || isOwner());
-      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow create: if isSignedIn() && (request.auth.uid == userId || isOwner());
       allow update: if isOwner()
         || (isSignedIn()
           && request.auth.uid == userId

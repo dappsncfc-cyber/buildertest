@@ -17,6 +17,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -25,6 +26,15 @@
         }
       }
     };
+    (function () {
+      try {
+        var savedTheme = window.localStorage.getItem('whb_theme_v1');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (err) {}
+    })();
   </script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -48,6 +58,83 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #94a3b8;
     }
+
+    /* Dark Mode Overrides */
+    html.dark body {
+      background-color: #020617 !important;
+      color: #e2e8f0 !important;
+    }
+    html.dark ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    html.dark ::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+    html.dark header,
+    html.dark footer,
+    html.dark .bg-white {
+      background-color: #0f172a !important;
+      color: #f1f5f9 !important;
+    }
+    html.dark .bg-slate-50,
+    html.dark .bg-slate-50\/70,
+    html.dark .bg-slate-50\/80 {
+      background-color: #1e293b !important;
+    }
+    html.dark .bg-slate-100 {
+      background-color: #1e293b !important;
+      color: #e2e8f0 !important;
+    }
+    html.dark .bg-amber-50\/75,
+    html.dark .bg-amber-50\/50 {
+      background-color: rgba(120, 53, 15, 0.25) !important;
+      border-color: rgba(217, 119, 6, 0.35) !important;
+    }
+    html.dark .bg-white\/90,
+    html.dark .bg-white\/95 {
+      background-color: rgba(15, 23, 42, 0.94) !important;
+    }
+    html.dark .text-slate-900 {
+      color: #f8fafc !important;
+    }
+    html.dark .text-slate-800 {
+      color: #e2e8f0 !important;
+    }
+    html.dark .text-slate-700 {
+      color: #cbd5e1 !important;
+    }
+    html.dark .text-slate-600 {
+      color: #94a3b8 !important;
+    }
+    html.dark .text-slate-500 {
+      color: #94a3b8 !important;
+    }
+    html.dark .border-slate-200,
+    html.dark .border-slate-200\/90,
+    html.dark .border-slate-200\/80,
+    html.dark .border-slate-200\/70,
+    html.dark .border-slate-100,
+    html.dark .border-slate-300 {
+      border-color: #334155 !important;
+    }
+    html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+      border-color: #1e293b !important;
+    }
+    html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+    html.dark select,
+    html.dark textarea {
+      background-color: #0f172a !important;
+      color: #f8fafc !important;
+      border-color: #334155 !important;
+    }
+    html.dark #sign-canvas {
+      background-color: #ffffff !important;
+    }
+    html.dark #mobile-bottom-nav {
+      background-color: rgba(15, 23, 42, 0.95) !important;
+      border-color: #1e293b !important;
+    }
+
     @media print {
       body * {
         visibility: hidden;
@@ -79,15 +166,18 @@
 
           <div class="flex items-center gap-2 min-w-0 flex-1 sm:flex-initial">
             <label for="project-selector" class="text-xs text-slate-400 hidden sm:inline font-medium">Project:</label>
-            <select id="project-selector" class="w-full sm:w-auto max-w-[210px] sm:max-w-none truncate bg-slate-900 text-white text-xs sm:text-sm font-medium rounded-xl px-2.5 py-1.5 border border-slate-700 focus:outline-none focus:border-amber-500 cursor-pointer">
+            <select id="project-selector" class="w-full sm:w-auto max-w-[180px] sm:max-w-none truncate bg-slate-900 text-white text-xs sm:text-sm font-medium rounded-xl px-2.5 py-1.5 border border-slate-700 focus:outline-none focus:border-amber-500 cursor-pointer">
               <option value="proj-1">14 Station Road, NR27 9DS — Rear Kitchen Extension</option>
               <option value="proj-2">8 Coastguard Cottages, NR27 9BU — Loft Conversion &amp; Dormer</option>
             </select>
           </div>
         </div>
 
-        <!-- Mobile Quick Actions: Alerts + Auth + Menu Toggle -->
+        <!-- Mobile Quick Actions: Theme + Alerts + Menu Toggle -->
         <div class="flex items-center gap-1.5 shrink-0 lg:hidden">
+          <button id="btn-theme-toggle-mobile" type="button" data-action="toggle-theme" title="Toggle Light / Dark mode" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 transition-colors">
+            <span class="theme-icon-label">🌙</span>
+          </button>
           <button id="btn-enable-notifications-mobile" type="button" data-action="enable-notifications" title="Enable phone alerts" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 transition-colors">
             🔔
           </button>
@@ -110,6 +200,11 @@
             Owner (Chris)
           </button>
         </div>
+
+        <button id="btn-theme-toggle" type="button" data-action="toggle-theme" title="Toggle Light / Dark mode" class="hidden lg:inline-flex px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-400 border border-slate-700 transition-colors shrink-0 items-center gap-1.5">
+          <span class="theme-icon-label">🌙</span>
+          <span id="theme-btn-text">Dark</span>
+        </button>
 
         <button id="btn-enable-notifications" type="button" data-action="enable-notifications" class="hidden lg:inline-flex px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-400 border border-slate-700 transition-colors shrink-0 items-center gap-1.5">
           <span>🔔</span>
@@ -4380,8 +4475,26 @@
               }).catch(function (err) {
                 showToast('Could not update role: ' + err.message, 'info');
               });
+            } else if (action === 'toggle-theme') {
+              var isNowDark = !document.documentElement.classList.contains('dark');
+              document.documentElement.classList.toggle('dark', isNowDark);
+              try {
+                window.localStorage.setItem('whb_theme_v1', isNowDark ? 'dark' : 'light');
+              } catch (err) {}
+              updateThemeUI();
+              showToast((isNowDark ? 'Dark' : 'Light') + ' mode enabled', 'info');
             }
           });
+
+          function updateThemeUI() {
+            var isDark = document.documentElement.classList.contains('dark');
+            var iconEls = document.querySelectorAll('.theme-icon-label');
+            for (var i = 0; i < iconEls.length; i++) {
+              iconEls[i].textContent = isDark ? '☀️' : '🌙';
+            }
+            var txtEl = document.getElementById('theme-btn-text');
+            if (txtEl) txtEl.textContent = isDark ? 'Light' : 'Dark';
+          }
 
           // Mobile PWA Install Prompt — appears on every mobile browser visit when not yet installed
           var deferredInstallPrompt = null;
@@ -4417,6 +4530,7 @@
           }
 
           renderAll();
+          updateThemeUI();
           updateNotificationBtnUI();
           initFirebaseIfConfigured();
           initMobileInstallPrompt();

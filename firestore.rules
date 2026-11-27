@@ -22,6 +22,10 @@ service cloud.firestore {
       allow update: if isSignedIn()
         && request.auth.uid == userId
         && request.resource.data.role == resource.data.role;
+
+      match /fcmTokens/{tokenId} {
+        allow read, write: if isSignedIn() && request.auth.uid == userId;
+      }
     }
 
     // Projects collection:
@@ -30,6 +34,11 @@ service cloud.firestore {
     // and restrict `read`/`update` to `isBuilder() || resource.data.clientUid == request.auth.uid`.
     match /projects/{projectId} {
       allow read, write: if isSignedIn();
+    }
+
+    // Notification queue: portal writes events here; Cloud Functions reads/updates via Admin SDK.
+    match /notifications/{notificationId} {
+      allow read, create: if isSignedIn();
     }
   }
 }

@@ -800,6 +800,20 @@
         </section>
       </div>
 
+      <!-- PROJECT TEAM & BUILDER ASSIGNMENTS (STAGE & AVAILABILITY) -->
+      <section id="owner-assignments-section" class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="bg-slate-900 text-white px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 class="font-bold text-sm sm:text-base">Project Team &amp; Builder Assignments</h3>
+            <p class="text-xs text-slate-400">Assign or remove builders per project based on current build stage &amp; availability</p>
+          </div>
+          <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 self-start sm:self-center">
+            Stage-Based Allocation
+          </span>
+        </div>
+        <div id="owner-project-assignments-list" class="p-5 grid grid-cols-1 lg:grid-cols-2 gap-4"></div>
+      </section>
+
       <!-- CREATE NEW PROJECT & ASSIGN PROFILES -->
       <section class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
         <div class="bg-slate-900 text-white px-5 py-4">
@@ -1367,6 +1381,7 @@
             baseContractNet: 45500,
             progress: 65,
             activeStage: 4,
+            assignedBuilders: ['bld-2'],
             targetHandover: '12 Dec 2026',
             lastUpdated: '24 Nov 2026, 14:40',
             weather: '8°C • Crisp & Dry, Light SW Coastal Breeze',
@@ -1556,6 +1571,7 @@
             baseContractNet: 32000,
             progress: 35,
             activeStage: 3,
+            assignedBuilders: ['bld-2'],
             targetHandover: '22 Jan 2027',
             lastUpdated: '23 Nov 2026, 16:30',
             weather: '7°C • Moderate North Sea Breeze, Dry',
@@ -2313,12 +2329,21 @@
         // Hero Section
         document.getElementById('hero-stage-pill').textContent = 'Stage ' + activeStageObj.num + ': ' + activeStageObj.label;
         document.getElementById('hero-title').textContent = proj.title;
+        var assignedIds = Array.isArray(proj.assignedBuilders) ? proj.assignedBuilders : [];
+        var assignedNames = assignedIds.map(function (bid) {
+          var b = profiles.builders.find(function (item) { return item.id === bid; });
+          return b ? b.name : '';
+        }).filter(Boolean);
+        var teamLabel = assignedNames.length ? assignedNames.join(', ') : 'Unassigned';
+
         document.getElementById('hero-meta').innerHTML =
           '<span><strong>Location:</strong> ' + escapeHtml(proj.address) + ', <strong>' + escapeHtml(proj.postcode) + '</strong></span>' +
           '<span>•</span>' +
           '<span><strong>Client:</strong> ' + escapeHtml(proj.clientName) + '</span>' +
           '<span>•</span>' +
-          '<span><strong>Ref:</strong> ' + escapeHtml(proj.ref) + '</span>';
+          '<span><strong>Ref:</strong> ' + escapeHtml(proj.ref) + '</span>' +
+          '<span>•</span>' +
+          '<span><strong>Team:</strong> ' + escapeHtml(teamLabel) + '</span>';
 
         document.getElementById('hero-progress-pct').textContent = proj.progress + '%';
         document.getElementById('hero-progress-bar').style.width = proj.progress + '%';
@@ -2671,6 +2696,10 @@
               var badgeCls = b.status === 'Active'
                 ? 'bg-emerald-100 text-emerald-800'
                 : 'bg-slate-100 text-slate-600';
+              var assignedCount = Object.keys(projects).filter(function (pid) {
+                var arr = projects[pid].assignedBuilders || [];
+                return arr.indexOf(b.id) !== -1;
+              }).length;
               return (
                 '<div class="pt-3 first:pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3">' +
                   '<div class="min-w-0">' +
@@ -2678,6 +2707,7 @@
                       '<span class="font-bold text-sm text-slate-900">' + escapeHtml(b.name) + '</span>' +
                       '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">' + escapeHtml(b.title) + '</span>' +
                       '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full ' + badgeCls + '">' + escapeHtml(b.status || 'Active') + '</span>' +
+                      '<span class="text-[11px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">' + assignedCount + ' project' + (assignedCount === 1 ? '' : 's') + '</span>' +
                     '</div>' +
                     '<p class="text-xs text-slate-600 mt-1">' + escapeHtml(b.email) + (b.phone ? ' • ' + escapeHtml(b.phone) : '') + '</p>' +
                     (b.trade ? '<p class="text-[11px] text-slate-500 mt-0.5">Specialism: ' + escapeHtml(b.trade) + '</p>' : '') +
@@ -2721,6 +2751,74 @@
               );
             }).join('');
           }
+        }
+
+        var assignmentsList = document.getElementById('owner-project-assignments-list');
+        if (assignmentsList) {
+          assignmentsList.innerHTML = Object.keys(projects).map(function (pid) {
+            var p = projects[pid];
+            var stageObj = BUILD_STAGES.find(function (s) { return s.num === p.activeStage; }) || BUILD_STAGES[0];
+            var assignedIds = Array.isArray(p.assignedBuilders) ? p.assignedBuilders : [];
+            var assignedCards = assignedIds.map(function (bid) {
+              var b = profiles.builders.find(function (item) { return item.id === bid; });
+              if (!b) return '';
+              var availCls = b.status === 'Active' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
+              return (
+                '<div class="flex items-center justify-between gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">' +
+                  '<div class="min-w-0">' +
+                    '<div class="flex items-center gap-1.5 flex-wrap">' +
+                      '<span class="text-xs font-bold text-slate-900">' + escapeHtml(b.name) + '</span>' +
+                      '<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded-full ' + availCls + '">' + escapeHtml(b.status || 'Active') + '</span>' +
+                    '</div>' +
+                    '<p class="text-[11px] text-slate-500 truncate">' + escapeHtml(b.title + (b.trade ? ' • ' + b.trade : '')) + '</p>' +
+                  '</div>' +
+                  '<button type="button" data-action="remove-project-builder" data-proj-id="' + escapeHtml(pid) + '" data-builder-id="' + escapeHtml(b.id) + '" class="px-2.5 py-1 rounded-lg border border-rose-200 hover:bg-rose-50 text-[11px] font-semibold text-rose-700 shrink-0">' +
+                    'Remove' +
+                  '</button>' +
+                '</div>'
+              );
+            }).filter(Boolean).join('');
+
+            var unassignedBuilders = profiles.builders.filter(function (b) {
+              return assignedIds.indexOf(b.id) === -1;
+            });
+
+            var assignControls = unassignedBuilders.length
+              ? (
+                '<div class="flex items-center gap-2 pt-2 border-t border-slate-100">' +
+                  '<select id="assign-select-' + escapeHtml(pid) + '" class="flex-1 min-w-0 bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-amber-500">' +
+                    unassignedBuilders.map(function (b) {
+                      var availTag = b.status === 'Active' ? 'Available' : (b.status || 'Unavailable');
+                      return '<option value="' + escapeHtml(b.id) + '">' + escapeHtml(b.name + ' — ' + (b.trade || b.title) + ' (' + availTag + ')') + '</option>';
+                    }).join('') +
+                  '</select>' +
+                  '<button type="button" data-action="assign-project-builder" data-proj-id="' + escapeHtml(pid) + '" class="px-3.5 py-2 rounded-xl bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold shrink-0 transition-colors">' +
+                    '+ Assign' +
+                  '</button>' +
+                '</div>'
+              )
+              : '<p class="text-[11px] text-slate-400 pt-2 border-t border-slate-100">All builder profiles are currently assigned to this project.</p>';
+
+            return (
+              '<div class="border border-slate-200 rounded-2xl p-4 space-y-3 flex flex-col justify-between">' +
+                '<div class="space-y-2.5">' +
+                  '<div class="flex items-start justify-between gap-2">' +
+                    '<div>' +
+                      '<h4 class="font-bold text-sm text-slate-900">' + escapeHtml(p.address + ', ' + p.postcode) + '</h4>' +
+                      '<p class="text-xs text-slate-500">' + escapeHtml(p.title) + ' • Client: ' + escapeHtml(p.clientName) + '</p>' +
+                    '</div>' +
+                    '<span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 shrink-0">' +
+                      'Stage ' + stageObj.num + ' (' + p.progress + '%)' +
+                    '</span>' +
+                  '</div>' +
+                  '<div class="space-y-2">' +
+                    (assignedCards || '<p class="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">No builders currently assigned to this stage.</p>') +
+                  '</div>' +
+                '</div>' +
+                assignControls +
+              '</div>'
+            );
+          }).join('');
         }
       }
 
@@ -3634,6 +3732,36 @@
               showToast('Client profile removed', 'info');
             } else if (action === 'refresh-owner-users') {
               loadOwnerUsersList();
+            } else if (action === 'assign-project-builder') {
+              var assignPid = trigger.dataset.projId;
+              var selEl = document.getElementById('assign-select-' + assignPid);
+              var targetProj = projects[assignPid];
+              if (targetProj && selEl && selEl.value) {
+                if (!Array.isArray(targetProj.assignedBuilders)) targetProj.assignedBuilders = [];
+                if (targetProj.assignedBuilders.indexOf(selEl.value) === -1) {
+                  targetProj.assignedBuilders.push(selEl.value);
+                  var assignedBuilder = profiles.builders.find(function (b) { return b.id === selEl.value; });
+                  savePersistedState(assignPid);
+                  renderOwnerConsole();
+                  renderAll();
+                  if (assignedBuilder) {
+                    queueNotification('team', 'client', 'Team Update — ' + targetProj.address, assignedBuilder.name + ' (' + assignedBuilder.title + ') assigned to your project.');
+                    showToast('Assigned ' + assignedBuilder.name + ' to ' + targetProj.address, 'success');
+                  }
+                }
+              }
+            } else if (action === 'remove-project-builder') {
+              var remPid = trigger.dataset.projId;
+              var remBid = trigger.dataset.builderId;
+              var remProj = projects[remPid];
+              if (remProj && Array.isArray(remProj.assignedBuilders)) {
+                remProj.assignedBuilders = remProj.assignedBuilders.filter(function (id) { return id !== remBid; });
+                var removedBuilder = profiles.builders.find(function (b) { return b.id === remBid; });
+                savePersistedState(remPid);
+                renderOwnerConsole();
+                renderAll();
+                showToast('Removed ' + (removedBuilder ? removedBuilder.name : 'builder') + ' from ' + remProj.address, 'info');
+              }
             } else if (action === 'set-user-role') {
               if (!firebaseState.db || firebaseState.userRole !== 'owner') return;
               var targetUid = trigger.dataset.uid;

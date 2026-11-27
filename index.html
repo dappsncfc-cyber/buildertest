@@ -3,6 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="WHB Portal" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <link rel="icon" type="image/png" href="./icon-192.png" />
   <title>White Horse Builders Ltd — Client Project Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,6 +29,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script>
   <style>
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -85,6 +93,11 @@
             Builder View (Jamie Cox)
           </button>
         </div>
+
+        <button id="btn-enable-notifications" type="button" data-action="enable-notifications" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-400 border border-slate-700 transition-colors shrink-0 inline-flex items-center gap-1.5">
+          <span>🔔</span>
+          <span id="notif-btn-label">Alerts</span>
+        </button>
 
         <button id="btn-firebase-setup" type="button" data-action="open-firebase-modal" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-emerald-400 border border-slate-700 transition-colors shrink-0">
           Firebase
@@ -791,6 +804,13 @@
           </p>
         </div>
 
+        <div>
+          <label for="firebase-vapid-input" class="block text-xs font-semibold text-slate-700 mb-1">
+            Web Push VAPID Key <span class="text-slate-400 font-normal">(optional, for phone push notifications)</span>:
+          </label>
+          <input id="firebase-vapid-input" type="text" placeholder="BKagOny0KF_2pCJQ3m..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:border-amber-500" />
+        </div>
+
         <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
           <div class="flex items-center gap-2">
             <button type="button" data-action="seed-firestore" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-800 transition-colors">
@@ -909,15 +929,23 @@
         appId: 'YOUR_APP_ID'
       };
 
+      var FIREBASE_VAPID_KEY_STORAGE = 'whb_firebase_vapid_v1';
+      var DEFAULT_VAPID_KEY = '';
+
       var firebaseState = {
         configured: false,
         connected: false,
         db: null,
         auth: null,
+        messaging: null,
+        swRegistration: null,
+        fcmToken: null,
         user: null,
         userRole: null,
         authMode: 'signin',
-        unsubscribeProjects: null
+        unsubscribeProjects: null,
+        unsubscribeNotifications: null,
+        sessionStartedAt: Date.now()
       };
 
       // Crisp inline SVG fallback so no broken image icon can ever appear
@@ -1567,13 +1595,20 @@
                   switchRole('client');
                 }
                 subscribeToProjects();
+                subscribeToNotifications();
+                if (firebaseState.fcmToken) {
+                  saveFcmTokenToFirestore(firebaseState.fcmToken);
+                }
               });
             } else {
               firebaseState.userRole = null;
               updateAuthUI();
               subscribeToProjects();
+              subscribeToNotifications();
             }
           });
+
+          registerServiceWorkerAndFcm(cfg);
         } catch (err) {
           console.error('Firebase init error:', err);
           firebaseState.configured = false;
@@ -1581,6 +1616,188 @@
           updateDbStatusUI('local', 'Local Demo');
           showToast('Firebase config error: ' + err.message, 'info');
         }
+      }
+
+      // =====================================================================
+      // PWA & MOBILE PUSH NOTIFICATIONS (FCM + WEB NOTIFICATIONS)
+      // =====================================================================
+      function getActiveVapidKey() {
+        try {
+          var stored = window.localStorage.getItem(FIREBASE_VAPID_KEY_STORAGE);
+          if (stored && stored.trim()) return stored.trim();
+        } catch (err) {}
+        return DEFAULT_VAPID_KEY || '';
+      }
+
+      function updateNotificationBtnUI() {
+        var btn = document.getElementById('btn-enable-notifications');
+        var label = document.getElementById('notif-btn-label');
+        if (!btn || !label) return;
+        var granted = typeof Notification !== 'undefined' && Notification.permission === 'granted';
+        if (granted && (firebaseState.fcmToken || firebaseState.connected)) {
+          btn.className = 'px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 transition-colors shrink-0 inline-flex items-center gap-1.5';
+          label.textContent = 'Alerts On';
+        } else if (granted) {
+          btn.className = 'px-3 py-2 rounded-xl text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40 transition-colors shrink-0 inline-flex items-center gap-1.5';
+          label.textContent = 'Alerts On';
+        } else {
+          btn.className = 'px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-400 border border-slate-700 transition-colors shrink-0 inline-flex items-center gap-1.5';
+          label.textContent = 'Alerts';
+        }
+      }
+
+      function registerServiceWorkerAndFcm(cfg) {
+        if (!('serviceWorker' in navigator)) return;
+        navigator.serviceWorker.register('./firebase-messaging-sw.js').then(function (reg) {
+          firebaseState.swRegistration = reg;
+          var sw = reg.active || reg.waiting || reg.installing;
+          if (sw && cfg) {
+            sw.postMessage({ type: 'INIT_FIREBASE_CONFIG', config: cfg });
+          }
+          if (typeof window.firebase !== 'undefined' && window.firebase.messaging && window.firebase.messaging.isSupported && window.firebase.messaging.isSupported()) {
+            try {
+              firebaseState.messaging = window.firebase.messaging();
+              firebaseState.messaging.onMessage(function (payload) {
+                var notif = payload.notification || {};
+                var title = notif.title || 'White Horse Builders Update';
+                var body = notif.body || 'New update in your build portal.';
+                showToast(title + ': ' + body, 'info');
+                showLocalDeviceNotification(title, body);
+              });
+              if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+                fetchAndSaveFcmToken();
+              }
+            } catch (err) {
+              console.warn('FCM init warning:', err);
+            }
+          }
+        }).catch(function (err) {
+          console.warn('Service worker registration skipped:', err);
+        });
+      }
+
+      function saveFcmTokenToFirestore(token) {
+        if (!firebaseState.db || !firebaseState.user || !token) return;
+        var tokenDocId = token.slice(-24);
+        firebaseState.db.collection('users').doc(firebaseState.user.uid)
+          .collection('fcmTokens').doc(tokenDocId).set({
+            token: token,
+            role: firebaseState.userRole || appState.role || 'client',
+            platform: navigator.userAgent.slice(0, 120),
+            updatedAt: new Date().toISOString()
+          }, { merge: true }).catch(function (err) {
+            console.warn('Failed to store FCM token:', err);
+          });
+      }
+
+      function fetchAndSaveFcmToken() {
+        if (!firebaseState.messaging || !firebaseState.swRegistration) return Promise.resolve(null);
+        var vapidKey = getActiveVapidKey();
+        if (!vapidKey) return Promise.resolve(null);
+        return firebaseState.messaging.getToken({
+          vapidKey: vapidKey,
+          serviceWorkerRegistration: firebaseState.swRegistration
+        }).then(function (token) {
+          if (token) {
+            firebaseState.fcmToken = token;
+            saveFcmTokenToFirestore(token);
+            updateNotificationBtnUI();
+          }
+          return token;
+        }).catch(function (err) {
+          console.warn('FCM getToken error:', err);
+          return null;
+        });
+      }
+
+      function showLocalDeviceNotification(title, body) {
+        if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+        try {
+          if (firebaseState.swRegistration && firebaseState.swRegistration.showNotification) {
+            firebaseState.swRegistration.showNotification(title, {
+              body: body,
+              icon: './icon-192.png',
+              badge: './icon-192.png',
+              tag: 'whb-portal-alert',
+              renotify: true
+            });
+          } else {
+            new Notification(title, { body: body, icon: './icon-192.png' });
+          }
+        } catch (err) {}
+      }
+
+      function enablePhoneNotifications() {
+        var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        if (isIos && !isStandalone) {
+          showToast('On iPhone: tap Share → "Add to Home Screen" first, then open the app to enable phone alerts.', 'info');
+          return;
+        }
+        if (typeof Notification === 'undefined') {
+          showToast('This browser does not support push notifications.', 'info');
+          return;
+        }
+        Notification.requestPermission().then(function (permission) {
+          updateNotificationBtnUI();
+          if (permission !== 'granted') {
+            showToast('Notifications were blocked. Enable them in browser/phone settings.', 'info');
+            return;
+          }
+          if (firebaseState.configured && getActiveVapidKey()) {
+            fetchAndSaveFcmToken().then(function (token) {
+              if (token) {
+                showToast('Phone push notifications enabled & linked to your account!', 'success');
+              } else {
+                showToast('Browser alerts enabled! Add your VAPID key in Firebase Setup for background phone push.', 'success');
+              }
+            });
+          } else {
+            showToast('Alerts enabled! Connect Firebase + VAPID key for background phone push.', 'success');
+          }
+          showLocalDeviceNotification('White Horse Builders Portal', 'Notifications are now active on this device.');
+        });
+      }
+
+      function queueNotification(type, targetRole, title, body) {
+        if (!firebaseState.db || !firebaseState.configured) return;
+        var proj = getCurrentProject();
+        firebaseState.db.collection('notifications').add({
+          projectId: proj.id,
+          projectName: proj.address + ', ' + proj.postcode,
+          type: type,
+          targetRole: targetRole,
+          title: title,
+          body: body,
+          createdAtMs: Date.now(),
+          createdByUid: firebaseState.user ? firebaseState.user.uid : 'anonymous',
+          sent: false
+        }).catch(function (err) {
+          console.warn('Notification queue error:', err);
+        });
+      }
+
+      function subscribeToNotifications() {
+        if (!firebaseState.db) return;
+        if (firebaseState.unsubscribeNotifications) {
+          firebaseState.unsubscribeNotifications();
+          firebaseState.unsubscribeNotifications = null;
+        }
+        firebaseState.unsubscribeNotifications = firebaseState.db.collection('notifications')
+          .where('createdAtMs', '>', firebaseState.sessionStartedAt)
+          .onSnapshot(function (snapshot) {
+            snapshot.docChanges().forEach(function (change) {
+              if (change.type !== 'added') return;
+              var n = change.doc.data();
+              if (!n) return;
+              // Don't notify the same user/tab that triggered the event
+              if (firebaseState.user && n.createdByUid === firebaseState.user.uid) return;
+              var currentRole = firebaseState.userRole || appState.role;
+              if (n.targetRole && n.targetRole !== currentRole) return;
+              showToast(n.title + ': ' + n.body, 'info');
+              showLocalDeviceNotification(n.title, n.body);
+            });
+          }, function () {});
       }
 
       function compressImageFile(file, maxWidth, quality, callback) {
@@ -2130,6 +2347,12 @@
         });
         savePersistedState();
         renderChats(proj);
+        queueNotification(
+          'chat',
+          senderRole === 'builder' ? 'client' : 'builder',
+          (senderRole === 'builder' ? 'Jamie Cox' : proj.clientName) + ' — ' + proj.address,
+          text
+        );
 
         if (senderRole === 'builder') {
           showToast('Reply sent to ' + proj.clientName, 'success');
@@ -2243,6 +2466,7 @@
             e.target.value = '';
             savePersistedState();
             renderAll();
+            queueNotification('document', 'builder', 'Document Uploaded — ' + proj.address, proj.clientName + ' uploaded "' + file.name + '"');
             showToast('Uploaded "' + file.name + '" to Document Vault', 'success');
           });
 
@@ -2270,6 +2494,7 @@
             document.getElementById('sign-modal').classList.add('hidden');
             savePersistedState();
             renderAll();
+            queueNotification('variation', 'builder', 'Variation Approved — ' + proj.address, signerName + ' signed ' + variation.code + ' (+' + formatGBP(variation.grossAmount) + ')');
             showToast(variation.code + ' digitally signed & added to Contract Sum', 'success');
           });
 
@@ -2311,6 +2536,7 @@
 
             savePersistedState();
             renderAll();
+            queueNotification('photo', 'client', 'New Site Photo — ' + proj.address, phase + ': ' + caption);
             showToast('Site photo published to Client Gallery', 'success');
           });
 
@@ -2356,6 +2582,7 @@
 
             savePersistedState();
             renderAll();
+            queueNotification('variation', 'client', 'New Variation ' + code + ' — ' + proj.address, title + ' (+' + formatGBP(grossAmount) + ' inc. VAT)');
             showToast(code + ' issued to ' + proj.clientName + ' for digital sign-off', 'success');
           });
 
@@ -2386,6 +2613,7 @@
             titleInput.value = '';
             savePersistedState();
             renderAll();
+            queueNotification('document', 'client', 'New Document — ' + proj.address, 'Jamie Cox published "' + rawTitle + '" (' + category + ')');
             showToast('Published "' + rawTitle + '" to Client Vault', 'success');
           });
 
@@ -2393,6 +2621,7 @@
           document.getElementById('firebase-config-form').addEventListener('submit', function (e) {
             e.preventDefault();
             var rawInput = document.getElementById('firebase-config-input').value;
+            var vapidInput = document.getElementById('firebase-vapid-input').value.trim();
             var parsed = parseFirebaseConfigInput(rawInput);
             if (!parsed) {
               showToast('Invalid Firebase config. Please paste valid JSON or JS firebaseConfig.', 'info');
@@ -2400,6 +2629,11 @@
             }
             try {
               window.localStorage.setItem(FIREBASE_CONFIG_KEY, JSON.stringify(parsed));
+              if (vapidInput) {
+                window.localStorage.setItem(FIREBASE_VAPID_KEY_STORAGE, vapidInput);
+              } else {
+                window.localStorage.removeItem(FIREBASE_VAPID_KEY_STORAGE);
+              }
             } catch (err) {}
             document.getElementById('firebase-modal').classList.add('hidden');
             initFirebaseIfConfigured();
@@ -2459,11 +2693,14 @@
 
             if (action === 'switch-role') {
               switchRole(trigger.dataset.role);
+            } else if (action === 'enable-notifications') {
+              enablePhoneNotifications();
             } else if (action === 'open-firebase-modal') {
               var activeCfg = getActiveFirebaseConfig();
               if (activeCfg) {
                 document.getElementById('firebase-config-input').value = JSON.stringify(activeCfg, null, 2);
               }
+              document.getElementById('firebase-vapid-input').value = getActiveVapidKey();
               document.getElementById('firebase-modal').classList.remove('hidden');
             } else if (action === 'close-firebase-modal') {
               document.getElementById('firebase-modal').classList.add('hidden');
@@ -2592,6 +2829,7 @@
                 });
                 savePersistedState();
                 renderAll();
+                queueNotification('payment', 'builder', 'BACS Payment Confirmed — ' + projBacs.address, projBacs.clientName + ' confirmed ' + formatGBP(payment.grossAmount) + ' for ' + payment.stage);
                 showToast('BACS payment confirmed & receipt posted to Jamie Cox', 'success');
               }
             } else if (action === 'quick-reply') {
@@ -2609,6 +2847,7 @@
               projSave.lastUpdated = '24 Nov 2026, ' + getNowTime24();
               savePersistedState();
               renderAll();
+              queueNotification('progress', 'client', 'Build Progress Update (' + projSave.progress + '%) — ' + projSave.address, projSave.diaryNote);
               showToast('Published progress & daily site diary to Client View', 'success');
             } else if (action === 'apply-photo-preset') {
               var preset = PHOTO_PRESETS[parseInt(trigger.dataset.presetIndex, 10)];
@@ -2625,6 +2864,7 @@
           });
 
           renderAll();
+          updateNotificationBtnUI();
           initFirebaseIfConfigured();
         } catch (err) {
           console.error('Portal initialisation error:', err);

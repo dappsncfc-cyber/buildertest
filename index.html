@@ -19,6 +19,9 @@
       }
     };
   </script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
   <style>
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -59,10 +62,10 @@
   <div class="bg-slate-950 text-white border-b border-slate-800 sticky top-0 z-40 shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-col lg:flex-row items-center justify-between gap-2.5">
       <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 w-full lg:w-auto">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 tracking-wider uppercase">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-          Live Portal Demo
-        </span>
+        <button id="db-status-pill" type="button" data-action="open-firebase-modal" title="Configure Firebase Firestore connection" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 tracking-wider uppercase transition-colors cursor-pointer">
+          <span id="db-status-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span id="db-status-text">Local Demo</span>
+        </button>
 
         <div class="flex items-center gap-2 flex-1 sm:flex-initial">
           <label for="project-selector" class="text-xs text-slate-400 hidden sm:inline font-medium">Project:</label>
@@ -73,13 +76,23 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-2 w-full sm:w-auto justify-center">
+      <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-center">
         <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 flex-1 sm:flex-initial">
           <button id="btn-role-client" type="button" data-action="switch-role" data-role="client" class="flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-amber-600 text-white shadow-sm">
             Client View (Homeowner)
           </button>
           <button id="btn-role-builder" type="button" data-action="switch-role" data-role="builder" class="flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white">
             Builder View (Jamie Cox)
+          </button>
+        </div>
+
+        <button id="btn-firebase-setup" type="button" data-action="open-firebase-modal" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-emerald-400 border border-slate-700 transition-colors shrink-0">
+          Firebase
+        </button>
+
+        <div id="auth-user-area" class="flex items-center gap-1.5 shrink-0">
+          <button id="btn-auth-open" type="button" data-action="open-auth-modal" class="px-3 py-2 rounded-xl text-xs font-semibold bg-amber-600 hover:bg-amber-700 text-white transition-colors shrink-0">
+            Sign In
           </button>
         </div>
 
@@ -742,6 +755,140 @@
   </div>
 
   <!-- =====================================================================
+       MODAL 4: FIREBASE FIRESTORE SETUP & CONNECTION
+       ===================================================================== -->
+  <div id="firebase-modal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl">
+      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+        <div>
+          <h4 class="font-bold text-sm sm:text-base">Firebase Cloud Firestore Connection</h4>
+          <p class="text-xs text-slate-400">Real-time database sync for White Horse Builders Portal</p>
+        </div>
+        <button type="button" data-action="close-firebase-modal" class="text-slate-300 hover:text-white text-sm font-bold px-2 py-1">
+          &times;
+        </button>
+      </div>
+
+      <form id="firebase-config-form" class="p-5 sm:p-6 space-y-4">
+        <div id="firebase-modal-status-banner" class="rounded-xl p-3.5 border text-xs font-medium bg-amber-50 border-amber-200 text-amber-900">
+          Currently running in <strong>Local Demo Mode</strong> (browser localStorage). Paste your Firebase web app config below to enable live Cloud Firestore sync &amp; Authentication.
+        </div>
+
+        <div>
+          <label for="firebase-config-input" class="block text-xs font-semibold text-slate-700 mb-1.5">
+            Paste your <code class="bg-slate-100 px-1 py-0.5 rounded">firebaseConfig</code> (JSON or JS snippet from Firebase Console):
+          </label>
+          <textarea id="firebase-config-input" rows="7" placeholder='{
+  "apiKey": "AIzaSy...",
+  "authDomain": "your-project.firebaseapp.com",
+  "projectId": "your-project",
+  "storageBucket": "your-project.appspot.com",
+  "messagingSenderId": "123456789",
+  "appId": "1:123456789:web:abcdef"
+}' class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs font-mono text-slate-900 focus:outline-none focus:border-amber-500"></textarea>
+          <p class="text-[11px] text-slate-500 mt-1.5">
+            Saved in your browser for instant testing. For production hosting, you can also paste this into <code class="bg-slate-100 px-1 rounded">DEFAULT_FIREBASE_CONFIG</code> in <code class="bg-slate-100 px-1 rounded">index.html</code>.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+          <div class="flex items-center gap-2">
+            <button type="button" data-action="seed-firestore" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-800 transition-colors">
+              Seed Demo Projects
+            </button>
+            <button type="button" data-action="clear-firebase-config" class="px-3 py-2 rounded-xl border border-rose-200 text-xs font-semibold text-rose-700 hover:bg-rose-50 transition-colors">
+              Disconnect
+            </button>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" data-action="close-firebase-modal" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+              Close
+            </button>
+            <button type="submit" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold shadow-xs">
+              Save &amp; Connect
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL 5: FIREBASE AUTHENTICATION (CLIENT & BUILDER SIGN-IN)
+       ===================================================================== -->
+  <div id="auth-modal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl">
+      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+        <div>
+          <h4 class="font-bold text-sm sm:text-base">Portal Sign In</h4>
+          <p class="text-xs text-slate-400">White Horse Builders Ltd • Client &amp; Site Admin Access</p>
+        </div>
+        <button type="button" data-action="close-auth-modal" class="text-slate-300 hover:text-white text-sm font-bold px-2 py-1">
+          &times;
+        </button>
+      </div>
+
+      <div class="p-5 sm:p-6 space-y-4">
+        <div id="auth-not-configured-notice" class="hidden rounded-xl p-3.5 bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-2">
+          <p><strong>Firebase is not connected yet.</strong> Connect your Firebase project first to enable Email/Password and Google Sign-In.</p>
+          <button type="button" data-action="open-firebase-from-auth" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs">
+            Open Firebase Setup
+          </button>
+        </div>
+
+        <div id="auth-form-container" class="space-y-4">
+          <div class="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl">
+            <button id="auth-tab-signin" type="button" data-action="switch-auth-mode" data-mode="signin" class="py-1.5 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs">
+              Sign In
+            </button>
+            <button id="auth-tab-signup" type="button" data-action="switch-auth-mode" data-mode="signup" class="py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900">
+              Create Account
+            </button>
+          </div>
+
+          <form id="auth-email-form" class="space-y-3">
+            <div>
+              <label for="auth-email-input" class="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+              <input id="auth-email-input" type="email" placeholder="name@example.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+            </div>
+            <div>
+              <label for="auth-password-input" class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+              <input id="auth-password-input" type="password" placeholder="••••••••" minlength="6" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+            </div>
+
+            <div id="auth-role-wrapper" class="hidden space-y-1.5">
+              <label for="auth-role-select" class="block text-xs font-semibold text-slate-700">Account Role</label>
+              <select id="auth-role-select" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500">
+                <option value="client">Client (Homeowner — View, Sign Variations, Chat)</option>
+                <option value="builder">Builder (Site Admin — Full Project Management)</option>
+              </select>
+            </div>
+
+            <p id="auth-error-msg" class="hidden text-xs font-medium text-rose-600 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2"></p>
+
+            <button id="auth-submit-btn" type="submit" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold transition-colors">
+              Sign In with Email
+            </button>
+          </form>
+
+          <div class="relative flex items-center py-1">
+            <div class="grow border-t border-slate-200"></div>
+            <span class="shrink mx-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Or</span>
+            <div class="grow border-t border-slate-200"></div>
+          </div>
+
+          <button id="auth-google-btn" type="button" data-action="google-signin" class="w-full py-2.5 px-4 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-800 text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#EA4335" d="M12 10.2v3.9h5.4c-.2 1.3-1.5 3.8-5.4 3.8-3.3 0-6-2.7-6-6s2.7-6 6-6c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.7 3.3 14.6 2.4 12 2.4 6.7 2.4 2.4 6.7 2.4 12s4.3 9.6 9.6 9.6c5.5 0 9.2-3.9 9.2-9.4 0-.6-.1-1.1-.2-1.6H12z"/>
+            </svg>
+            Continue with Google
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
        APPLICATION JAVASCRIPT (CLEAN, ESCAPE-SAFE, EVENT-DELEGATED)
        ===================================================================== -->
   <script>
@@ -749,6 +896,29 @@
       'use strict';
 
       var STORAGE_KEY = 'whb_client_portal_mvp_v2';
+      var FIREBASE_CONFIG_KEY = 'whb_firebase_config_v1';
+
+      // Replace these placeholder values with your Firebase Web App config for production,
+      // or paste your config directly in the "Firebase" Setup modal in the portal UI.
+      var DEFAULT_FIREBASE_CONFIG = {
+        apiKey: 'YOUR_API_KEY',
+        authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
+        projectId: 'YOUR_PROJECT_ID',
+        storageBucket: 'YOUR_PROJECT_ID.appspot.com',
+        messagingSenderId: 'YOUR_SENDER_ID',
+        appId: 'YOUR_APP_ID'
+      };
+
+      var firebaseState = {
+        configured: false,
+        connected: false,
+        db: null,
+        auth: null,
+        user: null,
+        userRole: null,
+        authMode: 'signin',
+        unsubscribeProjects: null
+      };
 
       // Crisp inline SVG fallback so no broken image icon can ever appear
       var FALLBACK_IMAGE_URI = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
@@ -1157,12 +1327,287 @@
         }
       }
 
-      function savePersistedState() {
+      function savePersistedState(targetProjectId) {
         try {
           window.localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
         } catch (err) {
           // Ignore storage quota errors if user uploads a large local image
         }
+
+        if (firebaseState.db && firebaseState.configured) {
+          var pid = targetProjectId || appState.projectId;
+          var projData = projects[pid];
+          if (projData) {
+            firebaseState.db.collection('projects').doc(pid).set(projData, { merge: true }).catch(function (err) {
+              console.warn('Firestore write error:', err);
+              if (err && err.code === 'permission-denied') {
+                showToast('Sign in required to save changes to Firestore', 'info');
+              } else {
+                showToast('Cloud sync failed: ' + (err && err.message ? err.message : 'Unknown error'), 'info');
+              }
+            });
+          }
+        }
+      }
+
+      // =====================================================================
+      // FIREBASE & CLOUD FIRESTORE INTEGRATION
+      // =====================================================================
+      function isValidFirebaseConfig(cfg) {
+        return !!(cfg && cfg.apiKey && cfg.projectId && cfg.apiKey !== 'YOUR_API_KEY' && cfg.projectId !== 'YOUR_PROJECT_ID');
+      }
+
+      function getActiveFirebaseConfig() {
+        try {
+          var raw = window.localStorage.getItem(FIREBASE_CONFIG_KEY);
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            if (isValidFirebaseConfig(parsed)) return parsed;
+          }
+        } catch (err) {}
+        return isValidFirebaseConfig(DEFAULT_FIREBASE_CONFIG) ? DEFAULT_FIREBASE_CONFIG : null;
+      }
+
+      function parseFirebaseConfigInput(rawText) {
+        var text = String(rawText || '').trim();
+        if (!text) return null;
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          // Support pasting JS snippet like: const firebaseConfig = { apiKey: "...", ... };
+          var startIdx = text.indexOf('{');
+          var endIdx = text.lastIndexOf('}');
+          if (startIdx === -1 || endIdx === -1) return null;
+          var objBody = text.slice(startIdx, endIdx + 1);
+          var extracted = {};
+          var keys = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId', 'measurementId', 'databaseURL'];
+          keys.forEach(function (k) {
+            var re = new RegExp('["\']?' + k + '["\']?\\s*:\\s*["\']([^"\']+)["\']');
+            var m = objBody.match(re);
+            if (m && m[1]) extracted[k] = m[1].trim();
+          });
+          return isValidFirebaseConfig(extracted) ? extracted : null;
+        }
+      }
+
+      function updateDbStatusUI(status, label) {
+        var pill = document.getElementById('db-status-pill');
+        var dot = document.getElementById('db-status-dot');
+        var text = document.getElementById('db-status-text');
+        var banner = document.getElementById('firebase-modal-status-banner');
+        if (!pill || !dot || !text) return;
+
+        if (status === 'live') {
+          pill.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 tracking-wider uppercase transition-colors cursor-pointer';
+          dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+          text.textContent = label || 'Firestore Live';
+          if (banner) {
+            banner.className = 'rounded-xl p-3.5 border text-xs font-medium bg-emerald-50 border-emerald-200 text-emerald-900';
+            var activeCfg = getActiveFirebaseConfig();
+            banner.innerHTML = 'Connected to Cloud Firestore project <strong>' + escapeHtml(activeCfg ? activeCfg.projectId : '') + '</strong>. Real-time sync is active.';
+          }
+        } else if (status === 'auth-required') {
+          pill.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500/30 tracking-wider uppercase transition-colors cursor-pointer';
+          dot.className = 'w-2 h-2 rounded-full bg-sky-400';
+          text.textContent = label || 'Sign In to Sync';
+          if (banner) {
+            banner.className = 'rounded-xl p-3.5 border text-xs font-medium bg-sky-50 border-sky-200 text-sky-900';
+            banner.innerHTML = 'Firebase is configured. <strong>Sign In</strong> to sync live project updates with Cloud Firestore.';
+          }
+        } else {
+          pill.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 tracking-wider uppercase transition-colors cursor-pointer';
+          dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+          text.textContent = label || 'Local Demo';
+          if (banner) {
+            banner.className = 'rounded-xl p-3.5 border text-xs font-medium bg-amber-50 border-amber-200 text-amber-900';
+            banner.innerHTML = 'Currently running in <strong>Local Demo Mode</strong> (browser localStorage). Paste your Firebase web app config below to enable live Cloud Firestore sync &amp; Authentication.';
+          }
+        }
+      }
+
+      function updateAuthUI() {
+        var area = document.getElementById('auth-user-area');
+        if (!area) return;
+        if (firebaseState.user) {
+          var displayLabel = firebaseState.user.displayName || firebaseState.user.email || 'Signed In';
+          var roleBadge = firebaseState.userRole === 'builder' ? 'Builder' : 'Client';
+          var roleColor = firebaseState.userRole === 'builder'
+            ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+            : 'bg-sky-500/20 text-sky-300 border-sky-500/30';
+          area.innerHTML =
+            '<span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium bg-slate-900 border border-slate-700 text-slate-200">' +
+              '<span class="px-1.5 py-0.5 rounded-md text-[10px] font-bold uppercase border ' + roleColor + '">' + roleBadge + '</span>' +
+              '<span class="max-w-[130px] truncate">' + escapeHtml(displayLabel) + '</span>' +
+            '</span>' +
+            '<button type="button" data-action="sign-out" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition-colors shrink-0">Sign Out</button>';
+        } else {
+          area.innerHTML =
+            '<button id="btn-auth-open" type="button" data-action="open-auth-modal" class="px-3 py-2 rounded-xl text-xs font-semibold bg-amber-600 hover:bg-amber-700 text-white transition-colors shrink-0">Sign In</button>';
+        }
+      }
+
+      function refreshProjectSelector() {
+        var select = document.getElementById('project-selector');
+        if (!select) return;
+        var currentVal = appState.projectId;
+        var keys = Object.keys(projects);
+        if (!keys.length) return;
+        select.innerHTML = keys.map(function (k) {
+          var p = projects[k];
+          return '<option value="' + escapeHtml(k) + '">' + escapeHtml(p.address + ', ' + p.postcode + ' — ' + p.title) + '</option>';
+        }).join('');
+        if (projects[currentVal]) {
+          select.value = currentVal;
+        } else {
+          appState.projectId = keys[0];
+          select.value = keys[0];
+        }
+      }
+
+      function seedProjectsToFirestore(forceOverwrite) {
+        if (!firebaseState.db) {
+          showToast('Connect Firebase first before seeding Firestore', 'info');
+          return Promise.resolve(false);
+        }
+        var defaults = getDefaultProjects();
+        var batch = firebaseState.db.batch();
+        Object.keys(defaults).forEach(function (pid) {
+          var ref = firebaseState.db.collection('projects').doc(pid);
+          batch.set(ref, defaults[pid], { merge: !forceOverwrite });
+        });
+        return batch.commit().then(function () {
+          showToast('Seeded default projects to Cloud Firestore', 'success');
+          return true;
+        }).catch(function (err) {
+          console.warn('Firestore seed error:', err);
+          showToast('Could not seed Firestore: ' + (err && err.message ? err.message : 'Check security rules / sign in'), 'info');
+          return false;
+        });
+      }
+
+      function subscribeToProjects() {
+        if (!firebaseState.db) return;
+        if (firebaseState.unsubscribeProjects) {
+          firebaseState.unsubscribeProjects();
+          firebaseState.unsubscribeProjects = null;
+        }
+
+        firebaseState.unsubscribeProjects = firebaseState.db.collection('projects').onSnapshot(function (snapshot) {
+          if (snapshot.empty) {
+            // Seed default projects if Firestore collection is brand new
+            seedProjectsToFirestore(false);
+            return;
+          }
+          var updated = {};
+          snapshot.forEach(function (doc) {
+            updated[doc.id] = doc.data();
+          });
+          projects = updated;
+          firebaseState.connected = true;
+          updateDbStatusUI('live', 'Firestore Live');
+          refreshProjectSelector();
+          renderAll();
+        }, function (err) {
+          console.warn('Firestore listener error:', err);
+          firebaseState.connected = false;
+          if (err && err.code === 'permission-denied') {
+            updateDbStatusUI('auth-required', 'Sign In to Sync');
+          } else {
+            updateDbStatusUI('local', 'Local Demo');
+          }
+        });
+      }
+
+      function loadUserRole(user) {
+        if (!firebaseState.db || !user) return Promise.resolve('client');
+        var userRef = firebaseState.db.collection('users').doc(user.uid);
+        return userRef.get().then(function (doc) {
+          if (doc.exists && doc.data().role) {
+            return doc.data().role;
+          }
+          var defaultRole = 'client';
+          return userRef.set({
+            email: user.email || '',
+            displayName: user.displayName || '',
+            role: defaultRole,
+            createdAt: new Date().toISOString()
+          }, { merge: true }).then(function () {
+            return defaultRole;
+          });
+        }).catch(function () {
+          return 'client';
+        });
+      }
+
+      function initFirebaseIfConfigured() {
+        var cfg = getActiveFirebaseConfig();
+        if (!cfg || typeof window.firebase === 'undefined') {
+          firebaseState.configured = false;
+          firebaseState.connected = false;
+          updateDbStatusUI('local', 'Local Demo');
+          updateAuthUI();
+          return;
+        }
+
+        try {
+          if (!window.firebase.apps.length) {
+            window.firebase.initializeApp(cfg);
+          }
+          firebaseState.auth = window.firebase.auth();
+          firebaseState.db = window.firebase.firestore();
+          firebaseState.configured = true;
+
+          firebaseState.auth.onAuthStateChanged(function (user) {
+            firebaseState.user = user;
+            if (user) {
+              loadUserRole(user).then(function (role) {
+                firebaseState.userRole = role;
+                updateAuthUI();
+                if (role === 'client' && appState.role === 'builder') {
+                  switchRole('client');
+                }
+                subscribeToProjects();
+              });
+            } else {
+              firebaseState.userRole = null;
+              updateAuthUI();
+              subscribeToProjects();
+            }
+          });
+        } catch (err) {
+          console.error('Firebase init error:', err);
+          firebaseState.configured = false;
+          firebaseState.connected = false;
+          updateDbStatusUI('local', 'Local Demo');
+          showToast('Firebase config error: ' + err.message, 'info');
+        }
+      }
+
+      function compressImageFile(file, maxWidth, quality, callback) {
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+          var img = new Image();
+          img.onload = function () {
+            var scale = img.width > maxWidth ? (maxWidth / img.width) : 1;
+            var w = Math.round(img.width * scale);
+            var h = Math.round(img.height * scale);
+            var canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            try {
+              callback(canvas.toDataURL('image/jpeg', quality));
+            } catch (err) {
+              callback(ev.target.result);
+            }
+          };
+          img.onerror = function () {
+            callback(ev.target.result);
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
       }
 
       function getCurrentProject() {
@@ -1569,6 +2014,10 @@
       // INTERACTION HANDLERS
       // =====================================================================
       function switchRole(newRole) {
+        if (newRole === 'builder' && firebaseState.user && firebaseState.userRole === 'client') {
+          showToast('Builder View requires a Builder account. Sign out or use a Builder login.', 'info');
+          return;
+        }
         appState.role = newRole;
         var clientBtn = document.getElementById('btn-role-client');
         var builderBtn = document.getElementById('btn-role-builder');
@@ -1684,7 +2133,7 @@
 
         if (senderRole === 'builder') {
           showToast('Reply sent to ' + proj.clientName, 'success');
-        } else {
+        } else if (!firebaseState.connected) {
           var typingBar = document.getElementById('client-typing-bar');
           typingBar.classList.remove('hidden');
           setTimeout(function () {
@@ -1760,22 +2209,18 @@
           document.getElementById('client-chat-photo-input').addEventListener('change', function (e) {
             var file = e.target.files[0];
             if (!file) return;
-            var reader = new FileReader();
-            reader.onload = function (ev) {
-              sendChatMessage('client', 'Attached photo: ' + file.name, ev.target.result);
-            };
-            reader.readAsDataURL(file);
+            compressImageFile(file, 1024, 0.75, function (dataUrl) {
+              sendChatMessage('client', 'Attached photo: ' + file.name, dataUrl);
+            });
             e.target.value = '';
           });
 
           document.getElementById('builder-chat-photo-input').addEventListener('change', function (e) {
             var file = e.target.files[0];
             if (!file) return;
-            var reader = new FileReader();
-            reader.onload = function (ev) {
-              sendChatMessage('builder', 'Site photo update: ' + file.name, ev.target.result);
-            };
-            reader.readAsDataURL(file);
+            compressImageFile(file, 1024, 0.75, function (dataUrl) {
+              sendChatMessage('builder', 'Site photo update: ' + file.name, dataUrl);
+            });
             e.target.value = '';
           });
 
@@ -1832,15 +2277,13 @@
           document.getElementById('admin-photo-file').addEventListener('change', function (e) {
             var file = e.target.files[0];
             if (!file) return;
-            var reader = new FileReader();
-            reader.onload = function (ev) {
-              appState.stagedPhotoUrl = ev.target.result;
+            compressImageFile(file, 1200, 0.78, function (dataUrl) {
+              appState.stagedPhotoUrl = dataUrl;
               var previewBox = document.getElementById('admin-staged-preview');
-              document.getElementById('admin-staged-img').src = ev.target.result;
+              document.getElementById('admin-staged-img').src = dataUrl;
               previewBox.classList.remove('hidden');
               previewBox.classList.add('flex');
-            };
-            reader.readAsDataURL(file);
+            });
           });
 
           // Admin Photo Publish Form
@@ -1946,6 +2389,60 @@
             showToast('Published "' + rawTitle + '" to Client Vault', 'success');
           });
 
+          // Firebase Config Form Submit
+          document.getElementById('firebase-config-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var rawInput = document.getElementById('firebase-config-input').value;
+            var parsed = parseFirebaseConfigInput(rawInput);
+            if (!parsed) {
+              showToast('Invalid Firebase config. Please paste valid JSON or JS firebaseConfig.', 'info');
+              return;
+            }
+            try {
+              window.localStorage.setItem(FIREBASE_CONFIG_KEY, JSON.stringify(parsed));
+            } catch (err) {}
+            document.getElementById('firebase-modal').classList.add('hidden');
+            initFirebaseIfConfigured();
+            showToast('Firebase config saved! Connecting to ' + parsed.projectId + '...', 'success');
+          });
+
+          // Firebase Auth Email Form Submit
+          document.getElementById('auth-email-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (!firebaseState.auth) return;
+            var email = document.getElementById('auth-email-input').value.trim();
+            var password = document.getElementById('auth-password-input').value;
+            var errBox = document.getElementById('auth-error-msg');
+            errBox.classList.add('hidden');
+
+            if (firebaseState.authMode === 'signup') {
+              var selectedRole = document.getElementById('auth-role-select').value || 'client';
+              firebaseState.auth.createUserWithEmailAndPassword(email, password).then(function (cred) {
+                return firebaseState.db.collection('users').doc(cred.user.uid).set({
+                  email: email,
+                  displayName: email.split('@')[0],
+                  role: selectedRole,
+                  createdAt: new Date().toISOString()
+                }, { merge: true }).then(function () {
+                  firebaseState.userRole = selectedRole;
+                  document.getElementById('auth-modal').classList.add('hidden');
+                  showToast('Account created as ' + (selectedRole === 'builder' ? 'Builder' : 'Client'), 'success');
+                });
+              }).catch(function (err) {
+                errBox.textContent = err.message || 'Sign up failed';
+                errBox.classList.remove('hidden');
+              });
+            } else {
+              firebaseState.auth.signInWithEmailAndPassword(email, password).then(function () {
+                document.getElementById('auth-modal').classList.add('hidden');
+                showToast('Signed in successfully', 'success');
+              }).catch(function (err) {
+                errBox.textContent = err.message || 'Sign in failed';
+                errBox.classList.remove('hidden');
+              });
+            }
+          });
+
           // Global Click Event Delegation (Zero brittle inline onclick handlers)
           document.addEventListener('click', function (e) {
             var trigger = e.target.closest('[data-action]');
@@ -1953,6 +2450,8 @@
               if (e.target.id === 'photo-modal') document.getElementById('photo-modal').classList.add('hidden');
               if (e.target.id === 'doc-modal') document.getElementById('doc-modal').classList.add('hidden');
               if (e.target.id === 'sign-modal') document.getElementById('sign-modal').classList.add('hidden');
+              if (e.target.id === 'firebase-modal') document.getElementById('firebase-modal').classList.add('hidden');
+              if (e.target.id === 'auth-modal') document.getElementById('auth-modal').classList.add('hidden');
               return;
             }
 
@@ -1960,6 +2459,77 @@
 
             if (action === 'switch-role') {
               switchRole(trigger.dataset.role);
+            } else if (action === 'open-firebase-modal') {
+              var activeCfg = getActiveFirebaseConfig();
+              if (activeCfg) {
+                document.getElementById('firebase-config-input').value = JSON.stringify(activeCfg, null, 2);
+              }
+              document.getElementById('firebase-modal').classList.remove('hidden');
+            } else if (action === 'close-firebase-modal') {
+              document.getElementById('firebase-modal').classList.add('hidden');
+            } else if (action === 'seed-firestore') {
+              seedProjectsToFirestore(true);
+            } else if (action === 'clear-firebase-config') {
+              try { window.localStorage.removeItem(FIREBASE_CONFIG_KEY); } catch (err) {}
+              if (firebaseState.unsubscribeProjects) {
+                firebaseState.unsubscribeProjects();
+                firebaseState.unsubscribeProjects = null;
+              }
+              firebaseState.configured = false;
+              firebaseState.connected = false;
+              firebaseState.user = null;
+              firebaseState.userRole = null;
+              updateDbStatusUI('local', 'Local Demo');
+              updateAuthUI();
+              document.getElementById('firebase-config-input').value = '';
+              document.getElementById('firebase-modal').classList.add('hidden');
+              showToast('Disconnected from Firebase — using Local Demo Mode', 'info');
+            } else if (action === 'open-auth-modal') {
+              var notCfg = document.getElementById('auth-not-configured-notice');
+              var formBox = document.getElementById('auth-form-container');
+              if (firebaseState.configured) {
+                notCfg.classList.add('hidden');
+                formBox.classList.remove('hidden');
+              } else {
+                notCfg.classList.remove('hidden');
+                formBox.classList.add('hidden');
+              }
+              document.getElementById('auth-error-msg').classList.add('hidden');
+              document.getElementById('auth-modal').classList.remove('hidden');
+            } else if (action === 'close-auth-modal') {
+              document.getElementById('auth-modal').classList.add('hidden');
+            } else if (action === 'open-firebase-from-auth') {
+              document.getElementById('auth-modal').classList.add('hidden');
+              document.getElementById('firebase-modal').classList.remove('hidden');
+            } else if (action === 'switch-auth-mode') {
+              firebaseState.authMode = trigger.dataset.mode === 'signup' ? 'signup' : 'signin';
+              var isSignup = firebaseState.authMode === 'signup';
+              document.getElementById('auth-tab-signin').className = isSignup
+                ? 'py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900'
+                : 'py-1.5 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs';
+              document.getElementById('auth-tab-signup').className = isSignup
+                ? 'py-1.5 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs'
+                : 'py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900';
+              document.getElementById('auth-role-wrapper').classList.toggle('hidden', !isSignup);
+              document.getElementById('auth-submit-btn').textContent = isSignup ? 'Create Account' : 'Sign In with Email';
+              document.getElementById('auth-error-msg').classList.add('hidden');
+            } else if (action === 'google-signin') {
+              if (!firebaseState.auth) return;
+              var provider = new window.firebase.auth.GoogleAuthProvider();
+              firebaseState.auth.signInWithPopup(provider).then(function () {
+                document.getElementById('auth-modal').classList.add('hidden');
+                showToast('Signed in with Google', 'success');
+              }).catch(function (err) {
+                var errBox = document.getElementById('auth-error-msg');
+                errBox.textContent = err.message || 'Google sign-in failed';
+                errBox.classList.remove('hidden');
+              });
+            } else if (action === 'sign-out') {
+              if (firebaseState.auth) {
+                firebaseState.auth.signOut().then(function () {
+                  showToast('Signed out', 'info');
+                });
+              }
             } else if (action === 'reset-demo') {
               try { window.localStorage.removeItem(STORAGE_KEY); } catch (err) {}
               projects = getDefaultProjects();
@@ -1967,6 +2537,9 @@
               appState.docFilter = 'All';
               updateFilterPills('photo-filter-bar', 'All');
               updateFilterPills('doc-filter-bar', 'All');
+              if (firebaseState.connected) {
+                seedProjectsToFirestore(true);
+              }
               renderAll();
               showToast('Demo data reset to default presentation state', 'info');
             } else if (action === 'select-tab') {
@@ -2052,6 +2625,7 @@
           });
 
           renderAll();
+          initFirebaseIfConfigured();
         } catch (err) {
           console.error('Portal initialisation error:', err);
         }

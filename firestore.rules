@@ -7,31 +7,43 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // Helper: check if the signed-in user has the 'builder' role in /users/{uid}
+    // Helper: check if the signed-in user has the 'owner' role (Chris)
+    function isOwner() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'owner';
+    }
+
+    // Helper: check if the signed-in user has the 'builder' or 'owner' role in /users/{uid}
     function isBuilder() {
       return isSignedIn()
         && exists(/databases/$(database)/documents/users/$(request.auth.uid))
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'builder';
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['builder', 'owner'];
     }
 
     // User profiles: users can read/write their own profile,
-    // but cannot self-escalate to 'builder' once created (edit in Firebase Console for production).
+    // while Chris (Owner) can list users and assign client/builder/owner roles.
     match /users/{userId} {
-      allow read: if isSignedIn() && request.auth.uid == userId;
+      allow read: if isSignedIn() && (request.auth.uid == userId || isOwner());
       allow create: if isSignedIn() && request.auth.uid == userId;
-      allow update: if isSignedIn()
-        && request.auth.uid == userId
-        && request.resource.data.role == resource.data.role;
+      allow update: if isOwner()
+        || (isSignedIn()
+          && request.auth.uid == userId
+          && request.resource.data.role == resource.data.role);
 
       match /fcmTokens/{tokenId} {
         allow read, write: if isSignedIn() && request.auth.uid == userId;
       }
     }
 
+    // Builder & Client directory profiles: readable by signed-in users, writable ONLY by Chris (Owner).
+    match /profiles/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isOwner();
+    }
+
     // Projects collection:
     // Signed-in users can read projects and post updates (variations sign-off, BACS confirmation, chat, docs).
-    // For stricter per-client isolation in production, add a `clientUid` field to each project doc
-    // and restrict `read`/`update` to `isBuilder() || resource.data.clientUid == request.auth.uid`.
     match /projects/{projectId} {
       allow read, write: if isSignedIn();
     }

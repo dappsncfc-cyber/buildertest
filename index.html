@@ -92,6 +92,9 @@
           <button id="btn-role-builder" type="button" data-action="switch-role" data-role="builder" class="flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white">
             Builder View (Jamie Cox)
           </button>
+          <button id="btn-role-owner" type="button" data-action="switch-role" data-role="owner" class="flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-amber-300">
+            Owner (Chris)
+          </button>
         </div>
 
         <button id="btn-enable-notifications" type="button" data-action="enable-notifications" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-400 border border-slate-700 transition-colors shrink-0 inline-flex items-center gap-1.5">
@@ -625,6 +628,215 @@
       </div>
     </div>
 
+    <!-- =====================================================================
+         OWNER CONSOLE VIEW (CHRIS ONLY — BUILDER & CLIENT PROFILES)
+         ===================================================================== -->
+    <div id="owner-view" class="hidden space-y-6">
+      <!-- Owner Banner -->
+      <div class="bg-slate-900 border border-amber-500/40 rounded-2xl p-5 sm:p-6 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-md">
+        <div>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wider mb-2">
+            Restricted • Owner Access Only
+          </span>
+          <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">Chris's Owner Console — Profiles &amp; Projects</h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1">
+            Create and manage Builder &amp; Client profiles, assign projects, and control portal access.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 shrink-0">
+          <div class="bg-slate-800/80 border border-slate-700 rounded-xl px-3.5 py-2 text-center">
+            <p id="owner-stat-builders" class="text-lg font-extrabold text-amber-400">0</p>
+            <p class="text-[11px] text-slate-400 font-medium">Builders</p>
+          </div>
+          <div class="bg-slate-800/80 border border-slate-700 rounded-xl px-3.5 py-2 text-center">
+            <p id="owner-stat-clients" class="text-lg font-extrabold text-emerald-400">0</p>
+            <p class="text-[11px] text-slate-400 font-medium">Clients</p>
+          </div>
+          <div class="bg-slate-800/80 border border-slate-700 rounded-xl px-3.5 py-2 text-center">
+            <p id="owner-stat-projects" class="text-lg font-extrabold text-sky-400">0</p>
+            <p class="text-[11px] text-slate-400 font-medium">Projects</p>
+          </div>
+          <button type="button" data-action="switch-role" data-role="client" class="text-xs font-semibold bg-white hover:bg-slate-100 text-slate-900 px-4 py-2.5 rounded-xl transition-colors">
+            Exit Owner Console
+          </button>
+        </div>
+      </div>
+
+      <!-- Two-Column Profile Management: Builders & Clients -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- BUILDER PROFILES -->
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col">
+          <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+            <div>
+              <h3 class="font-bold text-sm sm:text-base">Builder Profiles</h3>
+              <p class="text-xs text-slate-400">Site managers, trades &amp; White Horse Builders staff</p>
+            </div>
+            <button type="button" data-action="reset-builder-form" class="text-xs font-semibold text-amber-400 hover:text-amber-300">
+              + New Builder
+            </button>
+          </div>
+
+          <form id="owner-builder-form" class="p-5 border-b border-slate-100 bg-slate-50/70 space-y-3">
+            <input id="owner-builder-id" type="hidden" value="" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="owner-builder-name" class="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
+                <input id="owner-builder-name" type="text" placeholder="e.g. Jamie Cox" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+              </div>
+              <div>
+                <label for="owner-builder-title" class="block text-xs font-semibold text-slate-700 mb-1">Role / Title</label>
+                <input id="owner-builder-title" type="text" placeholder="e.g. Site Manager" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="owner-builder-email" class="block text-xs font-semibold text-slate-700 mb-1">Email</label>
+                <input id="owner-builder-email" type="email" placeholder="jamie@whitehorsebuilders.co.uk" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+              </div>
+              <div>
+                <label for="owner-builder-phone" class="block text-xs font-semibold text-slate-700 mb-1">Mobile / Phone</label>
+                <input id="owner-builder-phone" type="tel" placeholder="07700 900123" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="owner-builder-trade" class="block text-xs font-semibold text-slate-700 mb-1">Trade / Specialism</label>
+                <input id="owner-builder-trade" type="text" placeholder="e.g. Brickwork &amp; Structural" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" />
+              </div>
+              <div>
+                <label for="owner-builder-status" class="block text-xs font-semibold text-slate-700 mb-1">Status</label>
+                <select id="owner-builder-status" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500">
+                  <option value="Active">Active</option>
+                  <option value="On Leave">On Leave</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+            </div>
+            <div class="flex items-center justify-end gap-2 pt-1">
+              <button id="owner-builder-submit-btn" type="submit" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold transition-colors">
+                Save Builder Profile
+              </button>
+            </div>
+          </form>
+
+          <div id="owner-builders-list" class="p-5 space-y-3 divide-y divide-slate-100"></div>
+        </section>
+
+        <!-- CLIENT PROFILES -->
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col">
+          <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+            <div>
+              <h3 class="font-bold text-sm sm:text-base">Client Profiles</h3>
+              <p class="text-xs text-slate-400">Homeowners &amp; assigned property projects</p>
+            </div>
+            <button type="button" data-action="reset-client-form" class="text-xs font-semibold text-amber-400 hover:text-amber-300">
+              + New Client
+            </button>
+          </div>
+
+          <form id="owner-client-form" class="p-5 border-b border-slate-100 bg-slate-50/70 space-y-3">
+            <input id="owner-client-id" type="hidden" value="" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="owner-client-name" class="block text-xs font-semibold text-slate-700 mb-1">Client Name(s)</label>
+                <input id="owner-client-name" type="text" placeholder="e.g. Sarah &amp; Tom Jenkins" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+              </div>
+              <div>
+                <label for="owner-client-email" class="block text-xs font-semibold text-slate-700 mb-1">Email</label>
+                <input id="owner-client-email" type="email" placeholder="client@example.co.uk" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="owner-client-phone" class="block text-xs font-semibold text-slate-700 mb-1">Mobile / Phone</label>
+                <input id="owner-client-phone" type="tel" placeholder="07700 900456" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" />
+              </div>
+              <div>
+                <label for="owner-client-project" class="block text-xs font-semibold text-slate-700 mb-1">Assigned Project</label>
+                <select id="owner-client-project" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500"></select>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="owner-client-address" class="block text-xs font-semibold text-slate-700 mb-1">Property Address &amp; Postcode</label>
+                <input id="owner-client-address" type="text" placeholder="14 Station Road, NR27 9DS" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" />
+              </div>
+              <div>
+                <label for="owner-client-status" class="block text-xs font-semibold text-slate-700 mb-1">Status</label>
+                <select id="owner-client-status" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500">
+                  <option value="Active">Active</option>
+                  <option value="Pending">Pending Start</option>
+                  <option value="Completed">Handover Complete</option>
+                </select>
+              </div>
+            </div>
+            <div class="flex items-center justify-end gap-2 pt-1">
+              <button id="owner-client-submit-btn" type="submit" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs sm:text-sm font-semibold transition-colors">
+                Save Client Profile
+              </button>
+            </div>
+          </form>
+
+          <div id="owner-clients-list" class="p-5 space-y-3 divide-y divide-slate-100"></div>
+        </section>
+      </div>
+
+      <!-- CREATE NEW PROJECT & ASSIGN PROFILES -->
+      <section class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="bg-slate-900 text-white px-5 py-4">
+          <h3 class="font-bold text-sm sm:text-base">Create New Project</h3>
+          <p class="text-xs text-slate-400">Add a new build project and link a Client &amp; Lead Builder</p>
+        </div>
+        <form id="owner-project-form" class="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div>
+            <label for="owner-proj-title" class="block text-xs font-semibold text-slate-700 mb-1">Project Title</label>
+            <input id="owner-proj-title" type="text" placeholder="e.g. Two-Storey Side Extension" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+          </div>
+          <div>
+            <label for="owner-proj-address" class="block text-xs font-semibold text-slate-700 mb-1">Site Address</label>
+            <input id="owner-proj-address" type="text" placeholder="e.g. 22 Cliff Road, Sheringham" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+          </div>
+          <div>
+            <label for="owner-proj-postcode" class="block text-xs font-semibold text-slate-700 mb-1">Postcode</label>
+            <input id="owner-proj-postcode" type="text" placeholder="e.g. NR26 8BJ" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+          </div>
+          <div>
+            <label for="owner-proj-client-name" class="block text-xs font-semibold text-slate-700 mb-1">Client Name</label>
+            <input id="owner-proj-client-name" type="text" placeholder="e.g. Mr &amp; Mrs Davies" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+          </div>
+          <div>
+            <label for="owner-proj-net" class="block text-xs font-semibold text-slate-700 mb-1">Base Contract Net (£ ex. VAT)</label>
+            <input id="owner-proj-net" type="number" min="1000" step="100" placeholder="65000" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+          </div>
+          <div>
+            <label for="owner-proj-handover" class="block text-xs font-semibold text-slate-700 mb-1">Target Handover</label>
+            <input id="owner-proj-handover" type="text" placeholder="e.g. Mar 2027" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+          </div>
+          <div class="sm:col-span-2 lg:col-span-3 flex justify-end">
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold shadow-xs transition-colors">
+              Create &amp; Publish Project
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- REGISTERED FIREBASE USER ACCOUNTS (WHEN CONNECTED TO FIRESTORE) -->
+      <section id="owner-users-section" class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+          <div>
+            <h3 class="font-bold text-sm sm:text-base">Portal Login Accounts (Firebase Users)</h3>
+            <p class="text-xs text-slate-400">Assign Client, Builder, or Owner permissions to signed-up accounts</p>
+          </div>
+          <button type="button" data-action="refresh-owner-users" class="text-xs font-semibold text-amber-400 hover:text-amber-300">
+            Refresh
+          </button>
+        </div>
+        <div id="owner-users-list" class="p-5 text-xs text-slate-500">
+          Connect Firebase &amp; sign in as Chris (Owner) to manage registered Firebase user roles.
+        </div>
+      </section>
+    </div>
+
   </main>
 
   <!-- FOOTER -->
@@ -909,6 +1121,45 @@
   </div>
 
   <!-- =====================================================================
+       MODAL 6: CHRIS (OWNER) PASSCODE GATE (DEMO MODE)
+       ===================================================================== -->
+  <div id="owner-pin-modal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full overflow-hidden shadow-2xl">
+      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+        <div>
+          <h4 class="font-bold text-sm sm:text-base">Owner Access — Chris Only</h4>
+          <p class="text-xs text-slate-400">White Horse Builders Ltd • Profile &amp; Project Setup</p>
+        </div>
+        <button type="button" data-action="close-owner-pin-modal" class="text-slate-300 hover:text-white text-sm font-bold px-2 py-1">
+          &times;
+        </button>
+      </div>
+
+      <form id="owner-pin-form" class="p-5 space-y-4">
+        <div>
+          <label for="owner-pin-input" class="block text-xs font-semibold text-slate-700 mb-1.5">
+            Enter Owner Passcode:
+          </label>
+          <input id="owner-pin-input" type="password" placeholder="••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-mono tracking-widest text-slate-900 focus:outline-none focus:border-amber-500" required />
+          <p class="text-[11px] text-slate-500 mt-1.5">
+            Demo passcode: <code class="bg-slate-100 px-1.5 py-0.5 rounded font-bold text-slate-800">2026</code>. When Firebase Auth is enabled, access is controlled by Chris's Owner account role.
+          </p>
+          <p id="owner-pin-error" class="hidden text-xs font-medium text-rose-600 mt-2">Incorrect passcode.</p>
+        </div>
+
+        <div class="flex items-center justify-end gap-2">
+          <button type="button" data-action="close-owner-pin-modal" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+            Cancel
+          </button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold">
+            Unlock Owner Console
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =====================================================================
        APPLICATION JAVASCRIPT (CLEAN, ESCAPE-SAFE, EVENT-DELEGATED)
        ===================================================================== -->
   <script>
@@ -932,6 +1183,10 @@
       var FIREBASE_VAPID_KEY_STORAGE = 'whb_firebase_vapid_v1';
       var DEFAULT_VAPID_KEY = '';
 
+      var PROFILES_STORAGE_KEY = 'whb_profiles_mvp_v1';
+      var OWNER_EMAILS = ['chris@whitehorsebuilders.co.uk'];
+      var OWNER_DEMO_PIN = '2026';
+
       var firebaseState = {
         configured: false,
         connected: false,
@@ -945,8 +1200,56 @@
         authMode: 'signin',
         unsubscribeProjects: null,
         unsubscribeNotifications: null,
+        unsubscribeProfiles: null,
         sessionStartedAt: Date.now()
       };
+
+      function getDefaultProfiles() {
+        return {
+          builders: [
+            {
+              id: 'bld-1',
+              name: 'Chris (Owner)',
+              title: 'Company Director & Owner',
+              email: 'chris@whitehorsebuilders.co.uk',
+              phone: '07700 900100',
+              trade: 'Project Oversight & Contracts',
+              status: 'Active'
+            },
+            {
+              id: 'bld-2',
+              name: 'Jamie Cox',
+              title: 'Site Manager',
+              email: 'jamie@whitehorsebuilders.co.uk',
+              phone: '07700 900123',
+              trade: 'General Build, Groundworks & Steels',
+              status: 'Active'
+            }
+          ],
+          clients: [
+            {
+              id: 'cli-1',
+              name: 'Sarah & Tom Jenkins',
+              email: 'jenkins.home@example.co.uk',
+              phone: '07700 900456',
+              projectId: 'proj-1',
+              address: '14 Station Road, NR27 9DS',
+              status: 'Active'
+            },
+            {
+              id: 'cli-2',
+              name: 'Eleanor Vance',
+              email: 'eleanor.vance@example.co.uk',
+              phone: '07700 900789',
+              projectId: 'proj-2',
+              address: '8 Coastguard Cottages, NR27 9BU',
+              status: 'Active'
+            }
+          ]
+        };
+      }
+
+      var profiles = getDefaultProfiles();
 
       // Crisp inline SVG fallback so no broken image icon can ever appear
       var FALLBACK_IMAGE_URI = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
@@ -1338,7 +1641,8 @@
         docFilter: 'All',
         lightboxIndex: 0,
         stagedPhotoUrl: null,
-        signingVariationId: null
+        signingVariationId: null,
+        ownerUnlocked: false
       };
 
       function loadPersistedState() {
@@ -1352,6 +1656,33 @@
           }
         } catch (err) {
           projects = getDefaultProjects();
+        }
+        loadPersistedProfiles();
+      }
+
+      function loadPersistedProfiles() {
+        try {
+          var raw = window.localStorage.getItem(PROFILES_STORAGE_KEY);
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && Array.isArray(parsed.builders) && Array.isArray(parsed.clients)) {
+              profiles = parsed;
+            }
+          }
+        } catch (err) {
+          profiles = getDefaultProfiles();
+        }
+      }
+
+      function savePersistedProfiles() {
+        try {
+          window.localStorage.setItem(PROFILES_STORAGE_KEY, JSON.stringify(profiles));
+        } catch (err) {}
+
+        if (firebaseState.db && firebaseState.configured) {
+          firebaseState.db.collection('profiles').doc('directory').set(profiles, { merge: true }).catch(function (err) {
+            console.warn('Firestore profiles write error:', err);
+          });
         }
       }
 
@@ -1458,10 +1789,14 @@
         if (!area) return;
         if (firebaseState.user) {
           var displayLabel = firebaseState.user.displayName || firebaseState.user.email || 'Signed In';
-          var roleBadge = firebaseState.userRole === 'builder' ? 'Builder' : 'Client';
-          var roleColor = firebaseState.userRole === 'builder'
-            ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
-            : 'bg-sky-500/20 text-sky-300 border-sky-500/30';
+          var roleBadge = firebaseState.userRole === 'owner'
+            ? 'Owner'
+            : (firebaseState.userRole === 'builder' ? 'Builder' : 'Client');
+          var roleColor = firebaseState.userRole === 'owner'
+            ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+            : (firebaseState.userRole === 'builder'
+              ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+              : 'bg-sky-500/20 text-sky-300 border-sky-500/30');
           area.innerHTML =
             '<span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium bg-slate-900 border border-slate-700 text-slate-200">' +
               '<span class="px-1.5 py-0.5 rounded-md text-[10px] font-bold uppercase border ' + roleColor + '">' + roleBadge + '</span>' +
@@ -1546,14 +1881,38 @@
         });
       }
 
+      function subscribeToProfiles() {
+        if (!firebaseState.db) return;
+        if (firebaseState.unsubscribeProfiles) {
+          firebaseState.unsubscribeProfiles();
+          firebaseState.unsubscribeProfiles = null;
+        }
+        firebaseState.unsubscribeProfiles = firebaseState.db.collection('profiles').doc('directory').onSnapshot(function (doc) {
+          if (doc.exists) {
+            var data = doc.data();
+            if (data && Array.isArray(data.builders) && Array.isArray(data.clients)) {
+              profiles = data;
+              renderOwnerConsole();
+            }
+          } else {
+            firebaseState.db.collection('profiles').doc('directory').set(profiles, { merge: true }).catch(function () {});
+          }
+        }, function () {});
+      }
+
       function loadUserRole(user) {
         if (!firebaseState.db || !user) return Promise.resolve('client');
+        var emailLower = (user.email || '').toLowerCase();
+        var isDesignatedOwner = OWNER_EMAILS.some(function (e) { return e.toLowerCase() === emailLower; });
         var userRef = firebaseState.db.collection('users').doc(user.uid);
         return userRef.get().then(function (doc) {
           if (doc.exists && doc.data().role) {
+            if (isDesignatedOwner && doc.data().role !== 'owner') {
+              return userRef.set({ role: 'owner' }, { merge: true }).then(function () { return 'owner'; });
+            }
             return doc.data().role;
           }
-          var defaultRole = 'client';
+          var defaultRole = isDesignatedOwner ? 'owner' : 'client';
           return userRef.set({
             email: user.email || '',
             displayName: user.displayName || '',
@@ -1563,7 +1922,7 @@
             return defaultRole;
           });
         }).catch(function () {
-          return 'client';
+          return isDesignatedOwner ? 'owner' : 'client';
         });
       }
 
@@ -1591,10 +1950,14 @@
               loadUserRole(user).then(function (role) {
                 firebaseState.userRole = role;
                 updateAuthUI();
-                if (role === 'client' && appState.role === 'builder') {
+                if (role === 'client' && (appState.role === 'builder' || appState.role === 'owner')) {
                   switchRole('client');
                 }
+                if (role === 'builder' && appState.role === 'owner') {
+                  switchRole('builder');
+                }
                 subscribeToProjects();
+                subscribeToProfiles();
                 subscribeToNotifications();
                 if (firebaseState.fcmToken) {
                   saveFcmTokenToFirestore(firebaseState.fcmToken);
@@ -2228,6 +2591,128 @@
       }
 
       // =====================================================================
+      // OWNER CONSOLE RENDERERS (CHRIS ONLY)
+      // =====================================================================
+      function renderOwnerConsole() {
+        var statBuilders = document.getElementById('owner-stat-builders');
+        var statClients = document.getElementById('owner-stat-clients');
+        var statProjects = document.getElementById('owner-stat-projects');
+        if (statBuilders) statBuilders.textContent = String(profiles.builders.length);
+        if (statClients) statClients.textContent = String(profiles.clients.length);
+        if (statProjects) statProjects.textContent = String(Object.keys(projects).length);
+
+        var projSelect = document.getElementById('owner-client-project');
+        if (projSelect) {
+          var currentProjVal = projSelect.value;
+          projSelect.innerHTML = Object.keys(projects).map(function (pid) {
+            var p = projects[pid];
+            return '<option value="' + escapeHtml(pid) + '">' + escapeHtml(p.address + ', ' + p.postcode + ' (' + p.title + ')') + '</option>';
+          }).join('');
+          if (currentProjVal && projects[currentProjVal]) {
+            projSelect.value = currentProjVal;
+          }
+        }
+
+        var buildersList = document.getElementById('owner-builders-list');
+        if (buildersList) {
+          if (!profiles.builders.length) {
+            buildersList.innerHTML = '<p class="text-xs text-slate-500">No builder profiles added yet.</p>';
+          } else {
+            buildersList.innerHTML = profiles.builders.map(function (b) {
+              var badgeCls = b.status === 'Active'
+                ? 'bg-emerald-100 text-emerald-800'
+                : 'bg-slate-100 text-slate-600';
+              return (
+                '<div class="pt-3 first:pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3">' +
+                  '<div class="min-w-0">' +
+                    '<div class="flex items-center gap-2 flex-wrap">' +
+                      '<span class="font-bold text-sm text-slate-900">' + escapeHtml(b.name) + '</span>' +
+                      '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">' + escapeHtml(b.title) + '</span>' +
+                      '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full ' + badgeCls + '">' + escapeHtml(b.status || 'Active') + '</span>' +
+                    '</div>' +
+                    '<p class="text-xs text-slate-600 mt-1">' + escapeHtml(b.email) + (b.phone ? ' • ' + escapeHtml(b.phone) : '') + '</p>' +
+                    (b.trade ? '<p class="text-[11px] text-slate-500 mt-0.5">Specialism: ' + escapeHtml(b.trade) + '</p>' : '') +
+                  '</div>' +
+                  '<div class="flex items-center gap-2 shrink-0">' +
+                    '<button type="button" data-action="edit-builder" data-builder-id="' + escapeHtml(b.id) + '" class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700">Edit</button>' +
+                    '<button type="button" data-action="delete-builder" data-builder-id="' + escapeHtml(b.id) + '" class="px-3 py-1.5 rounded-lg border border-rose-200 hover:bg-rose-50 text-xs font-semibold text-rose-700">Remove</button>' +
+                  '</div>' +
+                '</div>'
+              );
+            }).join('');
+          }
+        }
+
+        var clientsList = document.getElementById('owner-clients-list');
+        if (clientsList) {
+          if (!profiles.clients.length) {
+            clientsList.innerHTML = '<p class="text-xs text-slate-500">No client profiles added yet.</p>';
+          } else {
+            clientsList.innerHTML = profiles.clients.map(function (c) {
+              var assignedProj = projects[c.projectId];
+              var projLabel = assignedProj ? (assignedProj.address + ' (' + assignedProj.postcode + ')') : (c.projectId || 'Unassigned');
+              var badgeCls = c.status === 'Active'
+                ? 'bg-emerald-100 text-emerald-800'
+                : (c.status === 'Completed' ? 'bg-sky-100 text-sky-800' : 'bg-amber-100 text-amber-800');
+              return (
+                '<div class="pt-3 first:pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3">' +
+                  '<div class="min-w-0">' +
+                    '<div class="flex items-center gap-2 flex-wrap">' +
+                      '<span class="font-bold text-sm text-slate-900">' + escapeHtml(c.name) + '</span>' +
+                      '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full ' + badgeCls + '">' + escapeHtml(c.status || 'Active') + '</span>' +
+                    '</div>' +
+                    '<p class="text-xs text-slate-600 mt-1">' + escapeHtml(c.email) + (c.phone ? ' • ' + escapeHtml(c.phone) : '') + '</p>' +
+                    '<p class="text-[11px] text-slate-500 mt-0.5">Project: ' + escapeHtml(projLabel) + '</p>' +
+                  '</div>' +
+                  '<div class="flex items-center gap-2 shrink-0">' +
+                    '<button type="button" data-action="edit-client" data-client-id="' + escapeHtml(c.id) + '" class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700">Edit</button>' +
+                    '<button type="button" data-action="delete-client" data-client-id="' + escapeHtml(c.id) + '" class="px-3 py-1.5 rounded-lg border border-rose-200 hover:bg-rose-50 text-xs font-semibold text-rose-700">Remove</button>' +
+                  '</div>' +
+                '</div>'
+              );
+            }).join('');
+          }
+        }
+      }
+
+      function loadOwnerUsersList() {
+        var container = document.getElementById('owner-users-list');
+        if (!container) return;
+        if (!firebaseState.db || !firebaseState.user || firebaseState.userRole !== 'owner') {
+          container.innerHTML = '<p class="text-xs text-slate-500">Connect Firebase &amp; sign in as Chris (Owner) to manage registered Firebase user roles.</p>';
+          return;
+        }
+        container.innerHTML = '<p class="text-xs text-slate-500">Loading Firebase user accounts...</p>';
+        firebaseState.db.collection('users').get().then(function (snapshot) {
+          if (snapshot.empty) {
+            container.innerHTML = '<p class="text-xs text-slate-500">No registered Firebase users yet.</p>';
+            return;
+          }
+          var rows = [];
+          snapshot.forEach(function (doc) {
+            var u = doc.data();
+            var role = u.role || 'client';
+            rows.push(
+              '<div class="py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 last:border-b-0">' +
+                '<div>' +
+                  '<p class="text-xs font-bold text-slate-900">' + escapeHtml(u.displayName || u.email || doc.id) + '</p>' +
+                  '<p class="text-[11px] text-slate-500">' + escapeHtml(u.email || doc.id) + '</p>' +
+                '</div>' +
+                '<div class="flex items-center gap-1.5">' +
+                  '<button type="button" data-action="set-user-role" data-uid="' + escapeHtml(doc.id) + '" data-role="client" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold ' + (role === 'client' ? 'bg-sky-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200') + '">Client</button>' +
+                  '<button type="button" data-action="set-user-role" data-uid="' + escapeHtml(doc.id) + '" data-role="builder" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold ' + (role === 'builder' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200') + '">Builder</button>' +
+                  '<button type="button" data-action="set-user-role" data-uid="' + escapeHtml(doc.id) + '" data-role="owner" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold ' + (role === 'owner' ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200') + '">Owner</button>' +
+                '</div>' +
+              '</div>'
+            );
+          });
+          container.innerHTML = rows.join('');
+        }).catch(function (err) {
+          container.innerHTML = '<p class="text-xs text-rose-600">Could not load users: ' + escapeHtml(err.message) + '</p>';
+        });
+      }
+
+      // =====================================================================
       // INTERACTION HANDLERS
       // =====================================================================
       function switchRole(newRole) {
@@ -2235,24 +2720,44 @@
           showToast('Builder View requires a Builder account. Sign out or use a Builder login.', 'info');
           return;
         }
+        if (newRole === 'owner') {
+          if (firebaseState.user) {
+            if (firebaseState.userRole !== 'owner') {
+              showToast('Owner Console is restricted to Chris (Owner).', 'info');
+              return;
+            }
+          } else if (!appState.ownerUnlocked) {
+            document.getElementById('owner-pin-input').value = '';
+            document.getElementById('owner-pin-error').classList.add('hidden');
+            document.getElementById('owner-pin-modal').classList.remove('hidden');
+            return;
+          }
+        }
+
         appState.role = newRole;
         var clientBtn = document.getElementById('btn-role-client');
         var builderBtn = document.getElementById('btn-role-builder');
+        var ownerBtn = document.getElementById('btn-role-owner');
         var clientView = document.getElementById('client-view');
         var builderView = document.getElementById('builder-view');
+        var ownerView = document.getElementById('owner-view');
 
-        if (newRole === 'client') {
-          clientBtn.className = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-amber-600 text-white shadow-sm';
-          builderBtn.className = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white';
-          clientView.classList.remove('hidden');
-          builderView.classList.add('hidden');
-        } else {
-          builderBtn.className = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-amber-600 text-white shadow-sm';
-          clientBtn.className = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white';
-          builderView.classList.remove('hidden');
-          clientView.classList.add('hidden');
-        }
+        var activeBtnCls = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-amber-600 text-white shadow-sm';
+        var inactiveBtnCls = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white';
+
+        clientBtn.className = newRole === 'client' ? activeBtnCls : inactiveBtnCls;
+        builderBtn.className = newRole === 'builder' ? activeBtnCls : inactiveBtnCls;
+        if (ownerBtn) ownerBtn.className = newRole === 'owner' ? activeBtnCls : inactiveBtnCls;
+
+        clientView.classList.toggle('hidden', newRole !== 'client');
+        builderView.classList.toggle('hidden', newRole !== 'builder');
+        if (ownerView) ownerView.classList.toggle('hidden', newRole !== 'owner');
+
         renderAll();
+        if (newRole === 'owner') {
+          renderOwnerConsole();
+          loadOwnerUsersList();
+        }
       }
 
       function selectTab(tabName) {
@@ -2677,6 +3182,143 @@
             }
           });
 
+          // Owner Passcode Form Submit (Demo Mode Gate for Chris)
+          document.getElementById('owner-pin-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var pin = document.getElementById('owner-pin-input').value.trim();
+            var errEl = document.getElementById('owner-pin-error');
+            if (pin === OWNER_DEMO_PIN) {
+              appState.ownerUnlocked = true;
+              errEl.classList.add('hidden');
+              document.getElementById('owner-pin-modal').classList.add('hidden');
+              switchRole('owner');
+              showToast('Welcome Chris — Owner Console unlocked', 'success');
+            } else {
+              errEl.classList.remove('hidden');
+            }
+          });
+
+          // Owner Console: Save Builder Profile
+          document.getElementById('owner-builder-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var idVal = document.getElementById('owner-builder-id').value;
+            var bData = {
+              id: idVal || ('bld-' + Date.now()),
+              name: document.getElementById('owner-builder-name').value.trim(),
+              title: document.getElementById('owner-builder-title').value.trim(),
+              email: document.getElementById('owner-builder-email').value.trim(),
+              phone: document.getElementById('owner-builder-phone').value.trim(),
+              trade: document.getElementById('owner-builder-trade').value.trim(),
+              status: document.getElementById('owner-builder-status').value || 'Active'
+            };
+            if (!bData.name || !bData.email) return;
+
+            var idx = profiles.builders.findIndex(function (b) { return b.id === bData.id; });
+            if (idx >= 0) {
+              profiles.builders[idx] = bData;
+              showToast('Updated builder profile: ' + bData.name, 'success');
+            } else {
+              profiles.builders.unshift(bData);
+              showToast('Added builder profile: ' + bData.name, 'success');
+            }
+            document.getElementById('owner-builder-form').reset();
+            document.getElementById('owner-builder-id').value = '';
+            document.getElementById('owner-builder-submit-btn').textContent = 'Save Builder Profile';
+            savePersistedProfiles();
+            renderOwnerConsole();
+          });
+
+          // Owner Console: Save Client Profile
+          document.getElementById('owner-client-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var idVal = document.getElementById('owner-client-id').value;
+            var cData = {
+              id: idVal || ('cli-' + Date.now()),
+              name: document.getElementById('owner-client-name').value.trim(),
+              email: document.getElementById('owner-client-email').value.trim(),
+              phone: document.getElementById('owner-client-phone').value.trim(),
+              projectId: document.getElementById('owner-client-project').value || '',
+              address: document.getElementById('owner-client-address').value.trim(),
+              status: document.getElementById('owner-client-status').value || 'Active'
+            };
+            if (!cData.name || !cData.email) return;
+
+            var idx = profiles.clients.findIndex(function (c) { return c.id === cData.id; });
+            if (idx >= 0) {
+              profiles.clients[idx] = cData;
+              showToast('Updated client profile: ' + cData.name, 'success');
+            } else {
+              profiles.clients.unshift(cData);
+              showToast('Added client profile: ' + cData.name, 'success');
+            }
+            document.getElementById('owner-client-form').reset();
+            document.getElementById('owner-client-id').value = '';
+            document.getElementById('owner-client-submit-btn').textContent = 'Save Client Profile';
+            savePersistedProfiles();
+            renderOwnerConsole();
+          });
+
+          // Owner Console: Create New Project
+          document.getElementById('owner-project-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var title = document.getElementById('owner-proj-title').value.trim();
+            var address = document.getElementById('owner-proj-address').value.trim();
+            var postcode = document.getElementById('owner-proj-postcode').value.trim().toUpperCase();
+            var clientName = document.getElementById('owner-proj-client-name').value.trim();
+            var baseNet = parseFloat(document.getElementById('owner-proj-net').value) || 50000;
+            var targetHandover = document.getElementById('owner-proj-handover').value.trim();
+            if (!title || !address || !clientName) return;
+
+            var newId = 'proj-' + Date.now();
+            var newRef = 'WHB-2026-' + Math.floor(100 + Math.random() * 900);
+            projects[newId] = {
+              id: newId,
+              title: title,
+              address: address,
+              postcode: postcode || 'NR27',
+              clientName: clientName,
+              ref: newRef,
+              targetHandover: targetHandover || 'TBC 2027',
+              baseContractNet: baseNet,
+              activeStage: 1,
+              progress: 10,
+              weather: 'Dry, Clear • 10°C',
+              tradesOnSite: 'Site Setup & Setting Out',
+              diaryNote: 'Project created by Chris (Owner). Initial site mobilisation scheduled.',
+              lastUpdated: 'Today, ' + getNowTime24(),
+              photos: [],
+              documents: [],
+              variations: [],
+              payments: [
+                {
+                  id: 'pay-' + Date.now(),
+                  stage: 'Stage 1: Mobilisation & Deposit',
+                  dueDate: 'On Commencement',
+                  netAmount: Math.round(baseNet * 0.2),
+                  vatAmount: Math.round(baseNet * 0.2 * 0.2),
+                  grossAmount: Math.round(baseNet * 0.2 * 1.2),
+                  status: 'Due Now',
+                  ref: 'INV-' + Math.floor(1000 + Math.random() * 9000)
+                }
+              ],
+              messages: [
+                {
+                  id: 'm-' + Date.now(),
+                  sender: 'builder',
+                  senderName: 'Chris (Owner)',
+                  text: 'Welcome to your White Horse Builders portal, ' + clientName + '! Your project "' + title + '" is now live.',
+                  time: getNowTime24()
+                }
+              ]
+            };
+
+            document.getElementById('owner-project-form').reset();
+            savePersistedState(newId);
+            refreshProjectSelector();
+            renderOwnerConsole();
+            showToast('Created project: ' + address + ' (' + newRef + ')', 'success');
+          });
+
           // Global Click Event Delegation (Zero brittle inline onclick handlers)
           document.addEventListener('click', function (e) {
             var trigger = e.target.closest('[data-action]');
@@ -2686,6 +3328,7 @@
               if (e.target.id === 'sign-modal') document.getElementById('sign-modal').classList.add('hidden');
               if (e.target.id === 'firebase-modal') document.getElementById('firebase-modal').classList.add('hidden');
               if (e.target.id === 'auth-modal') document.getElementById('auth-modal').classList.add('hidden');
+              if (e.target.id === 'owner-pin-modal') document.getElementById('owner-pin-modal').classList.add('hidden');
               return;
             }
 
@@ -2860,6 +3503,62 @@
                 previewBox.classList.remove('hidden');
                 previewBox.classList.add('flex');
               }
+            } else if (action === 'close-owner-pin-modal') {
+              document.getElementById('owner-pin-modal').classList.add('hidden');
+            } else if (action === 'reset-builder-form') {
+              document.getElementById('owner-builder-form').reset();
+              document.getElementById('owner-builder-id').value = '';
+              document.getElementById('owner-builder-submit-btn').textContent = 'Save Builder Profile';
+            } else if (action === 'edit-builder') {
+              var bEdit = profiles.builders.find(function (b) { return b.id === trigger.dataset.builderId; });
+              if (bEdit) {
+                document.getElementById('owner-builder-id').value = bEdit.id;
+                document.getElementById('owner-builder-name').value = bEdit.name || '';
+                document.getElementById('owner-builder-title').value = bEdit.title || '';
+                document.getElementById('owner-builder-email').value = bEdit.email || '';
+                document.getElementById('owner-builder-phone').value = bEdit.phone || '';
+                document.getElementById('owner-builder-trade').value = bEdit.trade || '';
+                document.getElementById('owner-builder-status').value = bEdit.status || 'Active';
+                document.getElementById('owner-builder-submit-btn').textContent = 'Update Builder Profile';
+              }
+            } else if (action === 'delete-builder') {
+              profiles.builders = profiles.builders.filter(function (b) { return b.id !== trigger.dataset.builderId; });
+              savePersistedProfiles();
+              renderOwnerConsole();
+              showToast('Builder profile removed', 'info');
+            } else if (action === 'reset-client-form') {
+              document.getElementById('owner-client-form').reset();
+              document.getElementById('owner-client-id').value = '';
+              document.getElementById('owner-client-submit-btn').textContent = 'Save Client Profile';
+            } else if (action === 'edit-client') {
+              var cEdit = profiles.clients.find(function (c) { return c.id === trigger.dataset.clientId; });
+              if (cEdit) {
+                document.getElementById('owner-client-id').value = cEdit.id;
+                document.getElementById('owner-client-name').value = cEdit.name || '';
+                document.getElementById('owner-client-email').value = cEdit.email || '';
+                document.getElementById('owner-client-phone').value = cEdit.phone || '';
+                document.getElementById('owner-client-project').value = cEdit.projectId || '';
+                document.getElementById('owner-client-address').value = cEdit.address || '';
+                document.getElementById('owner-client-status').value = cEdit.status || 'Active';
+                document.getElementById('owner-client-submit-btn').textContent = 'Update Client Profile';
+              }
+            } else if (action === 'delete-client') {
+              profiles.clients = profiles.clients.filter(function (c) { return c.id !== trigger.dataset.clientId; });
+              savePersistedProfiles();
+              renderOwnerConsole();
+              showToast('Client profile removed', 'info');
+            } else if (action === 'refresh-owner-users') {
+              loadOwnerUsersList();
+            } else if (action === 'set-user-role') {
+              if (!firebaseState.db || firebaseState.userRole !== 'owner') return;
+              var targetUid = trigger.dataset.uid;
+              var targetRole = trigger.dataset.role;
+              firebaseState.db.collection('users').doc(targetUid).set({ role: targetRole }, { merge: true }).then(function () {
+                showToast('Updated user role to ' + targetRole, 'success');
+                loadOwnerUsersList();
+              }).catch(function (err) {
+                showToast('Could not update role: ' + err.message, 'info');
+              });
             }
           });
 

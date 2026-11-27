@@ -814,40 +814,157 @@
         <div id="owner-project-assignments-list" class="p-5 grid grid-cols-1 lg:grid-cols-2 gap-4"></div>
       </section>
 
-      <!-- CREATE NEW PROJECT & ASSIGN PROFILES -->
+      <!-- CREATE NEW PROJECT (DETAILED TILE BUILDER) -->
       <section class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-        <div class="bg-slate-900 text-white px-5 py-4">
-          <h3 class="font-bold text-sm sm:text-base">Create New Project</h3>
-          <p class="text-xs text-slate-400">Add a new build project and link a Client &amp; Lead Builder</p>
+        <div class="bg-slate-900 text-white px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 class="font-bold text-sm sm:text-base">Build New Project (Customisable Tiles)</h3>
+            <p class="text-xs text-slate-400">Configure every portal tile — Hero, Roadmap, Assigned Team, Site Diary, Payment Schedule &amp; Starter Vault</p>
+          </div>
+          <button type="button" data-action="reset-project-builder" class="text-xs font-semibold text-amber-400 hover:text-amber-300 self-start sm:self-center">
+            Reset Builder
+          </button>
         </div>
-        <form id="owner-project-form" class="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div>
-            <label for="owner-proj-title" class="block text-xs font-semibold text-slate-700 mb-1">Project Title</label>
-            <input id="owner-proj-title" type="text" placeholder="e.g. Two-Storey Side Extension" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+
+        <form id="owner-project-form" class="p-5 space-y-5">
+          <!-- TILE 1: HERO & CLIENT DETAILS -->
+          <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/70 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-200/80 pb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-700">1. Hero Card &amp; Contract Basics</span>
+              <span id="owner-proj-gross-preview" class="text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">Gross: £78,000 inc. VAT</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div class="sm:col-span-2 lg:col-span-2">
+                <label for="owner-proj-title" class="block text-xs font-semibold text-slate-700 mb-1">Project Title</label>
+                <input id="owner-proj-title" type="text" placeholder="e.g. Two-Storey Side Extension &amp; Garden Room" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+              </div>
+              <div>
+                <label for="owner-proj-ref" class="block text-xs font-semibold text-slate-700 mb-1">Contract Ref <span class="text-slate-400 font-normal">(optional)</span></label>
+                <input id="owner-proj-ref" type="text" placeholder="Auto: WHB-2026-XXX" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm font-mono text-slate-900 focus:outline-none focus:border-amber-500" />
+              </div>
+              <div>
+                <label for="owner-proj-address" class="block text-xs font-semibold text-slate-700 mb-1">Site Address</label>
+                <input id="owner-proj-address" type="text" placeholder="e.g. 22 Cliff Road, Sheringham" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+              </div>
+              <div>
+                <label for="owner-proj-postcode" class="block text-xs font-semibold text-slate-700 mb-1">Postcode</label>
+                <input id="owner-proj-postcode" type="text" placeholder="e.g. NR26 8BJ" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+              </div>
+              <div>
+                <label for="owner-proj-handover" class="block text-xs font-semibold text-slate-700 mb-1">Target Handover</label>
+                <input id="owner-proj-handover" type="text" placeholder="e.g. 15 Mar 2027" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+              </div>
+              <div>
+                <label for="owner-proj-client-select" class="block text-xs font-semibold text-slate-700 mb-1">Link Client Profile</label>
+                <select id="owner-proj-client-select" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500">
+                  <option value="">— Custom Client Name Below —</option>
+                </select>
+              </div>
+              <div>
+                <label for="owner-proj-client-name" class="block text-xs font-semibold text-slate-700 mb-1">Client Display Name</label>
+                <input id="owner-proj-client-name" type="text" placeholder="e.g. Mr &amp; Mrs Davies" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+              </div>
+              <div>
+                <label for="owner-proj-net" class="block text-xs font-semibold text-slate-700 mb-1">Base Contract Net (£ ex. VAT)</label>
+                <input id="owner-proj-net" type="number" min="1000" step="100" value="65000" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+              </div>
+            </div>
           </div>
-          <div>
-            <label for="owner-proj-address" class="block text-xs font-semibold text-slate-700 mb-1">Site Address</label>
-            <input id="owner-proj-address" type="text" placeholder="e.g. 22 Cliff Road, Sheringham" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+
+          <!-- TILE 2: BUILD ROADMAP & ASSIGNED TEAM -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/70 space-y-3">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-700 block border-b border-slate-200/80 pb-2">2. Build Roadmap &amp; Initial Progress</span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label for="owner-proj-stage" class="block text-xs font-semibold text-slate-700 mb-1">Starting Build Stage</label>
+                  <select id="owner-proj-stage" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500">
+                    <option value="1">Stage 1: Site Setup &amp; Foundations</option>
+                    <option value="2">Stage 2: Masonry &amp; Structural Steels</option>
+                    <option value="3">Stage 3: Roof Structure &amp; Weathering</option>
+                    <option value="4">Stage 4: First Fix Electrics &amp; Plumbing</option>
+                    <option value="5">Stage 5: Plastering &amp; Second Fix</option>
+                    <option value="6">Stage 6: Snagging &amp; Practical Completion</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label for="owner-proj-progress" class="text-xs font-semibold text-slate-700">Initial Progress</label>
+                    <span id="owner-proj-progress-display" class="text-xs font-extrabold text-amber-800">10%</span>
+                  </div>
+                  <input id="owner-proj-progress" type="range" min="0" max="100" step="5" value="10" class="w-full accent-amber-700 mt-2" />
+                </div>
+              </div>
+              <div>
+                <span class="block text-xs font-semibold text-slate-700 mb-1.5">Assign Builders to Project</span>
+                <div id="owner-proj-builders-checkboxes" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+              </div>
+            </div>
+
+            <!-- TILE 3: DAILY SITE DIARY & CONDITIONS -->
+            <div class="border border-slate-200 rounded-2xl p-4 bg-amber-50/50 space-y-3">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-700 block border-b border-amber-200/80 pb-2">3. Daily Site Diary Tile</span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label for="owner-proj-weather" class="block text-xs font-semibold text-slate-700 mb-1">Site Weather / Conditions</label>
+                  <input id="owner-proj-weather" type="text" value="8°C • Crisp &amp; Dry, Light Coastal Breeze" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-amber-500" />
+                </div>
+                <div>
+                  <label for="owner-proj-trades" class="block text-xs font-semibold text-slate-700 mb-1">Trades On Site</label>
+                  <input id="owner-proj-trades" type="text" value="Site Setup &amp; Setting Out Team" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-amber-500" />
+                </div>
+              </div>
+              <div>
+                <label for="owner-proj-diary" class="block text-xs font-semibold text-slate-700 mb-1">Opening Site Diary Note</label>
+                <textarea id="owner-proj-diary" rows="3" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-amber-500">Site welfare and perimeter fencing established. Setting out complete and materials scheduled for delivery.</textarea>
+              </div>
+            </div>
           </div>
-          <div>
-            <label for="owner-proj-postcode" class="block text-xs font-semibold text-slate-700 mb-1">Postcode</label>
-            <input id="owner-proj-postcode" type="text" placeholder="e.g. NR26 8BJ" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+
+          <!-- TILE 4: CUSTOMISABLE JCT STAGE PAYMENT SCHEDULE -->
+          <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/70 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/80 pb-2">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-700">4. Stage Payment Schedule Tile</span>
+                <p class="text-[11px] text-slate-500">Customise milestones, due dates &amp; net amounts (20% UK VAT calculated automatically)</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" data-action="recalc-builder-payments" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-[11px] font-semibold text-slate-700">
+                  Auto-Split 20/30/30/20
+                </button>
+                <button type="button" data-action="add-builder-payment" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-semibold">
+                  + Add Stage
+                </button>
+              </div>
+            </div>
+            <div id="owner-proj-payments-builder" class="space-y-2"></div>
           </div>
-          <div>
-            <label for="owner-proj-client-name" class="block text-xs font-semibold text-slate-700 mb-1">Client Name</label>
-            <input id="owner-proj-client-name" type="text" placeholder="e.g. Mr &amp; Mrs Davies" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
+
+          <!-- TILE 5: STARTER PHOTOS, DOCUMENTS & WELCOME MESSAGE -->
+          <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/70 space-y-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-700 block border-b border-slate-200/80 pb-2">5. Starter Vault &amp; Welcome Message</span>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <span class="block text-xs font-semibold text-slate-700">Include Starter Documents &amp; Photos</span>
+                <label class="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
+                  <input id="owner-proj-inc-docs" type="checkbox" checked class="rounded border-slate-300 text-amber-700 focus:ring-amber-500" />
+                  <span>Include standard JCT Contract, NNDC Notice &amp; Insurance Certificates</span>
+                </label>
+                <label class="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
+                  <input id="owner-proj-inc-photos" type="checkbox" checked class="rounded border-slate-300 text-amber-700 focus:ring-amber-500" />
+                  <span>Include starter site setup progress photo</span>
+                </label>
+              </div>
+              <div>
+                <label for="owner-proj-welcome" class="block text-xs font-semibold text-slate-700 mb-1">Welcome Message in Live Chat</label>
+                <input id="owner-proj-welcome" type="text" placeholder="Welcome to your White Horse Builders portal! Feel free to message us anytime." class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-amber-500" />
+              </div>
+            </div>
           </div>
-          <div>
-            <label for="owner-proj-net" class="block text-xs font-semibold text-slate-700 mb-1">Base Contract Net (£ ex. VAT)</label>
-            <input id="owner-proj-net" type="number" min="1000" step="100" placeholder="65000" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
-          </div>
-          <div>
-            <label for="owner-proj-handover" class="block text-xs font-semibold text-slate-700 mb-1">Target Handover</label>
-            <input id="owner-proj-handover" type="text" placeholder="e.g. Mar 2027" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" required />
-          </div>
-          <div class="sm:col-span-2 lg:col-span-3 flex justify-end">
-            <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold shadow-xs transition-colors">
-              Create &amp; Publish Project
+
+          <div class="flex flex-wrap items-center justify-end gap-2 pt-1">
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold shadow-xs transition-colors">
+              Create &amp; Publish Full Project
             </button>
           </div>
         </form>
@@ -2820,6 +2937,90 @@
             );
           }).join('');
         }
+
+        renderProjectBuilderControls();
+      }
+
+      var builderPaymentDrafts = [];
+
+      function resetBuilderPayments(baseNet) {
+        var net = Number(baseNet) || 65000;
+        builderPaymentDrafts = [
+          { stage: 'Stage 1: Mobilisation & Deposit (20%)', dueDate: 'On Commencement', netAmount: Math.round(net * 0.2), status: 'Due Now' },
+          { stage: 'Stage 2: Masonry & Roof Structure (30%)', dueDate: 'On Roof Weathering', netAmount: Math.round(net * 0.3), status: 'Scheduled' },
+          { stage: 'Stage 3: First Fix & Plastering (30%)', dueDate: 'On First Fix Sign-Off', netAmount: Math.round(net * 0.3), status: 'Scheduled' },
+          { stage: 'Stage 4: Practical Completion (20%)', dueDate: 'On Final Handover', netAmount: Math.round(net * 0.2), status: 'Scheduled' }
+        ];
+      }
+
+      function renderBuilderPaymentsList() {
+        var container = document.getElementById('owner-proj-payments-builder');
+        if (!container) return;
+        if (!builderPaymentDrafts.length) {
+          var netInput = document.getElementById('owner-proj-net');
+          resetBuilderPayments(netInput ? netInput.value : 65000);
+        }
+        container.innerHTML = builderPaymentDrafts.map(function (row, idx) {
+          var gross = Math.round(Number(row.netAmount || 0) * 1.2);
+          return (
+            '<div class="grid grid-cols-1 sm:grid-cols-12 gap-2 items-center bg-white border border-slate-200 rounded-xl p-2.5">' +
+              '<div class="sm:col-span-4">' +
+                '<input type="text" data-pay-idx="' + idx + '" data-pay-field="stage" value="' + escapeHtml(row.stage) + '" placeholder="Milestone name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500" />' +
+              '</div>' +
+              '<div class="sm:col-span-3">' +
+                '<input type="text" data-pay-idx="' + idx + '" data-pay-field="dueDate" value="' + escapeHtml(row.dueDate) + '" placeholder="Due trigger" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500" />' +
+              '</div>' +
+              '<div class="sm:col-span-2">' +
+                '<input type="number" min="0" step="50" data-pay-idx="' + idx + '" data-pay-field="netAmount" value="' + Number(row.netAmount || 0) + '" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono text-slate-900 focus:outline-none focus:border-amber-500" />' +
+              '</div>' +
+              '<div class="sm:col-span-2">' +
+                '<select data-pay-idx="' + idx + '" data-pay-field="status" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500">' +
+                  '<option value="Due Now"' + (row.status === 'Due Now' ? ' selected' : '') + '>Due Now</option>' +
+                  '<option value="Scheduled"' + (row.status === 'Scheduled' ? ' selected' : '') + '>Scheduled</option>' +
+                  '<option value="Paid"' + (row.status === 'Paid' ? ' selected' : '') + '>Paid</option>' +
+                '</select>' +
+              '</div>' +
+              '<div class="sm:col-span-1 flex items-center justify-between sm:justify-end gap-1.5">' +
+                '<span class="sm:hidden text-[11px] font-semibold text-slate-500">Inc VAT: ' + formatGBP(gross) + '</span>' +
+                '<button type="button" data-action="remove-builder-payment" data-pay-idx="' + idx + '" title="Remove stage" class="px-2 py-1 rounded-lg border border-rose-200 hover:bg-rose-50 text-xs font-bold text-rose-700">&times;</button>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function renderProjectBuilderControls() {
+        var clientSel = document.getElementById('owner-proj-client-select');
+        if (clientSel) {
+          var prevVal = clientSel.value;
+          clientSel.innerHTML = '<option value="">— Custom Client Name Below —</option>' +
+            profiles.clients.map(function (c) {
+              return '<option value="' + escapeHtml(c.id) + '">' + escapeHtml(c.name + (c.address ? ' (' + c.address + ')' : '')) + '</option>';
+            }).join('');
+          if (prevVal) clientSel.value = prevVal;
+        }
+
+        var builderBox = document.getElementById('owner-proj-builders-checkboxes');
+        if (builderBox) {
+          if (!profiles.builders.length) {
+            builderBox.innerHTML = '<p class="text-xs text-slate-500 col-span-2">No builder profiles yet.</p>';
+          } else {
+            builderBox.innerHTML = profiles.builders.map(function (b) {
+              var availCls = b.status === 'Active' ? 'text-emerald-700' : 'text-amber-700';
+              return (
+                '<label class="flex items-start gap-2 bg-white border border-slate-200 rounded-xl p-2 cursor-pointer hover:border-amber-400 transition-colors">' +
+                  '<input type="checkbox" name="owner-proj-builder-chk" value="' + escapeHtml(b.id) + '"' + (b.status === 'Active' ? ' checked' : '') + ' class="mt-0.5 rounded border-slate-300 text-amber-700 focus:ring-amber-500" />' +
+                  '<span class="min-w-0">' +
+                    '<span class="block text-xs font-bold text-slate-900 truncate">' + escapeHtml(b.name) + '</span>' +
+                    '<span class="block text-[10px] ' + availCls + ' truncate">' + escapeHtml(b.title + ' • ' + (b.status || 'Active')) + '</span>' +
+                  '</span>' +
+                '</label>'
+              );
+            }).join('');
+          }
+        }
+
+        renderBuilderPaymentsList();
       }
 
       function loadOwnerUsersList() {
@@ -3434,19 +3635,137 @@
             renderOwnerConsole();
           });
 
-          // Owner Console: Create New Project
+          // Owner Console: Project Builder Live Controls
+          document.getElementById('owner-proj-net').addEventListener('input', function (e) {
+            var net = parseFloat(e.target.value) || 0;
+            var gross = Math.round(net * 1.2);
+            document.getElementById('owner-proj-gross-preview').textContent = 'Gross: ' + formatGBP(gross) + ' inc. VAT';
+          });
+
+          document.getElementById('owner-proj-progress').addEventListener('input', function (e) {
+            document.getElementById('owner-proj-progress-display').textContent = e.target.value + '%';
+          });
+
+          document.getElementById('owner-proj-client-select').addEventListener('change', function (e) {
+            var cli = profiles.clients.find(function (c) { return c.id === e.target.value; });
+            if (cli) {
+              document.getElementById('owner-proj-client-name').value = cli.name || '';
+              if (cli.address && !document.getElementById('owner-proj-address').value.trim()) {
+                var parts = cli.address.split(',');
+                document.getElementById('owner-proj-address').value = parts[0].trim();
+                if (parts[1]) document.getElementById('owner-proj-postcode').value = parts[1].trim();
+              }
+            }
+          });
+
+          document.getElementById('owner-proj-payments-builder').addEventListener('input', function (e) {
+            var idx = parseInt(e.target.dataset.payIdx, 10);
+            var field = e.target.dataset.payField;
+            if (!isNaN(idx) && field && builderPaymentDrafts[idx]) {
+              builderPaymentDrafts[idx][field] = field === 'netAmount' ? (parseFloat(e.target.value) || 0) : e.target.value;
+            }
+          });
+
+          document.getElementById('owner-proj-payments-builder').addEventListener('change', function (e) {
+            var idx = parseInt(e.target.dataset.payIdx, 10);
+            var field = e.target.dataset.payField;
+            if (!isNaN(idx) && field && builderPaymentDrafts[idx]) {
+              builderPaymentDrafts[idx][field] = field === 'netAmount' ? (parseFloat(e.target.value) || 0) : e.target.value;
+              renderBuilderPaymentsList();
+            }
+          });
+
+          // Owner Console: Create New Project (Full Multi-Tile)
           document.getElementById('owner-project-form').addEventListener('submit', function (e) {
             e.preventDefault();
             var title = document.getElementById('owner-proj-title').value.trim();
+            var customRef = document.getElementById('owner-proj-ref').value.trim();
             var address = document.getElementById('owner-proj-address').value.trim();
             var postcode = document.getElementById('owner-proj-postcode').value.trim().toUpperCase();
+            var linkedClientId = document.getElementById('owner-proj-client-select').value;
             var clientName = document.getElementById('owner-proj-client-name').value.trim();
             var baseNet = parseFloat(document.getElementById('owner-proj-net').value) || 50000;
             var targetHandover = document.getElementById('owner-proj-handover').value.trim();
+            var activeStage = parseInt(document.getElementById('owner-proj-stage').value, 10) || 1;
+            var progress = parseInt(document.getElementById('owner-proj-progress').value, 10) || 10;
+            var weather = document.getElementById('owner-proj-weather').value.trim() || 'Dry, Clear • 10°C';
+            var tradesOnSite = document.getElementById('owner-proj-trades').value.trim() || 'Site Setup & Setting Out';
+            var diaryNote = document.getElementById('owner-proj-diary').value.trim() || 'Project created by Chris (Owner).';
+            var incDocs = document.getElementById('owner-proj-inc-docs').checked;
+            var incPhotos = document.getElementById('owner-proj-inc-photos').checked;
+            var welcomeMsg = document.getElementById('owner-proj-welcome').value.trim();
             if (!title || !address || !clientName) return;
 
+            var checkedBuilders = [];
+            var chkNodes = document.querySelectorAll('input[name="owner-proj-builder-chk"]:checked');
+            for (var i = 0; i < chkNodes.length; i++) {
+              checkedBuilders.push(chkNodes[i].value);
+            }
+
             var newId = 'proj-' + Date.now();
-            var newRef = 'WHB-2026-' + Math.floor(100 + Math.random() * 900);
+            var newRef = customRef || ('WHB-2026-' + Math.floor(100 + Math.random() * 900));
+
+            var paymentsList = builderPaymentDrafts.map(function (row, idx) {
+              var net = Math.round(Number(row.netAmount || 0));
+              var vat = Math.round(net * 0.2);
+              return {
+                id: 'pay-' + Date.now() + '-' + idx,
+                stage: row.stage || ('Stage ' + (idx + 1)),
+                dueDate: row.dueDate || 'TBC',
+                netAmount: net,
+                vatAmount: vat,
+                grossAmount: net + vat,
+                status: row.status || 'Scheduled',
+                ref: 'INV-' + Math.floor(1000 + Math.random() * 9000)
+              };
+            });
+
+            var starterDocs = incDocs ? [
+              {
+                id: 'd-' + Date.now() + '-1',
+                title: 'JCT Minor Works Building Contract.pdf',
+                category: 'Contracts',
+                date: 'Today',
+                size: '1.2 MB',
+                status: 'Issued',
+                ref: newRef + '-JCT',
+                summary: 'Signed JCT Minor Works Building Contract between ' + clientName + ' and White Horse Builders Ltd for ' + address + '.',
+                financials: 'Contract Net: ' + formatGBP(baseNet) + ' • Target Handover: ' + (targetHandover || 'TBC')
+              },
+              {
+                id: 'd-' + Date.now() + '-2',
+                title: 'NNDC Building Control Commencement Notice.pdf',
+                category: 'Building Control',
+                date: 'Today',
+                size: '640 KB',
+                status: 'Active',
+                ref: 'NNDC-' + Math.floor(1000 + Math.random() * 9000),
+                summary: 'North Norfolk District Council Building Control commencement notice registered for ' + address + ', ' + postcode + '.',
+                financials: 'Inspections scheduled per build stage'
+              },
+              {
+                id: 'd-' + Date.now() + '-3',
+                title: 'WHB Public & Employers Liability Insurance.pdf',
+                category: 'Certificates',
+                date: 'Today',
+                size: '510 KB',
+                status: 'Verified',
+                ref: 'WHB-INS-2026',
+                summary: '£5,000,000 Public Liability & £10,000,000 Employers Liability cover for White Horse Builders Ltd.',
+                financials: 'Policy Active 2026–2027'
+              }
+            ] : [];
+
+            var starterPhotos = incPhotos ? [
+              {
+                id: 'p-' + Date.now(),
+                phase: 'Groundworks',
+                caption: 'Initial site setup & setting out at ' + address,
+                date: 'Today, ' + getNowTime24(),
+                url: VERIFIED_PHOTOS.concreteFoundations
+              }
+            ] : [];
+
             projects[newId] = {
               id: newId,
               title: title,
@@ -3456,43 +3775,47 @@
               ref: newRef,
               targetHandover: targetHandover || 'TBC 2027',
               baseContractNet: baseNet,
-              activeStage: 1,
-              progress: 10,
-              weather: 'Dry, Clear • 10°C',
-              tradesOnSite: 'Site Setup & Setting Out',
-              diaryNote: 'Project created by Chris (Owner). Initial site mobilisation scheduled.',
+              activeStage: activeStage,
+              assignedBuilders: checkedBuilders,
+              progress: progress,
+              weather: weather,
+              tradesOnSite: tradesOnSite,
+              diaryNote: diaryNote,
               lastUpdated: 'Today, ' + getNowTime24(),
-              photos: [],
-              documents: [],
+              photos: starterPhotos,
+              documents: starterDocs,
               variations: [],
-              payments: [
-                {
-                  id: 'pay-' + Date.now(),
-                  stage: 'Stage 1: Mobilisation & Deposit',
-                  dueDate: 'On Commencement',
-                  netAmount: Math.round(baseNet * 0.2),
-                  vatAmount: Math.round(baseNet * 0.2 * 0.2),
-                  grossAmount: Math.round(baseNet * 0.2 * 1.2),
-                  status: 'Due Now',
-                  ref: 'INV-' + Math.floor(1000 + Math.random() * 9000)
-                }
-              ],
+              payments: paymentsList,
               messages: [
                 {
                   id: 'm-' + Date.now(),
                   sender: 'builder',
                   senderName: 'Chris (Owner)',
-                  text: 'Welcome to your White Horse Builders portal, ' + clientName + '! Your project "' + title + '" is now live.',
+                  text: welcomeMsg || ('Welcome to your White Horse Builders portal, ' + clientName + '! Your project "' + title + '" is now live.'),
                   time: getNowTime24()
                 }
               ]
             };
 
+            if (linkedClientId) {
+              var cliProfile = profiles.clients.find(function (c) { return c.id === linkedClientId; });
+              if (cliProfile) {
+                cliProfile.projectId = newId;
+                savePersistedProfiles();
+              }
+            }
+
             document.getElementById('owner-project-form').reset();
+            document.getElementById('owner-proj-net').value = '65000';
+            document.getElementById('owner-proj-gross-preview').textContent = 'Gross: £78,000 inc. VAT';
+            document.getElementById('owner-proj-progress').value = '10';
+            document.getElementById('owner-proj-progress-display').textContent = '10%';
+            resetBuilderPayments(65000);
+
             savePersistedState(newId);
             refreshProjectSelector();
             renderOwnerConsole();
-            showToast('Created project: ' + address + ' (' + newRef + ')', 'success');
+            showToast('Published full project: ' + address + ' (' + newRef + ')', 'success');
           });
 
           // Global Click Event Delegation (Zero brittle inline onclick handlers)
@@ -3762,6 +4085,36 @@
                 renderAll();
                 showToast('Removed ' + (removedBuilder ? removedBuilder.name : 'builder') + ' from ' + remProj.address, 'info');
               }
+            } else if (action === 'reset-project-builder') {
+              document.getElementById('owner-project-form').reset();
+              document.getElementById('owner-proj-net').value = '65000';
+              document.getElementById('owner-proj-gross-preview').textContent = 'Gross: £78,000 inc. VAT';
+              document.getElementById('owner-proj-progress').value = '10';
+              document.getElementById('owner-proj-progress-display').textContent = '10%';
+              resetBuilderPayments(65000);
+              renderProjectBuilderControls();
+              showToast('Project builder reset to defaults', 'info');
+            } else if (action === 'add-builder-payment') {
+              builderPaymentDrafts.push({
+                stage: 'Stage ' + (builderPaymentDrafts.length + 1) + ': Custom Milestone',
+                dueDate: 'TBC',
+                netAmount: 5000,
+                status: 'Scheduled'
+              });
+              renderBuilderPaymentsList();
+            } else if (action === 'remove-builder-payment') {
+              var remIdx = parseInt(trigger.dataset.payIdx, 10);
+              if (!isNaN(remIdx) && builderPaymentDrafts.length > 1) {
+                builderPaymentDrafts.splice(remIdx, 1);
+                renderBuilderPaymentsList();
+              } else {
+                showToast('A project needs at least 1 payment milestone', 'info');
+              }
+            } else if (action === 'recalc-builder-payments') {
+              var netVal = parseFloat(document.getElementById('owner-proj-net').value) || 65000;
+              resetBuilderPayments(netVal);
+              renderBuilderPaymentsList();
+              showToast('Recalculated 20/30/30/20 JCT payment stages', 'info');
             } else if (action === 'set-user-role') {
               if (!firebaseState.db || firebaseState.userRole !== 'owner') return;
               var targetUid = trigger.dataset.uid;

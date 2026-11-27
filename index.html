@@ -731,6 +731,20 @@
                 </select>
               </div>
             </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 border-t border-slate-200/70">
+              <div>
+                <label for="owner-builder-password" class="block text-xs font-semibold text-slate-700 mb-1">
+                  First-Time Login Password <span class="text-slate-400 font-normal">(min 6 chars)</span>
+                </label>
+                <input id="owner-builder-password" type="password" minlength="6" placeholder="Set initial password for Firebase login" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" />
+              </div>
+              <div class="flex items-end pb-2">
+                <label class="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
+                  <input id="owner-builder-create-auth" type="checkbox" checked class="rounded border-slate-300 text-amber-700 focus:ring-amber-500" />
+                  <span>Write login account to Firebase Auth</span>
+                </label>
+              </div>
+            </div>
             <div class="flex items-center justify-end gap-2 pt-1">
               <button id="owner-builder-submit-btn" type="submit" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold transition-colors">
                 Save Builder Profile
@@ -789,8 +803,22 @@
                 </select>
               </div>
             </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 border-t border-slate-200/70">
+              <div>
+                <label for="owner-client-password" class="block text-xs font-semibold text-slate-700 mb-1">
+                  First-Time Login Password <span class="text-slate-400 font-normal">(min 6 chars)</span>
+                </label>
+                <input id="owner-client-password" type="password" minlength="6" placeholder="Set initial password for Firebase login" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500" />
+              </div>
+              <div class="flex items-end pb-2">
+                <label class="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
+                  <input id="owner-client-create-auth" type="checkbox" checked class="rounded border-slate-300 text-amber-700 focus:ring-amber-500" />
+                  <span>Write login account to Firebase Auth</span>
+                </label>
+              </div>
+            </div>
             <div class="flex items-center justify-end gap-2 pt-1">
-              <button id="owner-client-submit-btn" type="submit" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs sm:text-sm font-semibold transition-colors">
+              <button id="owner-client-submit-btn" type="submit" class="px-4 py-2 rounded-xl bg-amber-700 hover:bg-amber-800 text-white text-xs sm:text-sm font-semibold transition-colors">
                 Save Client Profile
               </button>
             </div>
@@ -2027,6 +2055,47 @@
           console.warn('Firestore seed error:', err);
           showToast('Could not seed Firestore: ' + (err && err.message ? err.message : 'Check security rules / sign in'), 'info');
           return false;
+        });
+      }
+
+      function provisionFirebaseAuthUser(email, password, displayName, role, profileId, projectId) {
+        var cfg = getActiveFirebaseConfig();
+        if (!cfg || !firebaseState.configured || typeof window.firebase === 'undefined') {
+          return Promise.resolve({ created: false, reason: 'not-configured' });
+        }
+        if (!password || password.length < 6) {
+          return Promise.resolve({ created: false, reason: 'no-password' });
+        }
+
+        var secondaryApp = null;
+        try {
+          var existing = window.firebase.apps.find(function (a) { return a.name === 'secondaryAdminApp'; });
+          secondaryApp = existing || window.firebase.initializeApp(cfg, 'secondaryAdminApp');
+        } catch (err) {
+          return Promise.resolve({ created: false, reason: err.message });
+        }
+
+        return secondaryApp.auth().createUserWithEmailAndPassword(email, password).then(function (cred) {
+          var newUid = cred.user.uid;
+          return cred.user.updateProfile({ displayName: displayName }).catch(function () {}).then(function () {
+            return firebaseState.db.collection('users').doc(newUid).set({
+              email: email,
+              displayName: displayName,
+              role: role,
+              profileId: profileId || '',
+              projectId: projectId || '',
+              createdByOwner: true,
+              createdAt: new Date().toISOString()
+            }, { merge: true });
+          }).then(function () {
+            return secondaryApp.auth().signOut().catch(function () {});
+          }).then(function () {
+            return { created: true, uid: newUid };
+          });
+        }).catch(function (err) {
+          return secondaryApp.auth().signOut().catch(function () {}).then(function () {
+            return { created: false, reason: err && err.message ? err.message : 'Auth creation failed' };
+          });
         });
       }
 
@@ -3579,6 +3648,7 @@
           document.getElementById('owner-builder-form').addEventListener('submit', function (e) {
             e.preventDefault();
             var idVal = document.getElementById('owner-builder-id').value;
+            var existingB = profiles.builders.find(function (b) { return b.id === idVal; });
             var bData = {
               id: idVal || ('bld-' + Date.now()),
               name: document.getElementById('owner-builder-name').value.trim(),
@@ -3586,9 +3656,13 @@
               email: document.getElementById('owner-builder-email').value.trim(),
               phone: document.getElementById('owner-builder-phone').value.trim(),
               trade: document.getElementById('owner-builder-trade').value.trim(),
-              status: document.getElementById('owner-builder-status').value || 'Active'
+              status: document.getElementById('owner-builder-status').value || 'Active',
+              authUid: existingB && existingB.authUid ? existingB.authUid : ''
             };
             if (!bData.name || !bData.email) return;
+
+            var bPassword = document.getElementById('owner-builder-password').value;
+            var bCreateAuth = document.getElementById('owner-builder-create-auth').checked;
 
             var idx = profiles.builders.findIndex(function (b) { return b.id === bData.id; });
             if (idx >= 0) {
@@ -3600,15 +3674,31 @@
             }
             document.getElementById('owner-builder-form').reset();
             document.getElementById('owner-builder-id').value = '';
+            document.getElementById('owner-builder-create-auth').checked = true;
             document.getElementById('owner-builder-submit-btn').textContent = 'Save Builder Profile';
             savePersistedProfiles();
             renderOwnerConsole();
+
+            if (bCreateAuth && bPassword && bPassword.length >= 6) {
+              provisionFirebaseAuthUser(bData.email, bPassword, bData.name, 'builder', bData.id, '').then(function (res) {
+                if (res.created) {
+                  bData.authUid = res.uid;
+                  savePersistedProfiles();
+                  renderOwnerConsole();
+                  loadOwnerUsersList();
+                  showToast('Firebase login created for ' + bData.email + ' (Builder)', 'success');
+                } else if (res.reason !== 'not-configured') {
+                  showToast('Firebase login note: ' + res.reason, 'info');
+                }
+              });
+            }
           });
 
           // Owner Console: Save Client Profile
           document.getElementById('owner-client-form').addEventListener('submit', function (e) {
             e.preventDefault();
             var idVal = document.getElementById('owner-client-id').value;
+            var existingC = profiles.clients.find(function (c) { return c.id === idVal; });
             var cData = {
               id: idVal || ('cli-' + Date.now()),
               name: document.getElementById('owner-client-name').value.trim(),
@@ -3616,9 +3706,13 @@
               phone: document.getElementById('owner-client-phone').value.trim(),
               projectId: document.getElementById('owner-client-project').value || '',
               address: document.getElementById('owner-client-address').value.trim(),
-              status: document.getElementById('owner-client-status').value || 'Active'
+              status: document.getElementById('owner-client-status').value || 'Active',
+              authUid: existingC && existingC.authUid ? existingC.authUid : ''
             };
             if (!cData.name || !cData.email) return;
+
+            var cPassword = document.getElementById('owner-client-password').value;
+            var cCreateAuth = document.getElementById('owner-client-create-auth').checked;
 
             var idx = profiles.clients.findIndex(function (c) { return c.id === cData.id; });
             if (idx >= 0) {
@@ -3630,9 +3724,24 @@
             }
             document.getElementById('owner-client-form').reset();
             document.getElementById('owner-client-id').value = '';
+            document.getElementById('owner-client-create-auth').checked = true;
             document.getElementById('owner-client-submit-btn').textContent = 'Save Client Profile';
             savePersistedProfiles();
             renderOwnerConsole();
+
+            if (cCreateAuth && cPassword && cPassword.length >= 6) {
+              provisionFirebaseAuthUser(cData.email, cPassword, cData.name, 'client', cData.id, cData.projectId).then(function (res) {
+                if (res.created) {
+                  cData.authUid = res.uid;
+                  savePersistedProfiles();
+                  renderOwnerConsole();
+                  loadOwnerUsersList();
+                  showToast('Firebase login created for ' + cData.email + ' (Client)', 'success');
+                } else if (res.reason !== 'not-configured') {
+                  showToast('Firebase login note: ' + res.reason, 'info');
+                }
+              });
+            }
           });
 
           // Owner Console: Project Builder Live Controls

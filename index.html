@@ -255,11 +255,11 @@
 
       <div class="flex items-center justify-between sm:justify-end gap-3 bg-slate-50 sm:bg-transparent px-3.5 py-2 sm:p-0 rounded-xl border sm:border-0 border-slate-200">
         <div class="text-left sm:text-right">
-          <p id="header-context-label" class="text-xs font-bold text-slate-900">Client Portal • David &amp; Sarah Mitchell</p>
-          <p class="text-[11px] text-slate-500">Site Manager: <strong class="text-slate-700">Jamie Cox</strong> (SMSTS &amp; CSCS)</p>
+          <p id="header-context-label" class="text-xs font-bold text-slate-900">Client Portal</p>
+          <p id="header-site-lead" class="text-[11px] text-slate-500">On Site Today: <strong class="text-slate-700">On-Site Lead</strong></p>
         </div>
-        <div class="w-10 h-10 rounded-full bg-amber-600 text-white font-bold text-xs flex items-center justify-center shadow-xs shrink-0">
-          JC
+        <div id="header-site-lead-initials" class="w-10 h-10 rounded-full bg-amber-700 text-white font-bold text-xs flex items-center justify-center shadow-xs shrink-0">
+          SL
         </div>
       </div>
     </div>
@@ -363,8 +363,8 @@
             <div class="bg-amber-50/75 text-slate-900 rounded-2xl p-4 sm:p-5 border border-amber-200/90 shadow-xs space-y-3">
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <div class="flex items-center gap-2">
-                  <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-amber-200/70 text-amber-900 border border-amber-300/70">
-                    Daily Site Diary — Jamie Cox
+                  <span id="diary-site-lead-badge" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-amber-200/70 text-amber-900 border border-amber-300/70">
+                    Daily Site Diary — On-Site Lead
                   </span>
                   <span id="diary-timestamp" class="text-xs text-slate-600 font-medium">24 Nov 2026, 14:40</span>
                 </div>
@@ -390,8 +390,11 @@
             <!-- Phase Filter Bar -->
             <div class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
               <div>
-                <h3 class="font-bold text-sm sm:text-base text-slate-900">Site Progress Gallery</h3>
-                <p class="text-xs text-slate-500">Tap any photograph to open full-screen lightbox with Next/Previous controls.</p>
+                <div class="flex flex-wrap items-center gap-2">
+                  <h3 class="font-bold text-sm sm:text-base text-slate-900">Site Progress Gallery</h3>
+                  <span id="photos-site-lead-pill" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200"></span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Tap any photograph to open full-screen lightbox with Next/Previous controls.</p>
               </div>
               <div id="photo-filter-bar" class="flex flex-wrap gap-1.5">
                 <button type="button" data-action="filter-photos" data-filter="All" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white">All Photos</button>
@@ -411,10 +414,13 @@
             <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-3">
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <h3 class="font-bold text-base text-slate-900">Documents &amp; Certificates Vault</h3>
-                  <p class="text-xs text-slate-500">Inspect formatted UK JCT contracts, NNDC Building Control notices, RSJ calculations &amp; VAT invoices.</p>
+                  <div class="flex flex-wrap items-center gap-2">
+                    <h3 class="font-bold text-base text-slate-900">Documents &amp; Certificates Vault</h3>
+                    <span id="docs-site-lead-pill" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200"></span>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-0.5">Inspect formatted UK JCT contracts, NNDC Building Control notices, RSJ calculations &amp; VAT invoices.</p>
                 </div>
-                <label class="cursor-pointer inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-xs transition-colors shrink-0">
+                <label class="cursor-pointer inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold shadow-xs transition-colors shrink-0">
                   <span>+ Upload Client File</span>
                   <input id="client-doc-upload-input" type="file" class="hidden" />
                 </label>
@@ -437,8 +443,11 @@
           <div id="panel-variations" class="hidden space-y-4">
             <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h3 class="font-bold text-base text-slate-900">Contract Variations &amp; Digital Sign-Offs</h3>
-                <p class="text-xs text-slate-500">Approving a variation digitally signs the scope change, updates your Contract Sum, and posts a receipt in chat.</p>
+                <div class="flex flex-wrap items-center gap-2">
+                  <h3 class="font-bold text-base text-slate-900">Contract Variations &amp; Digital Sign-Offs</h3>
+                  <span id="vars-site-lead-pill" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200"></span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Approving a variation digitally signs the scope change, updates your Contract Sum, and posts a receipt in chat.</p>
               </div>
               <div id="variations-summary-badge" class="bg-slate-900 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shrink-0"></div>
             </div>
@@ -450,8 +459,11 @@
           <div id="panel-payments" class="hidden space-y-4">
             <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h3 class="font-bold text-base text-slate-900">JCT Stage Payment Schedule</h3>
-                <p class="text-xs text-slate-500">Milestone-linked stage valuations with 20% UK VAT breakdown and White Horse Builders Ltd BACS details.</p>
+                <div class="flex flex-wrap items-center gap-2">
+                  <h3 class="font-bold text-base text-slate-900">JCT Stage Payment Schedule</h3>
+                  <span id="pay-site-lead-pill" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200"></span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Milestone-linked stage valuations with 20% UK VAT breakdown and White Horse Builders Ltd BACS details.</p>
               </div>
               <div id="payments-paid-badge" class="bg-emerald-50 border border-emerald-200 text-emerald-900 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0"></div>
             </div>
@@ -478,11 +490,11 @@
             <div class="bg-slate-900 text-white px-4 py-3.5 flex items-center justify-between">
               <div class="flex items-center gap-3">
                 <div class="relative">
-                  <div class="w-9 h-9 rounded-full bg-amber-700 text-white font-bold text-xs flex items-center justify-center">JC</div>
+                  <div id="chat-header-initials" class="w-9 h-9 rounded-full bg-amber-700 text-white font-bold text-xs flex items-center justify-center">SL</div>
                   <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-slate-900 absolute bottom-0 right-0"></span>
                 </div>
                 <div>
-                  <h4 class="font-bold text-sm">Jamie Cox • Site Manager</h4>
+                  <h4 id="chat-header-title" class="font-bold text-sm">On-Site Lead • Today</h4>
                   <p class="text-[11px] text-emerald-300">Online • Direct Project Thread</p>
                 </div>
               </div>
@@ -492,7 +504,7 @@
             <div id="client-chat-feed" class="flex-1 p-4 overflow-y-auto space-y-3.5 bg-slate-50"></div>
 
             <div id="client-typing-bar" class="hidden px-4 py-1.5 bg-slate-50 text-xs text-slate-500 italic border-t border-slate-100">
-              Jamie Cox is typing a reply...
+              On-site lead is typing a reply...
             </div>
 
             <!-- Quick-Reply Chips -->
@@ -514,7 +526,7 @@
                 + Photo
                 <input id="client-chat-photo-input" type="file" accept="image/*" class="hidden" />
               </label>
-              <input id="client-chat-input" type="text" placeholder="Message Jamie Cox..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-amber-500" required />
+              <input id="client-chat-input" type="text" placeholder="Message on-site lead..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-amber-500" required />
               <button type="submit" class="bg-amber-700 hover:bg-amber-800 text-white font-semibold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition-colors shrink-0">
                 Send
               </button>
@@ -526,19 +538,19 @@
     </div>
 
     <!-- ===================================================================
-         BUILDER VIEW (SITE ADMIN — JAMIE COX)
+         BUILDER VIEW (ON-SITE LEAD ADMIN)
          =================================================================== -->
     <div id="builder-view" class="hidden space-y-6">
 
       <!-- Admin Context Banner -->
       <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-slate-900 text-amber-400 font-bold flex items-center justify-center shrink-0">
-            JC
+          <div id="admin-banner-initials" class="w-10 h-10 rounded-xl bg-slate-900 text-amber-400 font-bold flex items-center justify-center shrink-0">
+            SL
           </div>
           <div>
-            <h3 class="font-bold text-sm sm:text-base text-slate-900">Jamie Cox — Site Manager Console (On-Site Admin)</h3>
-            <p id="admin-banner-subtitle" class="text-xs text-slate-600">Managing 14 Station Road, NR27 9DS • Changes sync immediately to Client View.</p>
+            <h3 id="admin-banner-title" class="font-bold text-sm sm:text-base text-slate-900">On-Site Lead Console</h3>
+            <p id="admin-banner-subtitle" class="text-xs text-slate-600">Managing project • Changes sync immediately to Client View.</p>
           </div>
         </div>
         <button type="button" data-action="switch-role" data-role="client" class="text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl transition-colors self-start sm:self-center shrink-0">
@@ -575,6 +587,12 @@
                 </div>
                 <input id="admin-progress-slider" type="range" min="0" max="100" value="65" class="w-full accent-amber-600 cursor-pointer h-2 bg-slate-200 rounded-lg mt-2.5" />
               </div>
+            </div>
+
+            <div>
+              <label for="admin-site-lead-input" class="block text-xs font-semibold text-slate-700 mb-1.5">Person in Charge On Site Today</label>
+              <input id="admin-site-lead-input" list="admin-site-lead-options" type="text" placeholder="Select or type person in charge today..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-medium text-slate-900 focus:outline-none focus:border-amber-500" />
+              <datalist id="admin-site-lead-options"></datalist>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -713,13 +731,13 @@
 
         </div>
 
-        <!-- RIGHT 5 COLUMNS: JAMIE COX LIVE CHAT REPLY CONSOLE -->
+        <!-- RIGHT 5 COLUMNS: ON-SITE LEAD LIVE CHAT REPLY CONSOLE -->
         <div class="lg:col-span-5 lg:sticky lg:top-20">
           <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col h-[680px]">
             <div class="bg-slate-900 text-white px-5 py-3.5 flex items-center justify-between">
               <div>
-                <h4 class="font-bold text-sm">Live Project Chat (Jamie Cox)</h4>
-                <p id="admin-chat-subtitle" class="text-xs text-slate-300">Replying to David &amp; Sarah Mitchell</p>
+                <h4 id="admin-chat-title" class="font-bold text-sm">Live Project Chat</h4>
+                <p id="admin-chat-subtitle" class="text-xs text-slate-300">Replying to Client</p>
               </div>
               <span class="text-[11px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-500/30">Synced</span>
             </div>
@@ -731,8 +749,8 @@
                 + Photo
                 <input id="builder-chat-photo-input" type="file" accept="image/*" class="hidden" />
               </label>
-              <input id="builder-chat-input" type="text" placeholder="Reply directly as Jamie Cox..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:bg-white focus:border-amber-500" required />
-              <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-4 py-2 rounded-xl text-sm transition-colors shrink-0">
+              <input id="builder-chat-input" type="text" placeholder="Reply to client..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:bg-white focus:border-amber-500" required />
+              <button type="submit" class="bg-amber-700 hover:bg-amber-800 text-white font-semibold px-4 py-2 rounded-xl text-sm transition-colors shrink-0">
                 Send
               </button>
             </form>
@@ -1246,7 +1264,7 @@
           <div id="doc-modal-financials" class="bg-slate-900 text-white p-4 rounded-xl text-xs font-medium leading-relaxed"></div>
 
           <div class="pt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 border-t border-slate-100">
-            <span>Authorised by: Jamie Cox (Site Manager, SMSTS &amp; CSCS)</span>
+            <span>Authorised by: On-Site Lead (White Horse Builders Ltd)</span>
             <span>NNDC Building Control Compliant</span>
           </div>
         </div>
@@ -1306,7 +1324,7 @@
             <p class="text-[10px] text-slate-400 text-center mt-1 select-none">Sign above using your finger, stylus, or mouse</p>
           </div>
           <p class="text-[11px] text-slate-500 mt-1.5">
-            By signing, this variation is added to your live Contract Sum and an audit receipt is posted to Jamie Cox in Live Project Chat.
+            By signing, this variation is added to your live Contract Sum and an audit receipt is posted to the on-site lead in Live Project Chat.
           </p>
         </div>
 
@@ -2586,6 +2604,36 @@
         return projects[appState.projectId] || projects['proj-1'];
       }
 
+      function getSiteLead(proj) {
+        var p = proj || getCurrentProject();
+        var leadName = (p && p.siteLeadName) ? String(p.siteLeadName).trim() : '';
+        var matchedBuilder = null;
+
+        if (leadName) {
+          matchedBuilder = profiles.builders.find(function (b) {
+            return b.name && b.name.toLowerCase() === leadName.toLowerCase();
+          });
+        } else if (p && Array.isArray(p.assignedBuilders) && p.assignedBuilders.length) {
+          matchedBuilder = profiles.builders.find(function (b) {
+            return b.id === p.assignedBuilders[0];
+          }) || null;
+          if (matchedBuilder) leadName = matchedBuilder.name;
+        }
+
+        if (!leadName) leadName = 'On-Site Lead';
+        var title = (matchedBuilder && matchedBuilder.title) ? matchedBuilder.title : 'On-Site Lead';
+        var parts = leadName.replace(/\(.*?\)/g, '').trim().split(/\s+/).filter(Boolean);
+        var initials = parts.length >= 2
+          ? (parts[0][0] + parts[1][0]).toUpperCase()
+          : (leadName.slice(0, 2) || 'SL').toUpperCase();
+
+        return {
+          name: leadName,
+          title: title,
+          initials: initials
+        };
+      }
+
       function formatGBP(amount) {
         return '£' + Math.round(Number(amount || 0)).toLocaleString('en-GB');
       }
@@ -2645,6 +2693,8 @@
         var totals = getContractTotals(proj);
         var activeStageObj = BUILD_STAGES.find(function (s) { return s.num === proj.activeStage; }) || BUILD_STAGES[0];
 
+        var siteLead = getSiteLead(proj);
+
         // Header context
         var headerContext = document.getElementById('header-context-label');
         if (headerContext) {
@@ -2652,6 +2702,12 @@
             ? 'Client Portal • ' + proj.clientName + ' (' + proj.postcode + ')'
             : 'Site Admin Console • ' + proj.address + ', ' + proj.postcode;
         }
+        var headerSiteLead = document.getElementById('header-site-lead');
+        if (headerSiteLead) {
+          headerSiteLead.innerHTML = 'On Site Today: <strong class="text-slate-700">' + escapeHtml(siteLead.name) + '</strong> (' + escapeHtml(siteLead.title) + ')';
+        }
+        var headerInitials = document.getElementById('header-site-lead-initials');
+        if (headerInitials) headerInitials.textContent = siteLead.initials;
 
         // Hero Section
         document.getElementById('hero-stage-pill').textContent = 'Stage ' + activeStageObj.num + ': ' + activeStageObj.label;
@@ -2684,13 +2740,48 @@
         document.getElementById('badge-variations').textContent = pendingVars > 0 ? pendingVars + ' Pending' : String(proj.variations.length);
         document.getElementById('badge-payments').textContent = String(proj.payments.length);
 
+        // Site Lead Pills Across Every Tab & Chat
+        var tabLeadText = 'On Site Today: ' + siteLead.name;
+        ['photos-site-lead-pill', 'docs-site-lead-pill', 'vars-site-lead-pill', 'pay-site-lead-pill'].forEach(function (pillId) {
+          var el = document.getElementById(pillId);
+          if (el) el.textContent = tabLeadText;
+        });
+
+        var chatInitialsEl = document.getElementById('chat-header-initials');
+        if (chatInitialsEl) chatInitialsEl.textContent = siteLead.initials;
+        var chatTitleEl = document.getElementById('chat-header-title');
+        if (chatTitleEl) chatTitleEl.textContent = siteLead.name + ' • ' + siteLead.title;
+        var typingBarEl = document.getElementById('client-typing-bar');
+        if (typingBarEl) typingBarEl.textContent = siteLead.name + ' is typing a reply...';
+        var clientChatInputEl = document.getElementById('client-chat-input');
+        if (clientChatInputEl) clientChatInputEl.placeholder = 'Message ' + siteLead.name + '...';
+
         // Site Diary Banner
+        var diaryLeadBadge = document.getElementById('diary-site-lead-badge');
+        if (diaryLeadBadge) diaryLeadBadge.textContent = 'Daily Site Diary — ' + siteLead.name;
         document.getElementById('diary-timestamp').textContent = proj.lastUpdated;
         document.getElementById('diary-note-text').textContent = proj.diaryNote;
         document.getElementById('diary-weather-text').textContent = proj.weather;
         document.getElementById('diary-trades-text').textContent = proj.tradesOnSite;
 
         // Admin View Sync
+        var adminInitialsEl = document.getElementById('admin-banner-initials');
+        if (adminInitialsEl) adminInitialsEl.textContent = siteLead.initials;
+        var adminTitleEl = document.getElementById('admin-banner-title');
+        if (adminTitleEl) adminTitleEl.textContent = siteLead.name + ' — Site Console (On-Site Lead)';
+        var adminLeadInput = document.getElementById('admin-site-lead-input');
+        if (adminLeadInput) adminLeadInput.value = siteLead.name;
+        var adminLeadDatalist = document.getElementById('admin-site-lead-options');
+        if (adminLeadDatalist) {
+          adminLeadDatalist.innerHTML = profiles.builders.map(function (b) {
+            return '<option value="' + escapeHtml(b.name) + '"></option>';
+          }).join('');
+        }
+        var adminChatTitleEl = document.getElementById('admin-chat-title');
+        if (adminChatTitleEl) adminChatTitleEl.textContent = 'Live Project Chat (' + siteLead.name + ')';
+        var builderChatInputEl = document.getElementById('builder-chat-input');
+        if (builderChatInputEl) builderChatInputEl.placeholder = 'Reply directly as ' + siteLead.name + '...';
+
         document.getElementById('admin-banner-subtitle').textContent =
           'Managing ' + proj.address + ', ' + proj.postcode + ' (' + proj.clientName + ')';
         document.getElementById('admin-stage-select').value = String(proj.activeStage);
@@ -2929,6 +3020,7 @@
       function renderChats(proj) {
         var clientFeed = document.getElementById('client-chat-feed');
         var builderFeed = document.getElementById('builder-chat-feed');
+        var siteLead = getSiteLead(proj);
 
         clientFeed.innerHTML = proj.messages.map(function (m) {
           var isClient = m.sender === 'client';
@@ -2943,7 +3035,7 @@
                 escapeHtml(m.text) +
                 imgHtml +
               '</div>' +
-              (isClient ? '<span class="text-[10px] text-emerald-600 font-medium mt-0.5 px-1">✓✓ Read by Jamie Cox</span>' : '') +
+              (isClient ? '<span class="text-[10px] text-emerald-600 font-medium mt-0.5 px-1">✓✓ Read by ' + escapeHtml(siteLead.name) + '</span>' : '') +
             '</div>'
           );
         }).join('');
@@ -3496,11 +3588,12 @@
 
       function sendChatMessage(senderRole, text, imageUrl) {
         var proj = getCurrentProject();
+        var siteLead = getSiteLead(proj);
         var nowTime = getNowTime24();
         proj.messages.push({
           id: 'm-' + Date.now(),
           sender: senderRole,
-          senderName: senderRole === 'client' ? proj.clientName : 'Jamie Cox',
+          senderName: senderRole === 'client' ? proj.clientName : siteLead.name,
           text: text,
           imageUrl: imageUrl || '',
           time: nowTime
@@ -3510,7 +3603,7 @@
         queueNotification(
           'chat',
           senderRole === 'builder' ? 'client' : 'builder',
-          (senderRole === 'builder' ? 'Jamie Cox' : proj.clientName) + ' — ' + proj.address,
+          (senderRole === 'builder' ? siteLead.name : proj.clientName) + ' — ' + proj.address,
           text
         );
 
@@ -3526,7 +3619,7 @@
             proj.messages.push({
               id: 'm-' + Date.now(),
               sender: 'builder',
-              senderName: 'Jamie Cox',
+              senderName: siteLead.name,
               text: replyText,
               time: getNowTime24()
             });
@@ -3621,7 +3714,7 @@
               status: 'Client Uploaded',
               ref: 'CLIENT-' + Math.floor(100 + Math.random() * 900),
               summary: 'Uploaded directly by ' + proj.clientName + ' into the White Horse Builders Client Portal.',
-              financials: 'Contract Ref: ' + proj.ref + ' • Shared immediately with Site Manager Jamie Cox'
+              financials: 'Contract Ref: ' + proj.ref + ' • Shared immediately with ' + getSiteLead(proj).name
             });
             e.target.value = '';
             savePersistedState();
@@ -3736,10 +3829,11 @@
               signedAt: ''
             });
 
+            var leadName = getSiteLead(proj).name;
             proj.messages.push({
               id: 'm-' + Date.now(),
               sender: 'builder',
-              senderName: 'Jamie Cox',
+              senderName: leadName,
               text: 'New priced variation issued (' + code + '): "' + title + '" (+' + formatGBP(grossAmount) + ' inc. VAT). Please review and sign in your Variations tab.',
               time: getNowTime24()
             });
@@ -3767,6 +3861,7 @@
               rawTitle += '.pdf';
             }
 
+            var leadInfo = getSiteLead(proj);
             proj.documents.unshift({
               id: 'd-' + Date.now(),
               title: rawTitle,
@@ -3775,14 +3870,14 @@
               size: '840 KB',
               status: 'Verified Today',
               ref: 'WHB-CERT-' + Math.floor(1000 + Math.random() * 9000),
-              summary: 'Published by Jamie Cox (Site Manager, White Horse Builders Ltd) for ' + proj.address + ', ' + proj.postcode + '.',
+              summary: 'Published by ' + leadInfo.name + ' (' + leadInfo.title + ', White Horse Builders Ltd) for ' + proj.address + ', ' + proj.postcode + '.',
               financials: 'Contract Ref: ' + proj.ref + ' • NNDC Building Control Compliant • VAT Reg No: GB 418 7291 04'
             });
 
             titleInput.value = '';
             savePersistedState();
             renderAll();
-            queueNotification('document', 'client', 'New Document — ' + proj.address, 'Jamie Cox published "' + rawTitle + '" (' + category + ')');
+            queueNotification('document', 'client', 'New Document — ' + proj.address, leadInfo.name + ' published "' + rawTitle + '" (' + category + ')');
             showToast('Published "' + rawTitle + '" to Client Vault', 'success');
           });
 
@@ -4308,7 +4403,7 @@
                 savePersistedState();
                 renderAll();
                 queueNotification('payment', 'builder', 'BACS Payment Confirmed — ' + projBacs.address, projBacs.clientName + ' confirmed ' + formatGBP(payment.grossAmount) + ' for ' + payment.stage);
-                showToast('BACS payment confirmed & receipt posted to Jamie Cox', 'success');
+                showToast('BACS payment confirmed & receipt posted to ' + getSiteLead(projBacs).name, 'success');
               }
             } else if (action === 'quick-reply') {
               sendChatMessage('client', trigger.dataset.text, '');
@@ -4316,9 +4411,11 @@
               var projSave = getCurrentProject();
               projSave.activeStage = parseInt(document.getElementById('admin-stage-select').value, 10) || 1;
               projSave.progress = parseInt(document.getElementById('admin-progress-slider').value, 10) || 0;
+              var leadVal = document.getElementById('admin-site-lead-input').value.trim();
               var wVal = document.getElementById('admin-weather-input').value.trim();
               var tVal = document.getElementById('admin-trades-input').value.trim();
               var dVal = document.getElementById('admin-diary-input').value.trim();
+              if (leadVal) projSave.siteLeadName = leadVal;
               if (wVal) projSave.weather = wVal;
               if (tVal) projSave.tradesOnSite = tVal;
               if (dVal) projSave.diaryNote = dVal;

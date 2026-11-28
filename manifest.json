@@ -1,7 +1,7 @@
 {
-  "name": "White Horse Builders — Client Portal",
-  "short_name": "WHB Portal",
-  "description": "Live build progress, site photos, variation sign-offs, and direct site messaging for White Horse Builders Ltd.",
+  "name": "Olive Tree Interiors — Client Portal",
+  "short_name": "Olive Tree",
+  "description": "Live project progress, site photos, variation sign-offs, and direct messaging for Olive Tree Interiors.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

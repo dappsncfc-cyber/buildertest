@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="theme-color" content="#232D1E" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Olive Tree" />
@@ -22,6 +22,33 @@
         extend: {
           fontFamily: {
             sans: ['Inter', 'system-ui', 'sans-serif']
+          },
+          colors: {
+            slate: {
+              50: '#F7F3EB',
+              100: '#EFE9DC',
+              200: '#DFD7C5',
+              300: '#C7BFA9',
+              400: '#8E9583',
+              500: '#656E5B',
+              600: '#4F5946',
+              700: '#3D4735',
+              800: '#2D3727',
+              900: '#232D1E',
+              950: '#192115'
+            },
+            amber: {
+              50: '#F5F2E6',
+              100: '#EAE4CD',
+              200: '#DACCA4',
+              300: '#D1BA7D',
+              400: '#C6A15B',
+              500: '#B68D40',
+              600: '#5C6B50',
+              700: '#4A593E',
+              800: '#3B4831',
+              900: '#2C3624'
+            }
           }
         }
       }
@@ -49,65 +76,65 @@
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #f1f5f9;
+      background: #EFE9DC;
     }
     ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
+      background: #C7BFA9;
       border-radius: 9999px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
+      background: #8E9583;
     }
 
-    /* Dark Mode Overrides */
+    /* Dark Mode Overrides (Deep Olive Night + Botanical Gold) */
     html.dark body {
-      background-color: #020617 !important;
-      color: #e2e8f0 !important;
+      background-color: #11170F !important;
+      color: #E2DDD0 !important;
     }
     html.dark ::-webkit-scrollbar-track {
-      background: #0f172a;
+      background: #1A2217;
     }
     html.dark ::-webkit-scrollbar-thumb {
-      background: #334155;
+      background: #3B4935;
     }
     html.dark header,
     html.dark footer,
     html.dark .bg-white {
-      background-color: #0f172a !important;
-      color: #f1f5f9 !important;
+      background-color: #1A2217 !important;
+      color: #F5F2EA !important;
     }
     html.dark .bg-slate-50,
     html.dark .bg-slate-50\/70,
     html.dark .bg-slate-50\/80 {
-      background-color: #1e293b !important;
+      background-color: #222C1E !important;
     }
     html.dark .bg-slate-100 {
-      background-color: #1e293b !important;
-      color: #e2e8f0 !important;
+      background-color: #222C1E !important;
+      color: #E2DDD0 !important;
     }
     html.dark .bg-amber-50\/75,
     html.dark .bg-amber-50\/50 {
-      background-color: rgba(120, 53, 15, 0.25) !important;
-      border-color: rgba(217, 119, 6, 0.35) !important;
+      background-color: rgba(92, 107, 80, 0.22) !important;
+      border-color: rgba(198, 161, 91, 0.35) !important;
     }
     html.dark .bg-white\/90,
     html.dark .bg-white\/95 {
-      background-color: rgba(15, 23, 42, 0.94) !important;
+      background-color: rgba(26, 34, 23, 0.94) !important;
     }
     html.dark .text-slate-900 {
-      color: #f8fafc !important;
+      color: #F5F2EA !important;
     }
     html.dark .text-slate-800 {
-      color: #e2e8f0 !important;
+      color: #E2DDD0 !important;
     }
     html.dark .text-slate-700 {
-      color: #cbd5e1 !important;
+      color: #D2CCB8 !important;
     }
     html.dark .text-slate-600 {
-      color: #94a3b8 !important;
+      color: #B5B1A3 !important;
     }
     html.dark .text-slate-500 {
-      color: #94a3b8 !important;
+      color: #A29E90 !important;
     }
     html.dark .border-slate-200,
     html.dark .border-slate-200\/90,
@@ -115,24 +142,24 @@
     html.dark .border-slate-200\/70,
     html.dark .border-slate-100,
     html.dark .border-slate-300 {
-      border-color: #334155 !important;
+      border-color: #34422E !important;
     }
     html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
-      border-color: #1e293b !important;
+      border-color: #263122 !important;
     }
     html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
     html.dark select,
     html.dark textarea {
-      background-color: #0f172a !important;
-      color: #f8fafc !important;
-      border-color: #334155 !important;
+      background-color: #151C12 !important;
+      color: #F5F2EA !important;
+      border-color: #3B4935 !important;
     }
     html.dark #sign-canvas {
       background-color: #ffffff !important;
     }
     html.dark #mobile-bottom-nav {
-      background-color: rgba(15, 23, 42, 0.95) !important;
-      border-color: #1e293b !important;
+      background-color: rgba(26, 34, 23, 0.96) !important;
+      border-color: #34422E !important;
     }
 
     @media print {

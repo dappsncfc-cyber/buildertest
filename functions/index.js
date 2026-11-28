@@ -14,7 +14,7 @@ exports.sendPortalPushNotification = onDocumentCreated('notifications/{notificat
 
   const data = snap.data();
   const targetRole = data.targetRole || 'client';
-  const title = data.title || 'White Horse Builders Update';
+  const title = data.title || 'Olive Tree Interiors Update';
   const body = data.body || 'You have a new update in your project portal.';
   const projectId = data.projectId || '';
 

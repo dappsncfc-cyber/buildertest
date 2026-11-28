@@ -1,4 +1,4 @@
-# White Horse Builders Ltd — Client Project Portal
+# Olive Tree Interiors — Client Project Portal
 
 Single-file client & site-admin portal backed by **Cloud Firestore** (real-time sync) and **Firebase Authentication** (Email/Password & Google Sign-In), with automatic fallback to **Local Demo Mode** (`localStorage`) when no Firebase config is set.
 

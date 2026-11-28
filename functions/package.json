@@ -1,6 +1,6 @@
 {
   "name": "whb-portal-functions",
-  "description": "Cloud Functions for White Horse Builders Client Portal push notifications",
+  "description": "Cloud Functions for Olive Tree Interiors Client Portal push notifications",
   "version": "1.0.0",
   "main": "index.js",
   "engines": {

@@ -25,7 +25,7 @@ function initSwMessaging(cfg) {
     messagingInstance.onBackgroundMessage(function (payload) {
       var notif = payload.notification || {};
       var data = payload.data || {};
-      var title = notif.title || data.title || 'White Horse Builders Update';
+      var title = notif.title || data.title || 'Olive Tree Interiors Update';
       var options = {
         body: notif.body || data.body || 'There is a new update on your build portal.',
         icon: './icon-192.png',
